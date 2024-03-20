@@ -59,7 +59,7 @@ function FAQ() {
         Frequently Asked Questions
         <BsQuestionCircleFill className="inline-block mb-1 ml-2" /> {}
       </h1>
-      <div className="faq-items ">
+      <div className="faq-items">
         {faqData.map((faqItem, index) => (
           <div
             key={faqItem.id}

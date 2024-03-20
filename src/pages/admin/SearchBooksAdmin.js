@@ -72,13 +72,13 @@ const AdminSearchBooks = () => {
       <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
         <table className="bg-white w-full rounded-2xl px-2 py-2 shadow-xl">
           <thead>
-            <tr className="pb-2">
+            {/* <tr className="pb-2">
               <th colSpan="10">
                 <div className="flex justify-between items-center px-5 py-4">
                   <h2 className="text-xl text-black">Book list</h2>
                 </div>
               </th>
-            </tr>
+            </tr> */}
 
             <tr className="text-left text-black text-lg border-b border-gray">
               <th className="px-5 py-4">DDC ID</th>

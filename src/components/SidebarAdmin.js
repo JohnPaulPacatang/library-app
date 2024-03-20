@@ -88,7 +88,7 @@ const SidebarAdmin = () => {
                 <h1 className="text-base font-semibold text-white">
                   Administrator
                   <span className="block text-sm text-gray font-normal">
-                    Admin
+                    Librarian
                   </span>
                 </h1>
               </div>
