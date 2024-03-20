@@ -85,7 +85,6 @@ const UserListSuperAdmin = () => {
     }
   }
 
-
   async function deleteUser(userId) {
     await supabase
       .from('users')
@@ -222,18 +221,11 @@ const UserListSuperAdmin = () => {
                 <td className="px-5 py-2">{user.email}</td>
                 <td className="px-5 py-2">{user.course}</td>
                 <td className="px-5">
-                  <button
-                    className="text-sm text-white bg-red p-2 m-2 rounded-lg hover:shadow-xl"
-                    onClick={() => {
-                      if (window.confirm("Are you sure you want to delete this user?")) {
-                        deleteUser(user.id);
-                      }
-                    }}
-                  >
-                    Delete
-                  </button>
                   <button className="text-sm text-white bg-blue p-2 m-2 rounded-lg hover:shadow-xl"
-                    onClick={() => { displayUser(user.id); handleOpenModalUpdate(); }}>Update</button>
+                  onClick={() => { displayUser(user.id); handleOpenModalUpdate(); }}>Update</button>
+                  <button className="text-sm text-white bg-red p-2 m-2 rounded-lg hover:shadow-xl" 
+                  onClick={() => {if (window.confirm("Are you sure you want to delete this user?")) {deleteUser(user.id);}}}>Delete
+                  </button>
                 </td>
               </tr>
             ))}

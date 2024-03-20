@@ -4,10 +4,16 @@ import { BiSearch } from "react-icons/bi";
 
 const BookList = () => {
   const [showModal, setShowModal] = useState(false);
+  const [showModalUpdate, setShowModalUpdate] = useState(false);
 
   const handleOpenModal = () => {
     setShowModal(true);
   };
+
+  const handleOpenModalUpdate = () => {
+    setShowModalUpdate(true);
+  };
+
 
   // Dropdown category and search
   const [searchQuery, setSearchQuery] = useState("");
@@ -24,6 +30,7 @@ const BookList = () => {
 
   const [books, setBooks] = useState([]);
   const [book, setBook] = useState([]);
+  const [bookData, setBookData] = useState([]);
 
   useEffect(() => {
     fetchBooks();
@@ -36,6 +43,13 @@ const BookList = () => {
 
   function handleChange(event) {
     setBook((prevFormData) => ({
+      ...prevFormData,
+      [event.target.name]: event.target.value,
+    }));
+  }
+
+  function handleUpdate(event) {
+    setBookData((prevFormData) => ({
       ...prevFormData,
       [event.target.name]: event.target.value,
     }));
@@ -71,17 +85,63 @@ const BookList = () => {
     } catch (error) {
       console.error("Error adding book:", error);
     }
+
+  }
+
+  function displayBook(bookId) {
+    const book = books.find((book) => book.id === bookId);
+    if (book) {
+      setBookData({
+        id: book.id,
+        ddc_id: book.ddc_id,
+        title: book.title,
+        author: book.author,
+        category: book.category,
+        availability: book.availability,
+      });
+    }
+  }
+
+  async function updateBook(bookId) {
+    try {
+      console.log("Updating book...");
+      await supabase
+        .from('books')
+        .update({
+          ddc_id: bookData.ddc_id,
+          title: bookData.title,
+          author: bookData.author,
+          category: bookData.category,
+          availability: bookData.availability,
+        })
+        .eq('id', bookId);
+
+      setShowModalUpdate(false);
+      console.log("Book updated successfully.");
+      fetchBooks();
+    } catch (error) {
+      console.error("Book updating user:", error);
+    }
+  }
+
+  async function deleteBook(bookId) {
+    await supabase
+      .from('books')
+      .delete()
+      .eq('id', bookId);
+
+    fetchBooks();
   }
 
   // Dropdown category and search
   const filteredData = books.filter((book) =>
-  (selectedCategory === "All" || book.category === selectedCategory) &&
-  (
-    (book.title?.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    (book.author?.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    (book.category?.toLowerCase().includes(searchQuery.toLowerCase()))
-  )
-);
+    (selectedCategory === "All" || book.category === selectedCategory) &&
+    (
+      (book.title?.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (book.author?.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (book.category?.toLowerCase().includes(searchQuery.toLowerCase()))
+    )
+  );
 
 
   return (
@@ -148,11 +208,17 @@ const BookList = () => {
                 <td className="px-5 py-2">{book.title}</td>
                 <td className="px-5 py-2">{book.author}</td>
                 <td className="px-5 py-2">{book.category}</td>
-                <td className={`px-1 py-2 text-center ${book.availability ? "bg-green" : "bg-red"
+                <td className={`px-1 py-2 text-center ${book.availability ? "bg-green text-black" : "bg-red text-white"
                   } m-2 inline-block rounded-xl text-sm w-3/4`}>
                   {book.availability ? "Available" : "Not Available"}
                 </td>
                 <td className="px-5">
+                  <button className="text-sm text-white bg-blue p-2 m-2 rounded-lg hover:shadow-xl"
+                    onClick={() => { displayBook(book.id); handleOpenModalUpdate(); }}>Update</button>
+                  <button className="text-sm text-white bg-red p-2 m-2 rounded-lg hover:shadow-xl" 
+                  onClick={() => {if (window.confirm("Are you sure you want to delete this book?")) {deleteBook(book.id);}}}>Delete
+                  </button>
+
                 </td>
               </tr>
             ))}
@@ -229,8 +295,8 @@ const BookList = () => {
                     onChange={handleChange}
                     required>
                     <option value="">Select Status</option>
-                    <option value={true}>TRUE</option>
-                    <option value={false}>FALSE</option>
+                    <option className="text-green font-semibold" value={true}>Available</option>
+                    <option className="text-red font-semibold" value={false}>Not Available</option>
                   </select>
                 </div>
               </div>
@@ -244,6 +310,90 @@ const BookList = () => {
           </div>
         </div>
       )}
+
+
+      {showModalUpdate && (
+        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl" onClick={() => setShowModalUpdate(false)} >
+          <div className="bg-peach p-8 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              Book Information
+            </h2>
+
+            <form onSubmit={(e) => { e.preventDefault(); updateBook(bookData.id); }}>
+              <div className="grid grid-cols-2 gap-10">
+                <div className="flex flex-col w-72">
+                  <label className="text-sm ml-1 font-semibold">DDC ID</label>
+                  <input
+                    type="number"
+                    step="any"
+                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    name="ddc_id"
+                    defaultValue={bookData.ddc_id}
+                    onChange={handleUpdate}
+                  />
+
+                  <label className="text-sm ml-1 font-semibold">Title</label>
+                  <input
+                    type="text"
+                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    name="title"
+                    defaultValue={bookData.title}
+                    onChange={handleUpdate}
+                  />
+                </div>
+
+                <div className="flex flex-col w-72">
+                  <label className="text-sm ml-1 font-semibold">Author</label>
+                  <input
+                    type="text"
+                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    name="author"
+                    defaultValue={bookData.author}
+                    onChange={handleUpdate}
+                  />
+
+                  <label className="text-sm ml-1 font-semibold">Category</label>
+                  <input
+                    type="text"
+                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    name="category"
+                    defaultValue={bookData.category}
+                    onChange={handleUpdate}
+
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-center">
+                <div className="flex flex-col">
+                  <label className="text-sm ml-1 font-semibold">Availability</label>
+                  <select
+                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 font-semibold"
+                    name="availability"
+                    defaultValue={bookData.availability}
+                    onChange={handleUpdate}
+                    required>
+                    <option value="">Select Status</option>
+                    <option className="text-green font-semibold" value={true}>Available</option>
+                    <option className="text-red font-semibold" value={false}>Not Available</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex justify-center pt-4">
+                <button type="submit" className="bg-blue text-white py-2 px-4 rounded-lg mr-2">
+                  Update
+                </button>
+                <button type="submit" className="bg-red text-white py-2 px-4 rounded-lg mr-2" onClick={() => setShowModalUpdate(false)}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+
     </div>
   );
 };
