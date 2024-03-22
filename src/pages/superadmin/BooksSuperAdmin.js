@@ -310,12 +310,12 @@ const BookSuperAdmin = () => {
                             onClick={() => { displayBook(book.id); handleOpenModalUpdate(); }}>Update</button>
                         </MenuItem>
                         <MenuItem>
-                          <button className="text-sm text-white w-full bg-red p-2 m-2 rounded-lg hover:shadow-xl"
+                          <button className="text-sm text-white w-full bg-red p-2 m-2 rounded-lg hover:shadow-xl "
                             onClick={() => { if (window.confirm("Are you sure you want to delete this book?")) { deleteBook(book.id); } }}>Delete
                           </button>
                         </MenuItem>
                         <MenuItem>
-                          <button className="text-sm text-black w-full bg-gray p-2 m-2 rounded-lg hover:shadow-xl hover:bg-maroon hover:text-white"
+                          <button className="text-sm text-black w-full bg-gray p-2 m-2 rounded-lg hover:shadow-xl"
                             onClick={handleOpenModalIssue}>Issue</button>
                         </MenuItem>
                       </MenuList>
