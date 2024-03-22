@@ -93,7 +93,7 @@ const SidebarAdmin = () => {
                 </h1>
               </div>
 
-              <div className="text-3xl ml-auto text-white mb-2 hover:text-blue cursor-pointer"onClick={() => setisOpen(!isOpen)}>
+              <div className="text-3xl ml-auto text-white mb-2 hover:text-blue cursor-pointer" onClick={() => setisOpen(!isOpen)}>
                 <TbLayoutSidebarRightExpandFilled />
               </div>
             </div>
