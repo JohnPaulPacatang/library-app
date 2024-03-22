@@ -43,8 +43,8 @@ const SidebarSuperAdmin = () => {
               </li>
             </Link>
 
-            <Link to="/books-list">
-              <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/books-list") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
+            <Link to="/books-super-admin">
+              <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/books-super-admin") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
                 <GiBookshelf />
               </li>
             </Link>
@@ -107,10 +107,10 @@ const SidebarSuperAdmin = () => {
               </li>
             </Link>
 
-            <Link to="/books-list">
-              <li className={`text-white text-base flex items-center px-4 py-3 m-2 ${isActive("/books-list") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
+            <Link to="/books-super-admin">
+              <li className={`text-white text-base flex items-center px-4 py-3 m-2 ${isActive("/books-super-admin") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
                 <GiBookshelf className="text-3xl mr-2" />
-                Book Lists
+                Books
               </li>
             </Link>
 

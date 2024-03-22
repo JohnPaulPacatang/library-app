@@ -1,12 +1,34 @@
 import React, { useState, useEffect } from "react";
-import { BsFileEarmarkSpreadsheetFill } from "react-icons/bs";
+import CanvasJSReact from "@canvasjs/react-charts";
 
-const LibraryLogs = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [studentNumber, setStudentNumber] = useState("");
-  const [name, setName] = useState("");
-  const [course, setCourse] = useState("");
-  const [userList, setUserList] = useState([]);
+const HomeAdmin = () => {
+
+  const [walkIns] = useState(23);
+  const [borrowedToday] = useState(15);
+  const [returned] = useState(5);
+  const [overdue] = useState(0);
+  const options = {
+    height: 400,
+    axisY: {
+      maximum: 30,
+    },
+
+    data: [
+      {
+        type: "column",
+        dataPoints: [
+          { label: "Monday", y: 10, color: "maroon" },
+          { label: "Tuesday", y: 15, color: "maroon" },
+          { label: "Wednesday", y: 15, color: "maroon" },
+          { label: "Thursday", y: 10, color: "maroon" },
+          { label: "Friday", y: 10, color: "maroon" },
+          { label: "Saturday", y: 3, color: "maroon" },
+        ],
+      },
+    ],
+  };
+
+
   const [username] = useState("Admin");
 
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -36,52 +58,11 @@ const LibraryLogs = () => {
     }
   };
 
-  const handleOpenModal = () => {
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setStudentNumber("");
-    setName("");
-    setCourse("");
-  };
-
-  const handleSignIn = () => {
-    const newUserList = [
-      ...userList,
-      {
-        studentNumber: parseInt(studentNumber),
-        name,
-        course,
-        date: currentTime.toLocaleDateString(),
-        timeIn: formattedTime,
-        timeOut: "",
-        action: "Signed In",
-      },
-    ];
-    setUserList(newUserList);
-    handleCloseModal();
-  };
-
-  const handleSignOut = (studentNumber) => {
-    const currentUserList = userList.map((user) => {
-      if (user.studentNumber === studentNumber) {
-        user.timeOut = new Date().toLocaleTimeString();
-        user.action = "Signed Out";
-      }
-      return user;
-    });
-    setUserList(currentUserList);
-  };
-
-  const handleExport = () => {
-    alert('Succesfully exported as Spreadsheet...');
-  };
+  var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
   return (
     <div className="px-3 flex-1 mt-3">
-      <div className="p-4 bg-white rounded-lg shadow-lg mb-3">
+      <div className="p-4 mx-3 bg-white rounded-lg shadow-lg mb-3">
         <div className="flex justify-between">
           <div className="Greetings">
             <p className="text-xl font-semibold pr-4">
@@ -106,138 +87,71 @@ const LibraryLogs = () => {
         </div>
       </div>
 
-      <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">        
-        <table className="bg-white w-full rounded-2xl px-2 py-2 shadow-xl">
-          <thead className="sticky top-0 bg-white">
-            <tr className="pb-2">
-              <th colSpan="10">
-                <div className="flex justify-between items-center px-5 py-4">
-                  <h2 className="text-xl text-black">Library Log</h2>
-                  <button
-                    className="bg-white text-black border rounded-xl p-3 hover:bg-maroon hover:text-white"
-                    onClick={handleOpenModal}
-                  >
-                    Sign in
-                  </button>
-                </div>
-              </th>
-            </tr>
+      <div className="statistics-section flex-1">
 
-            <tr className="text-left text-black text-base border-b border-gray">
-              <th className="px-5 py-4 w-1/6">Student No.</th>
-              <th className="px-5 py-4 w-1/6">Name</th>
-              <th className="px-5 py-4 w-1/6">Course</th>
-              <th className="px-5 py-4 w-1/6">Date</th>
-              <th className="px-5 py-4 w-1/6">Time In</th>
-              <th className="px-5 py-4 w-1/6">Time Out</th>
-              <th className="px-5 py-4 w-1/6">Action</th>
-            </tr>
-          </thead>
+        <div className="flex justify-between mt-10 mb-10 gap-5">
+          <div className="p-12 h-60 w-full bg-white mx-3 rounded-xl shadow-xl">
+            <p className="text-4xl text-center mt-5 font-bold">{walkIns}</p>
+            <p className="center text-lg font-bold text-center my-3">Walk In</p>
+          </div>
 
-          <tbody>
-            {userList.map((item) => {
-              return (
-                <tr
-                  key={item.studentNumber}
-                  className="text-sm border-b border-gray"
-                >
-                  <td className="px-4 py-1 w-1/6">{item.studentNumber}</td>
-                  <td className="px-4 py-1 w-1/6">{item.name}</td>
-                  <td className="px-4 py-1 w-1/6">{item.course}</td>
-                  <td className="px-4 py-1 w-1/6">{item.date}</td>
-                  <td className="px-4 py-1 w-1/6">{item.timeIn}</td>
-                  <td className="px-4 py-1 w-1/6">{item.timeOut}</td>
-                  <td
-                    className={`px-4 py-1 w-1/6 ${
-                      item.action === "Signed In" ? "text-green" : "text-red"
-                    }`}
-                  >
-                    {item.action}
-                  </td>
-                  <td className="px-5 py-1 w-1/6">
-                    <button
-                      className={
-                        item.action === "Signed In"
-                          ? "bg-red text-white px-5 py-1 rounded-lg"
-                          : "bg-green-600 text-white px-5 py-1 rounded-lg"
-                      }
-                      onClick={() => handleSignOut(item.studentNumber)}
-                    >
-                      {item.action === "Signed In" ? "Sign Out" : "Sign In"}
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+          <div className="p-12 h-60 w-full bg-white mr-3 rounded-xl shadow-lg">
+            <p className="text-4xl text-center mt-5 font-bold">{borrowedToday}</p>
+            <p className="center text-lg font-bold text-center my-3">
+              Books Borrowed Today
+            </p>
+          </div>
 
-      {showModal && (
-        <div
-          className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl"
-          onClick={() => setShowModal(false)}
-        >
-          <div
-            className="bg-peach p-12 rounded-lg shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="text-2xl font-bold mb-8 text-center">
-              Student Information
-            </h2>
+          <div className="p-12 h-60 w-full bg-white mr-3 rounded-xl shadow-lg">
+            <p className="text-4xl text-center mt-5 font-bold">{returned}</p>
+            <p className="center text-lg font-bold text-center my-3">
+              Books Returned Today
+            </p>
+          </div>
 
-            <div className="flex flex-col w-80">
-              <div className="flex flex-col w-90">
-                <label className="text-md">Student number</label>
-                <input
-                  type="number"
-                  placeholder="Student Number"
-                  className="shadow-lg rounded-xl text-sm px-5 py-4 mb-5 w-full"
-                  value={studentNumber}
-                  required
-                  onChange={(e) => setStudentNumber(e.target.value)}
-                />
+          <div className="p-12 h-60 w-full bg-white mr-3 rounded-xl shadow-lg">
+            <p className="text-4xl text-center mt-5 font-bold">{overdue}</p>
+            <p className="center text-lg font-bold text-center my-3">
+              Overdue Books
+            </p>
+          </div>
+        </div>
 
-                <label className="text-md ">Name</label>
-                <input
-                  type="text"
-                  placeholder="Name"
-                  className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                  value={name}
-                  required
-                  onChange={(e) => setName(e.target.value)}
-                
-                />
-                <label className="text-md">Course</label>
-                <input
-                  type="text"
-                  placeholder="Course"
-                  className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                  value={course}
-                  required
-                  onChange={(e) => setCourse(e.target.value)}
-                />
-              </div>
-            </div>
+        <div className="flex">
+          <div className="h-auto w-full bg-white mx-3 p-5 mt-5 rounded-xl shadow-lg">
+            <p className="center text-lg font-bold text-center my-3">
+              New Users per Day
+            </p>
+            <CanvasJSChart
+              options={options}
 
-            <div className="flex justify-center pt-4">
-              <button
-                className="bg-maroon text-white py-2 px-4 rounded-lg mr-2"
-                onClick={handleSignIn}
-              >
-                Sign in
-              </button>
+            />
+          </div>
+
+          <div className="bg-white mx-3 w-1/2 mt-5 rounded-xl shadow-xl flex flex-col">
+            <p className="text-xl font-bold text-center mt-10">Newly Registered Users</p>
+            <div className="p-5 custom-scrollbar overflow-y-auto max-h-[400px]">
+              <p className="mt-5 p-3 w-full bg-maroon rounded-md text-white flex justify-between">
+                1. Full Name: </p>
+
+              <p className="mt-5 p-3 w-full bg-maroon rounded-md text-white flex justify-between">
+                2. Full Name: </p>
+
+              <p className="mt-5 p-3 w-full bg-maroon rounded-md text-white flex justify-between">
+                3. Full Name: </p>
+
+              <p className="mt-5 p-3 w-full bg-maroon rounded-md text-white flex justify-between">
+                4. Full Name: </p>
+
+              <p className="mt-5 p-3 w-full bg-maroon rounded-md text-white flex justify-between">
+                5. Full Name: </p>
             </div>
           </div>
         </div>
-      )}
-      <button
-        onClick={handleExport}
-        className='bg-maroon text-white text-sm py-2 px-4 flex items-center rounded-full absolute bottom-2 right-4 cursor-pointer'>
-        <BsFileEarmarkSpreadsheetFill className="mr-1" />Export as Spreadsheet
-      </button>
+      </div>
+
     </div>
   );
 };
 
-export default LibraryLogs;
+export default HomeAdmin;

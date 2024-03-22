@@ -132,8 +132,10 @@ const UserListSuperAdmin = () => {
                 &times;
               </span>
               <h2 className="text-2xl font-bold mb-4">Issue Book</h2>
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
+
                   <div>
                     <label htmlFor="studentNumber" className="block text-gray-700 font-semibold mb-2">
                       Student Number:
@@ -148,6 +150,7 @@ const UserListSuperAdmin = () => {
                       className="w-full px-3 py-2 shadow-md rounded-md  focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
+                  
                   <div>
                     <label htmlFor="docId" className="block text-gray-700 font-semibold mb-2">
                       DDC ID:
@@ -189,6 +192,7 @@ const UserListSuperAdmin = () => {
                       className="w-full px-3 py-2 shadow-md rounded-md  focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                     />
                   </div>
+
                   <div>
                     <label htmlFor="returnDate" className="block text-gray-700 font-semibold mb-2">
                       Return Date:
@@ -216,6 +220,7 @@ const UserListSuperAdmin = () => {
           </div>
         </div>
       )}
+
       <button
         onClick={handleExport}
         className="bg-maroon text-white text-sm py-2 px-4 flex items-center rounded-full absolute bottom-2 right-4 cursor-pointer"

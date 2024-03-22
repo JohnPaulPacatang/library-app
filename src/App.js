@@ -13,14 +13,14 @@ import Setting from "./pages/user/Setting";
 
 import SidebarAdmin from "./components/SidebarAdmin";
 import HomeAdmin from "./pages/admin/HomeAdmin";
-import BooksAdmin from "./pages/admin/BooksAdmin";
+import Attendance from "./pages/admin/Attendance"
 import AddUser from "./pages/admin/AddUser";
-import IssueBookAdmin from "./pages/admin/IssueBookAdmin";
+import BooksAdmin from "./pages/admin/BooksAdmin";
 
 
 import SidebarSuperAdmin from "./components/SidebarSuperAdmin";
 import HomeSuperAdmin from "./pages/superadmin/HomeSuperAdmin";
-import BooksList from "./pages/superadmin/BooksList";
+import BooksSuperAdmin from "./pages/superadmin/BooksSuperAdmin";
 import ManageUser from "./pages/superadmin/ManageUser";
 import IssueBookSuperAdmin from "./pages/superadmin/IssueBookSuperAdmin";
 
@@ -53,9 +53,9 @@ function App() {
     routesComponent = (
       <Routes>
         <Route path="/home-admin" element={<HomeAdmin />} />
-        <Route path="/search-books" element={<BooksAdmin />} />
+        <Route path="/attendance-log" element={<Attendance />} />
         <Route path="/create-accounts" element={<AddUser />} />
-        <Route path="/books-issued" element={<IssueBookAdmin />} />
+        <Route path="/books-admin" element={<BooksAdmin />} />
       </Routes>
     );
   } else if (userRole === "super-admin") {
@@ -63,7 +63,7 @@ function App() {
     routesComponent = (
       <Routes>
         <Route path="/home-super-admin" element={<HomeSuperAdmin />} />
-        <Route path="/books-list" element={<BooksList />} />
+        <Route path="/books-super-admin" element={<BooksSuperAdmin />} />
         <Route path="/manage-users" element={<ManageUser />} />
         <Route path="/books-issued" element={<IssueBookSuperAdmin />} />
       </Routes>

@@ -3,7 +3,7 @@ import { supabase } from '../../utils/supabaseClient';
 import { FaRegFilePdf } from "react-icons/fa";
 import { BiSearch } from "react-icons/bi";
 
-const AdminSearchBooks = () => {
+const BooksAdmin = () => {
   // Dropdown category and search
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -14,7 +14,7 @@ const AdminSearchBooks = () => {
     setSelectedTable(event.target.value);
   };
 
-  const [issuedBooks, setIssuedBooks] = useState([
+  const [issuedBooks] = useState([
     {
       studentNumber: "123456",
       docId: "789",
@@ -121,16 +121,16 @@ const AdminSearchBooks = () => {
 
         </div>
 
-          <select
-            id="table"
-            name="table"
-            className="w-fit py-3 px-4 xl:ml-60 md:ml-32 bg-gray rounded-xl shadow-sm focus:outline-none focus:ring-maroon focus:border-maroon sm:text-sm"
-            value={selectedTable}
-            onChange={handleTableChange}>
-            <option value="Books">Books</option>
-            <option value="Issue">Issue</option>
-            <option value="Overdue">Overdue</option>
-          </select>
+        <select
+          id="table"
+          name="table"
+          className="w-fit py-3 px-4 xl:ml-60 md:ml-32 bg-gray rounded-xl shadow-sm focus:outline-none focus:ring-maroon focus:border-maroon sm:text-sm"
+          value={selectedTable}
+          onChange={handleTableChange}>
+          <option value="Books">Books</option>
+          <option value="Issue">Issue</option>
+          <option value="Overdue">Overdue</option>
+        </select>
       </div>
 
       {selectedTable === 'Books' && (
@@ -144,7 +144,7 @@ const AdminSearchBooks = () => {
                     <select
                       id="category"
                       name="category"
-                      className="w-fit py-3 px-4 xl:ml-4 bg-gray rounded-xl shadow-sm font-normal focus:outline-none focus:ring-maroon focus:border-maroon sm:text-sm category "
+                      className="w-fit py-3 px-4 xl:ml-4 bg-gray rounded-xl shadow-sm font-semibold focus:outline-none focus:ring-maroon focus:border-maroon sm:text-sm category "
                       value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}>
                       {categories.map((category) => (
@@ -283,4 +283,4 @@ const AdminSearchBooks = () => {
   );
 };
 
-export default AdminSearchBooks;
+export default BooksAdmin;
