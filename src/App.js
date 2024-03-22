@@ -13,7 +13,7 @@ import Setting from "./pages/user/Setting";
 
 import SidebarAdmin from "./components/SidebarAdmin";
 import HomeAdmin from "./pages/admin/HomeAdmin";
-import SearchBooksAdmin from "./pages/admin/SearchBooksAdmin";
+import BooksAdmin from "./pages/admin/BooksAdmin";
 import AddUser from "./pages/admin/AddUser";
 import IssueBookAdmin from "./pages/admin/IssueBookAdmin";
 
@@ -53,7 +53,7 @@ function App() {
     routesComponent = (
       <Routes>
         <Route path="/home-admin" element={<HomeAdmin />} />
-        <Route path="/search-books" element={<SearchBooksAdmin />} />
+        <Route path="/search-books" element={<BooksAdmin />} />
         <Route path="/create-accounts" element={<AddUser />} />
         <Route path="/books-issued" element={<IssueBookAdmin />} />
       </Routes>

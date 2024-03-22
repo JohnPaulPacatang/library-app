@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
+import Books from './BooksAdmin'
 import Issue from './Issue';
-import OverdueTable from './OverdueTable'; 
+import OverdueTable from './OverdueTable';
 import { BiSearch } from 'react-icons/bi';
 
 const IssueBook = () => {
-  const [selectedCategory, setSelectedCategory] = useState('Issue');
+  const [selectedTable, setSelectedTable] = useState('Issue');
 
-  const handleCategoryChange = (event) => {
-    setSelectedCategory(event.target.value);
+  const handleTableChange = (event) => {
+    setSelectedTable(event.target.value);
   };
 
   return (
@@ -22,19 +23,24 @@ const IssueBook = () => {
               className="w-full px-4 py-3 border border-opacity-25 rounded-3xl focus:outline-none focus:ring-1"
             />
           </div>
+
           <select
-            id="category"
-            name="category"
+            id="table"
+            name="table"
             className="w-fit py-3 px-4 xl:ml-60 md:ml-32 bg-gray rounded-xl shadow-sm focus:outline-none focus:ring-maroon focus:border-maroon sm:text-sm"
-            value={selectedCategory}
-            onChange={handleCategoryChange}
-          >
+            value={selectedTable}
+            onChange={handleTableChange}>
+            <option value="Books">Books</option>
             <option value="Issue">Issue</option>
             <option value="Overdue">Overdue</option>
           </select>
+
+
         </div>
       </div>
-      {selectedCategory === 'Issue' ? (
+      {selectedTable === 'Books' ? (
+        <Books />
+      ) : selectedTable === 'Issue' ? (
         <Issue />
       ) : (
         <OverdueTable />

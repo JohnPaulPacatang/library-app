@@ -108,7 +108,7 @@ const SidebarAdmin = () => {
 
             <Link to="/search-books">
               <li className={`text-white text-base flex items-center px-4 py-3 m-2 ${isActive("/search-books") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <GiBookshelf className="text-3xl mr-2" />Search Books
+                <GiBookshelf className="text-3xl mr-2" />Attendance
               </li>
             </Link>
 
@@ -120,7 +120,7 @@ const SidebarAdmin = () => {
 
             <Link to="/books-issued">
               <li className={`text-white text-base flex items-center px-4 py-3 m-2 ${isActive("/books-issued") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <LuBookDown className="text-3xl mr-2" />Book Issued
+                <LuBookDown className="text-3xl mr-2" />Books
               </li>
             </Link>
 
