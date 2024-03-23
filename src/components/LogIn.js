@@ -18,6 +18,12 @@ function Login({ handleLogin }) {
     const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD;
     const superadminUsername = process.env.REACT_APP_SUPERADMIN_USERNAME;
     const superadminPassword = process.env.REACT_APP_SUPERADMIN_PASSWORD;
+
+    console.log("Admin username:", adminUsername);
+    console.log("Admin password:", adminPassword);
+    console.log("Superadmin username:", superadminUsername);
+    console.log("Superadmin password:", superadminPassword);
+
     
     if (username === "user" && password === "1234") {
       handleLogin("user");
