@@ -26,18 +26,19 @@ import IssueBookSuperAdmin from "./pages/superadmin/IssueBookSuperAdmin";
 
 function App() {
   // dito nya tinatanggap yung bato ng handle submit
-  const storedUserRole = localStorage.getItem('userRole');
+  const storedUserRole = sessionStorage.getItem('userRole');
   const [userRole, setUserRole] = useState(storedUserRole);
+
 
   // tas dito nireread na yung user role para ma set
   const handleLogin = (role) => {
     setUserRole(role);
-    localStorage.setItem('userRole', role);
+    sessionStorage.setItem('userRole', role);
   };
 
   // Render sidebar and routes based on user role
   let sidebarComponent, routesComponent;
-  
+
   if (userRole === "user") {
     sidebarComponent = <SidebarUser />;
     routesComponent = (

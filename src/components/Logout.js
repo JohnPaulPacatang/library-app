@@ -11,7 +11,7 @@ export const handleLogout = () => {
     cancelButtonText: 'Cancel',
   }).then((result) => {
     if (result.isConfirmed) {
-      localStorage.removeItem('userRole');
+      sessionStorage.removeItem('userRole');
       window.location.href = "/";
 
     }

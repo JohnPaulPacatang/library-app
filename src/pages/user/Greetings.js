@@ -5,9 +5,7 @@ const Greetings = () => {
   const hour = currentDate.getHours();
   const username = 'Juan';
 
-
   const formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
 
   const getGreeting = () => {
     if (hour >= 5 && hour < 12) {

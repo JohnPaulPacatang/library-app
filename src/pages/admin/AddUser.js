@@ -85,7 +85,7 @@ const UserListAdmin = () => {
   
 
   const handleExport = () => {
-    alert('Succesfully exported as Spreadsheet...');
+    alert('Succesfully exported as PDF...');
   };
 
   return (

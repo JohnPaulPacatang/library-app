@@ -9,41 +9,38 @@ import 'react-toastify/dist/ReactToastify.css';
 function Login({ handleLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error] = useState("");
   const navigate = useNavigate();
- 
 
-  // dito yung hayup na maghhandle ng roles pag naginput ka ng username at password (sakit sa ulo)
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     try {
       const adminUsername = process.env.REACT_APP_ADMIN_USERNAME;
       const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD;
       const superadminUsername = process.env.REACT_APP_SUPERADMIN_USERNAME;
       const superadminPassword = process.env.REACT_APP_SUPERADMIN_PASSWORD;
-   
+
       if (username === adminUsername && password === adminPassword) {
         handleLogin("admin");
         navigate("/home-admin");
         return;
       }
-   
+
       if (username === superadminUsername && password === superadminPassword) {
         handleLogin("super-admin");
         navigate("/home-super-admin");
         return;
       }
-   
+
       const { data, error } = await supabase
         .from('users')
         .select('*')
         .eq('student_number', username);
-  
+
       if (error) {
         throw new Error("Invalid username or password");
       }
-  
+
       if (data.length === 1 && data[0].password === password) {
         handleLogin("user");
         navigate("/home-user");
@@ -55,7 +52,7 @@ function Login({ handleLogin }) {
       toast.error(error.message);
     }
   };
-  
+
 
   return (
     <div className="flex items-center justify-start min-h-screen bg-peach">
@@ -131,17 +128,11 @@ function Login({ handleLogin }) {
               </div>
             </div>
 
-            {/* Error message */}
-            {error && (
-              <div className="text-red text-sm text-center">{error}</div>
-            )}
-
             {/* Login Button */}
             <div className="bg-maroon p-2 rounded-md mt-16">
               <button
                 type="submit"
-                className="w-full p-2 text-xl font-bold text-white rounded-md "
-              >
+                className="w-full p-2 text-xl font-bold text-white rounded-md ">
                 Log In
               </button>
             </div>
