@@ -41,12 +41,11 @@ function Login({ handleLogin }) {
         .from('users')
         .select('*')
         .eq('student_number', username);
-  
-      // Handle errors from Supabase query
+
       if (error) {
-        throw new Error("Login error: " + error.message);
+        throw new Error("Invalid username or password");
       }
-  
+
       // Check if user data is found and password matches
       if (data.length === 1 && data[0].password === password) {
         handleLogin("user");
