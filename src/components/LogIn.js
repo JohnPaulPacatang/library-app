@@ -14,43 +14,52 @@ function Login({ handleLogin }) {
   // dito yung hayup na maghhandle ng roles pag naginput ka ng username at password (sakit sa ulo)
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    // Fetch user data from Supabase
-    const { data, error } = await supabase
-      .from('users')
-      .select('*')
-      .eq('student_number', username);
   
-    // Handle errors from Supabase query
-    if (error) {
-      console.error("Login error:", error);
-      setError("Invalid username or password");
-      return;
-    }
+    try {
+      // Check for admin and superadmin credentials
+      const adminUsername = process.env.REACT_APP_ADMIN_USERNAME;
+      const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD;
+      const superadminUsername = process.env.REACT_APP_SUPERADMIN_USERNAME;
+      const superadminPassword = process.env.REACT_APP_SUPERADMIN_PASSWORD;
   
-    // Check if user data is found and password matches
-    if (data.length === 1 && data[0].password === password) {
-      handleLogin("user");
-      navigate("/home-user");
-      return;
-    }
-    
-    // Check for admin and superadmin credentials
-    const adminUsername = process.env.REACT_APP_ADMIN_USERNAME;
-    const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD;
-    const superadminUsername = process.env.REACT_APP_SUPERADMIN_USERNAME;
-    const superadminPassword = process.env.REACT_APP_SUPERADMIN_PASSWORD;
-    
-    if (username === adminUsername && password === adminPassword) {
-      handleLogin("admin");
-      navigate("/home-admin");
-    } else if (username === superadminUsername && password === superadminPassword) {
-      handleLogin("super-admin");
-      navigate("/home-super-admin");
-    } else {
-      setError("Invalid username or password");
+      // Check if the provided username and password match admin credentials
+      if (username === adminUsername && password === adminPassword) {
+        handleLogin("admin");
+        navigate("/home-admin");
+        return;
+      }
+  
+      // Check if the provided username and password match superadmin credentials
+      if (username === superadminUsername && password === superadminPassword) {
+        handleLogin("super-admin");
+        navigate("/home-super-admin");
+        return;
+      }
+  
+      // If not admin or superadmin, proceed to fetch user data from Supabase
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('student_number', username);
+  
+      // Handle errors from Supabase query
+      if (error) {
+        throw new Error("Login error: " + error.message);
+      }
+  
+      // Check if user data is found and password matches
+      if (data.length === 1 && data[0].password === password) {
+        handleLogin("user");
+        navigate("/home-user");
+      } else {
+        throw new Error("Invalid username or password");
+      }
+    } catch (error) {
+      console.error(error);
+      setError(error.message);
     }
   };
+  
   
   
 
