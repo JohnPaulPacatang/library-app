@@ -98,7 +98,7 @@ const LibraryLog = () => {
                         Export as PDF
                       </button>
                     <button
-                      className='bg-gray text-black rounded-xl p-3 hover:bg-maroon hover:text-white'
+                      className='bg-white text-black border rounded-xl p-3 hover:bg-maroon hover:text-white'
                       onClick={handleOpenModal}>
                       Sign in
                   </button>

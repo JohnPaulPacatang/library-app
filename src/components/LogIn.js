@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { supabase } from '../utils/supabaseClient';
 import { FaUser, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -11,18 +12,36 @@ function Login({ handleLogin }) {
  
 
   // dito yung hayup na maghhandle ng roles pag naginput ka ng username at password (sakit sa ulo)
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    
+    // Fetch user data from Supabase
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('student_number', username);
   
+    // Handle errors from Supabase query
+    if (error) {
+      console.error("Login error:", error);
+      setError("Invalid username or password");
+      return;
+    }
+  
+    // Check if user data is found and password matches
+    if (data.length === 1 && data[0].password === password) {
+      handleLogin("user");
+      navigate("/home-user");
+      return;
+    }
+    
+    // Check for admin and superadmin credentials
     const adminUsername = process.env.REACT_APP_ADMIN_USERNAME;
     const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD;
     const superadminUsername = process.env.REACT_APP_SUPERADMIN_USERNAME;
     const superadminPassword = process.env.REACT_APP_SUPERADMIN_PASSWORD;
     
-    if (username === "user" && password === "1234") {
-      handleLogin("user");
-      navigate("/home-user");
-    } else if (username === adminUsername && password === adminPassword) {
+    if (username === adminUsername && password === adminPassword) {
       handleLogin("admin");
       navigate("/home-admin");
     } else if (username === superadminUsername && password === superadminPassword) {
@@ -32,6 +51,8 @@ function Login({ handleLogin }) {
       setError("Invalid username or password");
     }
   };
+  
+  
 
   return (
     <div className="flex items-center justify-start min-h-screen bg-peach">

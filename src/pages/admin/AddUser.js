@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabaseClient';
-import { BsFileEarmarkSpreadsheetFill } from "react-icons/bs";
+import { FaRegFilePdf } from "react-icons/fa";
 import { BiSearch } from 'react-icons/bi';
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { IoEyeOutline } from "react-icons/io5";
@@ -67,7 +67,6 @@ const UserListAdmin = () => {
       console.error("Error adding user:", error);
     }
   }
-
   
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -127,12 +126,19 @@ const UserListAdmin = () => {
               <th colSpan='6'>
                 <div className='flex justify-between items-center px-5 py-4'>
                   <h2 className='text-xl text-black'>Users list</h2>
-                  <button
-                    className='bg-white text-black border rounded-xl p-3 hover:bg-maroon hover:text-white'
-                    onClick={handleOpenModal}
-                  >
-                    Add User
-                  </button>
+                  <div className="flex items-center gap-5">
+                    <button
+                      onClick={handleExport}
+                      className='bg-maroon text-white text-sm py-3 px-3 flex items-center rounded-full cursor-pointer'>
+                      <FaRegFilePdf className="mr-1" />Export as PDF
+                    </button>
+                    <button
+                      className='bg-white text-black border rounded-xl p-3 hover:bg-maroon hover:text-white'
+                      onClick={handleOpenModal}
+                    >
+                      Add User
+                    </button>
+                  </div>
                 </div>
               </th>
             </tr>
@@ -272,12 +278,7 @@ const UserListAdmin = () => {
           </div>
         </div>
       )}
-
-      <button
-        onClick={handleExport}
-        className='bg-maroon text-white text-sm py-2 px-4 flex items-center rounded-full absolute bottom-2 right-4 cursor-pointer'>
-        <BsFileEarmarkSpreadsheetFill className="mr-1" />Export as Spreadsheet
-      </button>
+      
     </div>
   );
 };
