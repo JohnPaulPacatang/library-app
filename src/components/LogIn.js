@@ -2,51 +2,48 @@ import React, { useState } from "react";
 import { supabase } from '../utils/supabaseClient';
 import { FaUser, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function Login({ handleLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error] = useState("");
   const navigate = useNavigate();
  
 
   // dito yung hayup na maghhandle ng roles pag naginput ka ng username at password (sakit sa ulo)
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+    
     try {
-      // Check for admin and superadmin credentials
       const adminUsername = process.env.REACT_APP_ADMIN_USERNAME;
       const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD;
       const superadminUsername = process.env.REACT_APP_SUPERADMIN_USERNAME;
       const superadminPassword = process.env.REACT_APP_SUPERADMIN_PASSWORD;
-  
-      // Check if the provided username and password match admin credentials
+   
       if (username === adminUsername && password === adminPassword) {
         handleLogin("admin");
         navigate("/home-admin");
         return;
       }
-  
-      // Check if the provided username and password match superadmin credentials
+   
       if (username === superadminUsername && password === superadminPassword) {
         handleLogin("super-admin");
         navigate("/home-super-admin");
         return;
       }
-  
-      // If not admin or superadmin, proceed to fetch user data from Supabase
+   
       const { data, error } = await supabase
         .from('users')
         .select('*')
         .eq('student_number', username);
-
+  
       if (error) {
         throw new Error("Invalid username or password");
       }
-
-      // Check if user data is found and password matches
+  
       if (data.length === 1 && data[0].password === password) {
         handleLogin("user");
         navigate("/home-user");
@@ -55,11 +52,9 @@ function Login({ handleLogin }) {
       }
     } catch (error) {
       console.error(error);
-      setError(error.message);
+      toast.error(error.message);
     }
   };
-  
-  
   
 
   return (
@@ -88,7 +83,7 @@ function Login({ handleLogin }) {
             </h2>
           </div>
 
-          <form className="space-y-10 p-6" onSubmit={handleSubmit}>
+          <form className="space-y-12 p-6" onSubmit={handleSubmit}>
             {/* Username input */}
             <div className="relative">
               <label
