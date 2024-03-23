@@ -672,8 +672,6 @@ const BookSuperAdmin = () => {
         </div>
       )}
 
-
-
     </div>
   );
 };

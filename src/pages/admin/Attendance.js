@@ -1,40 +1,63 @@
-import React, { useState, useEffect } from "react";
-import { BsFileEarmarkSpreadsheetFill } from "react-icons/bs";
+import React, { useState } from 'react';
+import { FaRegFilePdf } from "react-icons/fa";
 
-const LibraryLogs = () => {
+const LibraryLog = () => {
   const [showModal, setShowModal] = useState(false);
-  const [studentNumber, setStudentNumber] = useState("");
-  const [name, setName] = useState("");
-  const [course, setCourse] = useState("");
-  const [userList, setUserList] = useState([]);
-  const [username] = useState("Admin");
 
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [studentNumber, setStudentNumber] = useState('');
+  const [Name, setName] = useState('');
+  const [course, setCourse] = useState('');
+ 
+  
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const hour = currentTime.getHours();
-
-  const formattedTime = currentTime.toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-
-  const getGreeting = () => {
-    if (hour >= 5 && hour < 12) {
-      return "Good morning";
-    } else if (hour >= 12 && hour < 18) {
-      return "Good afternoon";
-    } else {
-      return "Good evening";
-    }
-  };
+  // Define userList here
+  const userList = [
+    {
+        studentNumber: 20226535,
+        name: 'Pacatang, John Paul B.',
+        course: 'BSCS',
+        date: '3/22/2024',
+        timein: '01:57 PM',
+        timeout: '02:57 PM',
+        action: 'Signed Out',
+      },
+      {
+        studentNumber: 20226869,
+        name: 'Tresmanio, Ryan T.',
+        course: 'BSCS',
+        date: '3/20/2024',
+        timein: '12:57 AM',
+        timeout: '01:38 PM',
+        action: 'Signed Out',
+      },
+      {
+        studentNumber: 20225301,
+        name: 'Clara, Prime John F.',
+        course: 'BSCS',
+        date: '3/22/2024',
+        timein: '01:57 pm',
+        timeout: '02:57 pm',
+        action: 'Signed Out',
+      },
+      {
+        studentNumber: 20227468,
+        name: 'Mantes, Reynold V.',
+        course: 'BSCS',
+        date: '3/25/2024',
+        timein: '01:25 pm',
+        timeout: '04:23 pm',
+        action: 'Signed Out',
+      },
+      {
+        studentNumber: 20220000,
+        name: 'Yunting, Joannes Paulus',
+        course: 'BSCS',
+        date: '3/22/2024',
+        timein: '03:12 pm',
+        timeout: '06:24 pm',
+        action: 'Signed Out',
+      },
+  ];
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -42,142 +65,80 @@ const LibraryLogs = () => {
 
   const handleCloseModal = () => {
     setShowModal(false);
-    setStudentNumber("");
-    setName("");
-    setCourse("");
+
+    setStudentNumber('');
+    setName('');
+    setCourse('');
+  
   };
 
   const handleSignIn = () => {
-    const newUserList = [
-      ...userList,
-      {
-        studentNumber: parseInt(studentNumber),
-        name,
-        course,
-        date: currentTime.toLocaleDateString(),
-        timeIn: formattedTime,
-        timeOut: "",
-        action: "Signed In",
-      },
-    ];
-    setUserList(newUserList);
+    alert('Oke na...');
     handleCloseModal();
   };
 
-  const handleSignOut = (studentNumber) => {
-    const currentUserList = userList.map((user) => {
-      if (user.studentNumber === studentNumber) {
-        user.timeOut = new Date().toLocaleTimeString();
-        user.action = "Signed Out";
-      }
-      return user;
-    });
-    setUserList(currentUserList);
-  };
-
   const handleExport = () => {
-    alert('Succesfully exported as Spreadsheet...');
+    alert('Succesfully exported as PDF...');
   };
 
   return (
-    <div className="px-3 flex-1 mt-3">
-      <div className="p-4 bg-white rounded-lg shadow-lg mb-3">
-        <div className="flex justify-between">
-          <div className="Greetings">
-            <p className="text-xl font-semibold pr-4">
-              {getGreeting()},{" "}
-              <span className="text-maroon">Welcome {username}!👋</span>
-            </p>
-          </div>
-          <div>
-            <p className="text-xl font-semibold">
-              {currentTime.toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}{" "}
-              |{" "}
-              {currentTime.toLocaleDateString("en-US", {
-                weekday: "long",
-              })}
-              , {formattedTime}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">        
-        <table className="bg-white w-full rounded-2xl px-2 py-2 shadow-xl">
-          <thead className="sticky top-0 bg-white">
-            <tr className="pb-2">
-              <th colSpan="10">
-                <div className="flex justify-between items-center px-5 py-4">
-                  <h2 className="text-xl text-black">Library Log</h2>
-                  <button
-                    className="bg-white text-black border rounded-xl p-3 hover:bg-maroon hover:text-white"
-                    onClick={handleOpenModal}
-                  >
-                    Sign in
+    <div className='px-4 flex-1 pt-4'>
+      <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
+        <table className='bg-white w-full rounded-2xl px-2 py-2 shadow-xl'>
+          <thead className='sticky top-0 bg-white'>
+            <tr className='pb-2'>
+              <th colSpan='10'>
+                <div className='flex justify-between items-center px-5 py-4'>
+                  <h2 className='text-xl text-black'>Library Log</h2>
+                  <div className="flex items-center gap-5">
+                    <button
+                        onClick={handleExport}
+                        className="bg-maroon text-white text-sm py-3 px-3 flex items-center rounded-full cursor-pointer">
+                        <FaRegFilePdf className="mr-1" />
+                        Export as PDF
+                      </button>
+                    <button
+                      className='bg-gray text-black rounded-xl p-3 hover:bg-maroon hover:text-white'
+                      onClick={handleOpenModal}>
+                      Sign in
                   </button>
+                  </div>
                 </div>
               </th>
             </tr>
 
-            <tr className="text-left text-black text-base border-b border-gray">
-              <th className="px-5 py-4 w-1/6">Student No.</th>
-              <th className="px-5 py-4 w-1/6">Name</th>
-              <th className="px-5 py-4 w-1/6">Course</th>
-              <th className="px-5 py-4 w-1/6">Date</th>
-              <th className="px-5 py-4 w-1/6">Time In</th>
-              <th className="px-5 py-4 w-1/6">Time Out</th>
-              <th className="px-5 py-4 w-1/6">Action</th>
+            <tr className='text-left text-black text-lg border-b border-gray'>
+              <th className='px-5 py-4 w-1/6'>Student No.</th>
+              <th className='px-5 py-4 w-1/6'>Name</th>
+              <th className='px-4 py-4 w-1/6'>Course</th>
+              <th className='px-4 py-4 w-1/6'>Date</th>
+              <th className='px-4 py-4 w-1/6'>Time In</th>
+              <th className='px-4 py-4 w-1/6'>Time Out</th>
+              <th className='px-4 py-4 w-1/6'>Action</th>
             </tr>
           </thead>
 
           <tbody>
-            {userList.map((item) => {
-              return (
-                <tr
-                  key={item.studentNumber}
-                  className="text-sm border-b border-gray"
-                >
-                  <td className="px-4 py-1 w-1/6">{item.studentNumber}</td>
-                  <td className="px-4 py-1 w-1/6">{item.name}</td>
-                  <td className="px-4 py-1 w-1/6">{item.course}</td>
-                  <td className="px-4 py-1 w-1/6">{item.date}</td>
-                  <td className="px-4 py-1 w-1/6">{item.timeIn}</td>
-                  <td className="px-4 py-1 w-1/6">{item.timeOut}</td>
-                  <td
-                    className={`px-4 py-1 w-1/6 ${
-                      item.action === "Signed In" ? "text-green" : "text-red"
-                    }`}
-                  >
-                    {item.action}
-                  </td>
-                  <td className="px-5 py-1 w-1/6">
-                    <button
-                      className={
-                        item.action === "Signed In"
-                          ? "bg-red text-white px-5 py-1 rounded-lg"
-                          : "bg-green-600 text-white px-5 py-1 rounded-lg"
-                      }
-                      onClick={() => handleSignOut(item.studentNumber)}
-                    >
-                      {item.action === "Signed In" ? "Sign Out" : "Sign In"}
-                    </button>
-                  </td>
-                </tr>
-              );
-            })}
+            {userList.map((item) => (
+              <tr key={item.studentNumber} className='border-b border-gray text-sm'>
+                <td className='px-5 py-2 w-1/12'>{item.studentNumber}</td>
+                <td className='px-5 py-2 w-1/12'>{item.name}</td>
+                <td className="px-5 py-2 w-1/12">{item.course}</td>
+                <td className="px-5 py-2 w-1/12">{item.date}</td>
+                <td className="px-5 py-2 w-1/12">{item.timein}</td>
+                <td className="px-5 py-2 w-1/12">{item.timeout}</td>
+                <td className="px-5 py-2 w-1/12 text-red">{item.action}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
 
       {showModal && (
-        <div
-          className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl"
-          onClick={() => setShowModal(false)}
-        >
+       <div
+       className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl"
+       onClick={() => setShowModal(false)}
+     >
           <div
             className="bg-peach p-12 rounded-lg shadow-2xl"
             onClick={(e) => e.stopPropagation()}
@@ -203,7 +164,7 @@ const LibraryLogs = () => {
                   type="text"
                   placeholder="Name"
                   className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                  value={name}
+                  value={Name}
                   required
                   onChange={(e) => setName(e.target.value)}
                 
@@ -231,13 +192,9 @@ const LibraryLogs = () => {
           </div>
         </div>
       )}
-      <button
-        onClick={handleExport}
-        className='bg-maroon text-white text-sm py-2 px-4 flex items-center rounded-full absolute bottom-2 right-4 cursor-pointer'>
-        <BsFileEarmarkSpreadsheetFill className="mr-1" />Export as Spreadsheet
-      </button>
+     
     </div>
   );
 };
 
-export default LibraryLogs;
+export default LibraryLog;

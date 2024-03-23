@@ -9,8 +9,8 @@ import {
 import { MdDashboard } from "react-icons/md";
 import { GiBookshelf } from "react-icons/gi";
 import { IoIosLogOut } from "react-icons/io";
-import { LuBookDown } from "react-icons/lu";
 import Profile from "../assets/profile.jpg";
+import { FaPersonWalkingArrowRight } from "react-icons/fa6";
 import { handleLogout } from "./Logout";
 
 const SidebarAdmin = () => {
@@ -44,7 +44,7 @@ const SidebarAdmin = () => {
 
             <Link to="/attendance-log">
               <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/attendance-log") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <LuBookDown />
+                <FaPersonWalkingArrowRight />
               </li>
             </Link>
 
@@ -56,7 +56,7 @@ const SidebarAdmin = () => {
 
             <Link to="/books-admin">
               <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/books-admin") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                 <GiBookshelf />
+                <GiBookshelf />
               </li>
             </Link>
 
@@ -108,7 +108,7 @@ const SidebarAdmin = () => {
 
             <Link to="/attendance-log">
               <li className={`text-white text-base flex items-center px-4 py-3 m-2 ${isActive("/attendance-log") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <LuBookDown className="text-3xl mr-2" />Attendance
+                <FaPersonWalkingArrowRight className="text-3xl mr-2" />Walk in
               </li>
             </Link>
 

@@ -8,18 +8,24 @@ function Login({ handleLogin }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
+ 
 
   // dito yung hayup na maghhandle ng roles pag naginput ka ng username at password (sakit sa ulo)
   const handleSubmit = (event) => {
     event.preventDefault();
+  
+    const adminUsername = process.env.REACT_APP_ADMIN_USERNAME;
+    const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD;
+    const superadminUsername = process.env.REACT_APP_SUPERADMIN_USERNAME;
+    const superadminPassword = process.env.REACT_APP_SUPERADMIN_PASSWORD;
+    
     if (username === "user" && password === "1234") {
       handleLogin("user");
       navigate("/home-user");
-    } else if (username === "admin" && password === "1234") {
+    } else if (username === adminUsername && password === adminPassword) {
       handleLogin("admin");
       navigate("/home-admin");
-    } else if (username === "superadmin" && password === "1234") {
+    } else if (username === superadminUsername && password === superadminPassword) {
       handleLogin("super-admin");
       navigate("/home-super-admin");
     } else {
