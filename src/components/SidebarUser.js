@@ -75,7 +75,7 @@ const SidebarUser = () => {
                 alt="cooler"
                 width="48"
                 height="48"
-                class="rounded-full"
+                className="rounded-full"
               />
 
               <div className="ml-3">
