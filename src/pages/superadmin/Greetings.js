@@ -1,14 +1,19 @@
-
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Greetings = () => {
-  const currentDate = new Date();
-  const hour = currentDate.getHours();
-  const username = 'Juan';
+  const [currentTime, setCurrentTime] = useState(new Date());
 
+  useEffect(() => {
+    const intervalID = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000); 
+   
+    return () => clearInterval(intervalID);
+  }, []); 
 
-  const formattedTime = currentDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
+  const hour = currentTime.getHours();
+  const username = 'Super Admin';
+  const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   const getGreeting = () => {
     if (hour >= 5 && hour < 12) {
@@ -30,8 +35,8 @@ const Greetings = () => {
         </div>
         <div>
           <p className="text-xl font-semibold">
-            {currentDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} |{' '}
-            {currentDate.toLocaleDateString('en-US', { weekday: 'long' })}, {formattedTime}
+            {currentTime.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} |{' '}
+            {currentTime.toLocaleDateString('en-US', { weekday: 'long' })}, {formattedTime}
           </p>
         </div>
       </div>

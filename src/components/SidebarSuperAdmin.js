@@ -1,11 +1,8 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
-import {
-  TbLayoutSidebarRightExpandFilled,
-  TbLayoutSidebarLeftExpandFilled,
-  TbSettings,
-} from "react-icons/tb";
+import {TbSettings} from "react-icons/tb";
+import { IoArrowUndoCircleOutline, IoArrowRedoCircleOutline } from "react-icons/io5";
 import { MdDashboard } from "react-icons/md";
 import { GiBookshelf } from "react-icons/gi";
 import { IoIosLogOut } from "react-icons/io";
@@ -32,7 +29,7 @@ const SidebarSuperAdmin = () => {
               className="text-3xl text-center px-4 py-3 m-2 text-white hover:text-blue hover:rounded-xl cursor-pointer"
               onClick={() => setisOpen(true)}
             >
-              <TbLayoutSidebarLeftExpandFilled />
+              <IoArrowRedoCircleOutline />
             </li>
 
             <hr className="m-2 text-white text-opacity-50" />
@@ -93,36 +90,36 @@ const SidebarSuperAdmin = () => {
                 </h1>
               </div>
 
-              <div className="text-3xl ml-auto text-white mb-2 hover:text-blue cursor-pointer" onClick={() => setisOpen(!isOpen)}>
-                <TbLayoutSidebarRightExpandFilled />
+              <div className="text-3xl ml-auto text-white mb-3 hover:text-blue cursor-pointer" onClick={() => setisOpen(!isOpen)}>
+                <IoArrowUndoCircleOutline />
               </div>
             </div>
 
             <hr className="m-2 text-gray text-opacity-50" />
 
             <Link to="/home-super-admin">
-              <li className={`text-white text-base flex items-center px-4 py-3 m-2 ${isActive("/home-super-admin") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
+              <li className={`text-white text-base flex items-center px-4 py-3 m-3 ${isActive("/home-super-admin") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
                 <MdDashboard className="text-3xl mr-2" />
                 Dashboard
               </li>
             </Link>
 
             <Link to="/books-super-admin">
-              <li className={`text-white text-base flex items-center px-4 py-3 m-2 ${isActive("/books-super-admin") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
+              <li className={`text-white text-base flex items-center px-4 py-3 m-3 ${isActive("/books-super-admin") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
                 <GiBookshelf className="text-3xl mr-2" />
                 Books
               </li>
             </Link>
 
             <Link to="/manage-users">
-              <li className={`text-white text-base flex items-center px-4 py-3 m-2 ${isActive("/manage-users") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
+              <li className={`text-white text-base flex items-center px-4 py-3 m-3 ${isActive("/manage-users") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
                 <TbSettings className="text-3xl mr-2" />
                 User Lists
               </li>
             </Link>
 
             <Link to="/books-issued">
-              <li className={`text-white text-base flex items-center px-4 py-3 m-2 ${isActive("/books-issued") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
+              <li className={`text-white text-base flex items-center px-4 py-3 m-3 ${isActive("/books-issued") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
                 <LuBookDown className="text-3xl mr-2" />
                 Book Issued
               </li>
@@ -130,7 +127,7 @@ const SidebarSuperAdmin = () => {
 
             <div className="mt-auto">
               <hr className="m-2 text-gray text-opacity-50" />
-              <li className="text-white text-base flex items-center px-4 py-3 m-2 hover:bg-white hover:text-black hover:rounded-xl cursor-pointer" onClick={handleLogout}>
+              <li className="text-white text-base flex items-center px-4 py-3 m-3 hover:bg-white hover:text-black hover:rounded-xl cursor-pointer" onClick={handleLogout}>
                 <IoIosLogOut className="text-3xl mr-2" /> Log Out
               </li>
             </div>

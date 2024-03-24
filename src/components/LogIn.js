@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { supabase } from '../utils/supabaseClient';
 import { FaUser, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { AiOutlineEyeInvisible } from "react-icons/ai";
+import { IoEyeOutline } from "react-icons/io5";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -9,6 +11,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function Login({ handleLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -42,7 +45,7 @@ function Login({ handleLogin }) {
       }
 
       if (data.length === 1 && data[0].password === password) {
-        handleLogin("user");
+        handleLogin("user", data[0].first_name, data[0].last_name);
         navigate("/home-user");
       } else {
         throw new Error("Invalid username or password");
@@ -117,7 +120,7 @@ function Login({ handleLogin }) {
                 <FaLock className="h-5 w-5 text-black absolute left-2" />
 
                 <input
-                  type="password"
+                  type={visible ? "text" : "password"}
                   id="password"
                   name="password"
                   value={password}
@@ -125,6 +128,11 @@ function Login({ handleLogin }) {
                   className="mt-1 pl-8 p-4 w-full rounded-xl bg-gray shadow-sm"
                   placeholder="Enter Password"
                 />
+                <div className="absolute right-0 top-0 mt-14 mr-4 text-xl text-maroon" onClick={() => setVisible(!visible)}>
+                  {
+                    visible ? <IoEyeOutline /> : <AiOutlineEyeInvisible />
+                  }
+                </div>
               </div>
             </div>
 
