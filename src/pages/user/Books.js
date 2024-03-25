@@ -12,10 +12,10 @@ const Books = () => {
 
   return (
     <div className="flex flex-col">
-      <h1 className="ml-3 my-3 text-left text-xl font-bold">Top Books</h1>
-        <div className="flex flex-row items-center gap-6 ml-3">
+      <h1 className="ml-5 mb-5 text-left text-xl font-bold">Top Books</h1>
+        <div className="flex flex-row items-center gap-6 ml-5">
         {books.map((book) => (
-          <div key={book.id} className="bg-white rounded-lg p-5 shadow-xl w-full">
+          <div key={book.id} className="bg-white rounded-lg p-5 shadow w-full">
             <img src={Profile} alt={book.title} width="125" height="125" className="m-auto mb-3" />
             <p className="text-center">{book.title}</p>
           </div>

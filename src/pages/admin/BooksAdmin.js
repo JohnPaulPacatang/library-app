@@ -7,6 +7,12 @@ const BooksAdmin = () => {
   // Dropdown category and search
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [showModalIssue, setShowModalIssue] = useState(false);
+
+  const handleOpenModalIssue = () => {
+    setShowModalIssue(true);
+  };
+
 
   const [selectedTable, setSelectedTable] = useState('Books');
 
@@ -106,8 +112,8 @@ const BooksAdmin = () => {
 
 
   return (
-    <div className="px-3 flex-1">
-      <div className="bg-white my-3 px-3 py-2 rounded-xl flex justify-between search-container">
+    <div className="px-5 flex-1">
+      <div className="bg-white my-5 px-3 py-2 rounded-xl shadow flex justify-between search-container">
         <div className="flex items-center w-full">
           <BiSearch className="text-3xl mx-2 my-2 sm:text-4xl" />
 
@@ -124,7 +130,7 @@ const BooksAdmin = () => {
         <select
           id="table"
           name="table"
-          className="w-fit py-3 px-4 xl:ml-60 md:ml-32 bg-gray rounded-xl shadow-sm focus:outline-none focus:ring-maroon focus:border-maroon sm:text-sm"
+          className="w-fit py-3 px-4 xl:ml-60 md:ml-32 bg-gray rounded-xl shadow-sm focus:outline-none sm:text-sm"
           value={selectedTable}
           onChange={handleTableChange}>
           <option value="Books">Books</option>
@@ -135,7 +141,7 @@ const BooksAdmin = () => {
 
       {selectedTable === 'Books' && (
         <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
-          <table className="bg-white w-full rounded-2xl px-2 py-2 shadow-xl">
+          <table className="bg-white w-full rounded-lg px-2 py-2 shadow-xl">
             <thead>
               <tr className="pb-2">
                 <th colSpan="10">
@@ -144,7 +150,7 @@ const BooksAdmin = () => {
                     <select
                       id="category"
                       name="category"
-                      className="w-fit py-3 px-4 xl:ml-4 bg-gray rounded-xl shadow-sm font-semibold focus:outline-none focus:ring-maroon focus:border-maroon sm:text-sm category "
+                      className="w-fit py-3 px-4 xl:ml-4 bg-gray rounded-xl shadow-sm font-semibold sm:text-sm category "
                       value={selectedCategory}
                       onChange={(e) => setSelectedCategory(e.target.value)}>
                       {categories.map((category) => (
@@ -179,7 +185,7 @@ const BooksAdmin = () => {
                     {book.availability ? "Available" : "Not Available"}
                   </td>
                   <td className="px-5">
-                    <button className="text-sm text-black bg-white border p-2 px-4 rounded-lg hover:shadow-xl hover:bg-maroon hover:text-white">Issue</button>
+                    <button className="text-sm text-white bg-blue border p-2 px-4 rounded-lg hover:text-white"  onClick={handleOpenModalIssue}>Issue</button>
                   </td>
                 </tr>
               ))}
@@ -190,7 +196,7 @@ const BooksAdmin = () => {
 
       {selectedTable === 'Issue' && (
         <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
-          <table className="bg-white w-full rounded-2xl px-2 py-2 shadow-xl">
+          <table className="bg-white w-full rounded-lg px-2 py-2 shadow-xl">
             <thead className="sticky top-0 bg-white">
               <tr className="pb-2">
                 <th colSpan="10">
@@ -198,7 +204,7 @@ const BooksAdmin = () => {
                     <h2 className="text-xl text-black">Book Issued</h2>
                     <button
                       onClick={handleExport}
-                      className="bg-maroon text-white text-sm py-2 px-4 flex items-center rounded-full cursor-pointer">
+                      className="bg-gray text-black text-sm p-3 flex items-center rounded-xl hover:bg-blue hover:text-white cursor-pointer">
                       <FaRegFilePdf className="mr-1" />
                       Export as PDF
                     </button>
@@ -225,7 +231,7 @@ const BooksAdmin = () => {
                   <td className="px-5 py-2">{issue.issueDate}</td>
                   <td className="px-5 py-2">{issue.returnDate}</td>
                   <td className="px-5">
-                    <button className="text-sm text-black bg-white border p-2 px-4 rounded-lg hover:shadow-xl hover:bg-maroon hover:text-white">Issue</button>
+                    <button className="text-sm text-blue font-normal py-2 my-2  rounded-lg hover:text-black">Mark as Returned</button>
                   </td>
                 </tr>
               ))}
@@ -244,7 +250,7 @@ const BooksAdmin = () => {
                     <h2 className="text-xl text-black">Overdue books</h2>
                     <button
                       onClick={handleExport}
-                      className="bg-maroon text-white text-sm py-2 px-4 flex items-center rounded-full cursor-pointer">
+                      className="bg-gray text-black text-sm p-3 flex items-center rounded-xl hover:bg-blue hover:text-white cursor-pointer">
                       <FaRegFilePdf className="mr-1" />
                       Export as PDF
                     </button>
@@ -270,7 +276,7 @@ const BooksAdmin = () => {
                     <td className="px-5 py-2">{overdue.title}</td>
                     <td className="px-5 py-2">{overdue.status}</td>
                     <td className="px-5">
-                      <button className="text-sm text-black bg-white border p-2 px-4 rounded-lg hover:shadow-xl hover:bg-maroon hover:text-white">Issue</button>
+                      <button className="text-sm text-blue font-normal py-2 my-2  rounded-lg hover:text-black">Mark as Returned</button>
                     </td>
                   </tr>
                 ))}
@@ -279,6 +285,90 @@ const BooksAdmin = () => {
         </div>
       )}
 
+      {showModalIssue && (
+        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModalIssue(false)} >
+          <div className="bg-white p-8 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <h2 className="text-2xl font-bold mb-4 text-center">
+              Issue Book
+            </h2>
+
+            <form>
+              <div className="grid grid-cols-2 gap-4">
+
+                <div>
+                  <label className="text-sm m-1 font-semibold">
+                    Student Number:
+                  </label>
+                  <input
+                    type="text"
+                    name="studentNumber"
+                    id="studentNumber"
+                    placeholder="12345678"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                  />
+                </div>
+
+                <div >
+                  <label className="text-sm m-1 font-semibold">
+                    DDC ID:
+                  </label>
+                  <input
+                    type="text"
+                    name="docId"
+                    id="docId"
+                    placeholder="1234"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                  />
+                </div>
+
+                <div >
+                  <label className="text-sm m-1 font-semibold">
+                    Book Title:
+                  </label>
+                  <input
+                    type="text"
+                    name="title"
+                    id="title"
+                    placeholder="Superbook"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm m-1 font-semibold">
+                    Issue Date:
+                  </label>
+                  <input
+                    type="date"
+                    name="issueDate"
+                    id="issueDate"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="returnDate" className="text-sm m-1 font-semibold">Return Date:</label>
+                  <input
+                    type="date"
+                    name="returnDate"
+                    id="returnDate"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                  />
+                </div>
+              </div>
+
+
+              <div className="flex justify-center pt-4">
+                <button
+                  type="submit"
+                  className="bg-blue text-white font-semibold py-2 px-4  rounded-md shadow-sm mt-2">
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

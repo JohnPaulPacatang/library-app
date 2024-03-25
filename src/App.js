@@ -19,7 +19,6 @@ import SidebarSuperAdmin from "./components/SidebarSuperAdmin";
 import HomeSuperAdmin from "./pages/superadmin/HomeSuperAdmin";
 import BooksSuperAdmin from "./pages/superadmin/BooksSuperAdmin";
 import ManageUser from "./pages/superadmin/ManageUser";
-import IssueBookSuperAdmin from "./pages/superadmin/IssueBookSuperAdmin";
 
 function App() {
   // dito nya tinatanggap yung bato ng handle submit
@@ -79,7 +78,6 @@ function App() {
         <Route path="/home-super-admin" element={<HomeSuperAdmin />} />
         <Route path="/books-super-admin" element={<BooksSuperAdmin />} />
         <Route path="/manage-users" element={<ManageUser />} />
-        <Route path="/books-issued" element={<IssueBookSuperAdmin />} />
       </Routes>
     );
   } else {

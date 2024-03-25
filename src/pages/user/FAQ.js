@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import { BsQuestionCircleFill } from "react-icons/bs";
 
@@ -54,7 +53,7 @@ function FAQ() {
   };
 
   return (
-    <div className="faq-container py-8 mx-3 rounded-lg bg-peach flex-1">
+    <div className="faq-container py-8 mx-5 rounded-lg flex-1">
       <h1 className="text-3xl font-semibold mb-8 text-left">
         Frequently Asked Questions
         <BsQuestionCircleFill className="inline-block mb-1 ml-2" /> {}
@@ -63,13 +62,13 @@ function FAQ() {
         {faqData.map((faqItem, index) => (
           <div
             key={faqItem.id}
-            className={`faq-item drop-shadow-lg border-gray-300 py-3 bg-white my-8 pl-3 rounded-xl ${
+            className={`faq-item shadow border-gray-300 py-3 bg-white my-8 pl-3 rounded-xl ${
               index === expandedIndex ? " expanded" : ""
             }`}
           >
             <button
               className={`faq-question w-full flex items-center text-left text-lg font-large focus:outline-none ${
-                index === expandedIndex ? " text-maroon" : " text-gray-600"
+                index === expandedIndex ? " text-blue" : " text-gray-600"
               }`}
               onClick={() => toggleAccordion(index)}
             >

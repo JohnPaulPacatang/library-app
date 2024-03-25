@@ -67,7 +67,7 @@ const UserListAdmin = () => {
       console.error("Error adding user:", error);
     }
   }
-  
+
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const categories = ["All", "BSCS", "BSTM", "BSHM", "POLSCI", "BEED", "BSBA"];
@@ -82,15 +82,15 @@ const UserListAdmin = () => {
       user.email.toLowerCase().includes(searchQuery.toLowerCase())
       : false
   );
-  
+
 
   const handleExport = () => {
     alert('Succesfully exported as PDF...');
   };
 
   return (
-    <div className='px-3 flex-1'>
-      <div className='bg-white my-3 px-2 py-2 rounded-xl shadow-lg flex justify-between'>
+    <div className='px-5 flex-1'>
+      <div className='bg-white my-5 px-2 py-2 rounded-xl shadow flex justify-between'>
         <div className='flex items-center w-full'>
           <BiSearch className='text-3xl mx-2 my-2 sm:text-4xl' />
 
@@ -106,7 +106,7 @@ const UserListAdmin = () => {
         <select
           id='category'
           name='category'
-          className='w-fit py-3 px-4 xl:ml-60 md:ml-32 bg-gray rounded-xl shadow-sm focus:outline-none focus:ring-maroon focus:border-maroon sm:text-sm'
+          className='w-fit py-3 px-4 xl:ml-60 md:ml-32 bg-gray rounded-xl shadow-sm sm:text-sm'
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
         >
@@ -117,8 +117,8 @@ const UserListAdmin = () => {
           ))}
         </select>
       </div>
-            
-     
+
+
       <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
         <table className='bg-white w-full rounded-2xl px-2 py-2 shadow-xl'>
           <thead className='sticky top-0 bg-white'>
@@ -126,16 +126,16 @@ const UserListAdmin = () => {
               <th colSpan='6'>
                 <div className='flex justify-between items-center px-5 py-4'>
                   <h2 className='text-xl text-black'>Users list</h2>
-                  <div className="flex items-center gap-5">
+                  <div className="flex items-center gap-3">
                     <button
                       onClick={handleExport}
-                      className='bg-maroon text-white text-sm py-3 px-3 flex items-center rounded-full cursor-pointer'>
-                      <FaRegFilePdf className="mr-1" />Export as PDF
+                      className="bg-gray text-black text-sm p-3 flex items-center rounded-xl hover:bg-blue hover:text-white cursor-pointer">
+                      <FaRegFilePdf className="mr-1" />
+                      Export as PDF
                     </button>
                     <button
-                      className='bg-white text-black border rounded-xl p-3 hover:bg-maroon hover:text-white'
-                      onClick={handleOpenModal}
-                    >
+                      className="bg-gray text-black text-sm font-semibold rounded-xl p-3 hover:bg-blue hover:text-white"
+                      onClick={handleOpenModal}>
                       Add User
                     </button>
                   </div>
@@ -169,8 +169,8 @@ const UserListAdmin = () => {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl" onClick={() => setShowModal(false)}>
-          <div className="bg-peach p-4 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModal(false)}>
+          <div className="bg-white p-4 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-xl font-bold mb-4 text-center">
               Student Information
             </h2>
@@ -178,86 +178,85 @@ const UserListAdmin = () => {
             <form onSubmit={(e) => { e.preventDefault(); addUser(user); }}>
               <div className="grid grid-cols-2 gap-10">
                 <div className="flex flex-col w-72">
-                  <label className="text-sm ml-1">Student number:</label>
+                  <label className="text-sm m-1 font-semibold">Student number:</label>
 
                   <input
                     type="number"
                     placeholder="Student Number"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="studentNumber"
                     value={user.studentNumber}
                     onChange={handleChange}
                     required
                   />
 
-                  <label className="text-sm ml-1">Lastname:</label>
+                  <label className="text-sm m-1 font-semibold">Lastname:</label>
                   <input
                     type="text"
                     placeholder="Lastname"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="lastName"
                     value={user.lastName}
                     onChange={handleChange}
                     required
                   />
 
-                  <label className="text-sm ml-1">Firstname:</label>
+                  <label className="text-sm m-1 font-semibold">Firstname:</label>
                   <input
                     type="text"
                     placeholder="Firstname"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="firstName"
                     value={user.firstName}
                     onChange={handleChange}
                     required
                   />
 
-                  <label className="text-sm ml-1">Middlename:</label>
+                  <label className="text-sm m-1 font-semibold">Middlename:</label>
                   <input
                     type="text"
                     placeholder="Middlename"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="middleName"
                     value={user.middleName}
                     onChange={handleChange}
-                    required
                   />
                 </div>
 
                 <div className="flex flex-col w-72">
-                  <label className="text-sm ml-1">Password:</label>
+                  <label className="text-sm m-1 font-semibold">Password:</label>
                   <div className="relative">
                     <input
                       type={visible ? "text" : "password"}
                       placeholder="Password"
-                      className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                      className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                       name="password"
                       value={user.password}
                       onChange={handleChange}
                       required
                     />
-                    <div className="absolute right-0 top-0 mt-4 mr-4 text-xl text-maroon" onClick={() => setVisible(!visible)}>
+                    <div className="absolute right-0 top-0 mt-4 mr-4 text-xl text-blue" onClick={() => setVisible(!visible)}>
                       {
                         visible ? <IoEyeOutline /> : <AiOutlineEyeInvisible />
                       }
                     </div>
                   </div>
-                  <label className="text-sm ml-1">Email:</label>
+                  <label className="text-sm m-1 font-semibold">Email:</label>
                   <input
                     type="email"
                     placeholder="example@gmail.com"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="email"
                     value={user.email}
                     onChange={handleChange}
                     required
                   />
 
-                  <label className="text-sm ml-1">Course:</label>
+                  <label className="text-sm m-1 font-semibold">Course:</label>
                   <input
                     type="text"
                     placeholder="Course"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="course"
                     value={user.course}
                     onChange={handleChange}
@@ -269,7 +268,7 @@ const UserListAdmin = () => {
               <div className="flex justify-center pt-4">
                 <button
                   type="submit"
-                  className="bg-maroon text-white py-2 px-4 rounded-lg mr-2 hover:bg-blue">
+                  className="bg-blue text-white py-2 px-4 rounded-lg mr-2 hover:bg-blue">
                   Create account
                 </button>
               </div>
@@ -278,7 +277,7 @@ const UserListAdmin = () => {
           </div>
         </div>
       )}
-      
+
     </div>
   );
 };

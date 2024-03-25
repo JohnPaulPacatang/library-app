@@ -58,19 +58,19 @@ function Login({ handleLogin }) {
 
 
   return (
-    <div className="flex items-center justify-start min-h-screen bg-peach">
-      <div className="flex items-center justify-center w-1/2 min-h-screen text-center bg-maroon text-white p-8 rounded-br-md rounded-tr-md shadow-lg">
+    <div className="flex items-center justify-start min-h-screen">
+      <div className="flex items-center justify-center w-1/2 min-h-screen text-center bg-black text-white p-8 rounded-br-md rounded-tr-md shadow-lg">
         <h1 className="text-80xl font-bold">
           St. Clare College
           <p className="text-80xl"> of Caloocan</p>
-          <p className="text-80xl text-peach"> Library Management System</p>
+          <p className="text-80xl text-white"> Library Management System</p>
         </h1>
       </div>
 
 
-      <div className="bg-peach flex items-center justify-center w-1/2">
+      <div className="flex items-center justify-center w-1/2">
         <div
-          className="bg-white p-8 rounded-md shadow-lg w-80"
+          className="bg-white p-8 rounded-md shadow w-80"
           style={{ height: "90vh", width: "75vh" }}
         >
           <div className="bg-white p-2 rounded-md">
@@ -128,7 +128,7 @@ function Login({ handleLogin }) {
                   className="mt-1 pl-8 p-4 w-full rounded-xl bg-gray shadow-sm"
                   placeholder="Enter Password"
                 />
-                <div className="absolute right-0 top-0 mt-14 mr-4 text-xl text-maroon" onClick={() => setVisible(!visible)}>
+                <div className="absolute right-0 top-0 mt-14 mr-4 text-xl text-blue" onClick={() => setVisible(!visible)}>
                   {
                     visible ? <IoEyeOutline /> : <AiOutlineEyeInvisible />
                   }
@@ -137,7 +137,7 @@ function Login({ handleLogin }) {
             </div>
 
             {/* Login Button */}
-            <div className="bg-maroon p-2 rounded-md mt-16">
+            <div className="bg-blue p-2 rounded-md mt-16">
               <button
                 type="submit"
                 className="w-full p-2 text-xl font-bold text-white rounded-md ">
@@ -148,7 +148,7 @@ function Login({ handleLogin }) {
             {/* Don't have an account */}
             <div className="text-base text-black text-center mt-16">
               Don't have an account?
-              <p className="text-base text-red hover:text-blue mt-2 cursor-default">
+              <p className="text-base text-blue mt-2 cursor-default">
                 Go to library
               </p>
             </div>

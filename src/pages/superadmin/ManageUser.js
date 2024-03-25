@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from '../../utils/supabaseClient';
 import { BiSearch } from "react-icons/bi";
-import { BsFileEarmarkSpreadsheetFill } from "react-icons/bs";
+import { FaRegFilePdf } from "react-icons/fa";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { IoEyeOutline } from "react-icons/io5";
+import { BsThreeDots } from "react-icons/bs";
+import { Menu, MenuButton, MenuList, MenuItem, IconButton } from "@chakra-ui/react";
 
 const UserListSuperAdmin = () => {
   const [showModal, setShowModal] = useState(false);
@@ -20,7 +22,7 @@ const UserListSuperAdmin = () => {
 
   const [users, setUsers] = useState([]);
 
-  
+
   const [user, setUser] = useState({});
   const [userData, setUserData] = useState({});
 
@@ -30,8 +32,8 @@ const UserListSuperAdmin = () => {
 
   async function fetchUsers() {
     const { data } = await supabase
-    .from('users')
-    .select('*');
+      .from('users')
+      .select('*');
     setUsers(data);
   }
 
@@ -126,7 +128,7 @@ const UserListSuperAdmin = () => {
           course: userData.course,
         })
         .eq('id', userId);
-  
+
       setShowModalUpdate(false);
       console.log("User updated successfully.");
       fetchUsers();
@@ -151,12 +153,12 @@ const UserListSuperAdmin = () => {
   );
 
   const handleExport = () => {
-    alert('Succesfully exported as Spreadsheet...');
+    alert('Succesfully exported as PDF...');
   };
 
   return (
-    <div className="px-3 flex-1">
-      <div className="bg-white my-3 px-2 py-2 rounded-xl shadow-lg flex justify-between search-container">
+    <div className="px-5 flex-1">
+      <div className="bg-white my-5 px-2 py-2 rounded-xl shadow flex justify-between search-container">
         <div className="flex items-center w-full">
           <BiSearch className="text-3xl mx-2 my-2 sm:text-4xl" />
 
@@ -185,17 +187,25 @@ const UserListSuperAdmin = () => {
       </div>
 
       <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
-        <table className="bg-white w-full rounded-2xl px-2 py-2 shadow-xl">
+        <table className="bg-white w-full rounded-lg px-2 py-2 shadow-xl">
           <thead className="sticky top-0 bg-white">
             <tr className="pb-2">
               <th colSpan="10">
                 <div className="flex justify-between items-center px-5 py-4">
                   <h2 className="text-xl text-black">Users list</h2>
-                  <button
-                    className="bg-white text-black border rounded-xl p-3 hover:bg-maroon hover:text-white"
-                    onClick={handleOpenModal}>
-                    Add User
-                  </button>
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={handleExport}
+                      className="bg-gray text-black text-sm p-3 flex items-center rounded-xl hover:bg-blue hover:text-white cursor-pointer">
+                      <FaRegFilePdf className="mr-1" />
+                      Export as PDF
+                    </button>
+                    <button
+                      className="bg-gray text-black text-sm font-semibold rounded-xl p-3 hover:bg-blue hover:text-white"
+                      onClick={handleOpenModal}>
+                      Add User
+                    </button>
+                  </div>
                 </div>
               </th>
             </tr>
@@ -221,11 +231,25 @@ const UserListSuperAdmin = () => {
                 <td className="px-5 py-2">{user.email}</td>
                 <td className="px-5 py-2">{user.course}</td>
                 <td className="px-5">
-                  <button className="text-sm text-white bg-blue p-2 m-2 rounded-lg hover:shadow-xl"
-                  onClick={() => { displayUser(user.id); handleOpenModalUpdate(); }}>Update</button>
-                  <button className="text-sm text-white bg-red p-2 m-2 rounded-lg hover:shadow-xl" 
-                  onClick={() => {if (window.confirm("Are you sure you want to delete this user?")) {deleteUser(user.id);}}}>Delete
-                  </button>
+                  <Menu>
+                    <MenuButton
+                      as={IconButton}
+                      aria-label='Options'
+                      icon={<BsThreeDots style={{ fontSize: '2.5rem', marginLeft: '0.5rem' }} />}
+                      variant='outline'
+                    />
+                    <MenuList className="bg-white shadow rounded-lg p-1" zIndex={10}>
+                      <MenuItem>
+                        <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline"
+                          onClick={() => { displayUser(user.id); handleOpenModalUpdate(); }}>Update</button>
+                      </MenuItem>
+                      <MenuItem>
+                        <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline"
+                          onClick={() => { if (window.confirm("Are you sure you want to delete this user?")) { deleteUser(user.id); } }}>Delete
+                        </button>
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
                 </td>
               </tr>
             ))}
@@ -235,8 +259,8 @@ const UserListSuperAdmin = () => {
 
 
       {showModal && (
-        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl" onClick={() => setShowModal(false)}>
-          <div className="bg-peach p-4 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModal(false)}>
+          <div className="bg-white p-4 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-xl font-bold mb-4 text-center">
               Student Information
             </h2>
@@ -244,86 +268,85 @@ const UserListSuperAdmin = () => {
             <form onSubmit={(e) => { e.preventDefault(); addUser(user); }}>
               <div className="grid grid-cols-2 gap-10">
                 <div className="flex flex-col w-72">
-                  <label className="text-sm ml-1">Student number:</label>
+                  <label className="text-sm m-1 font-semibold">Student number:</label>
 
                   <input
                     type="number"
                     placeholder="Student Number"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="studentNumber"
                     value={user.studentNumber}
                     onChange={handleChange}
                     required
                   />
 
-                  <label className="text-sm ml-1">Lastname:</label>
+                  <label className="text-sm m-1 font-semibold">Lastname:</label>
                   <input
                     type="text"
                     placeholder="Lastname"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="lastName"
                     value={user.lastName}
                     onChange={handleChange}
                     required
                   />
 
-                  <label className="text-sm ml-1">Firstname:</label>
+                  <label className="text-sm m-1 font-semibold">Firstname:</label>
                   <input
                     type="text"
                     placeholder="Firstname"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="firstName"
                     value={user.firstName}
                     onChange={handleChange}
                     required
                   />
 
-                  <label className="text-sm ml-1">Middlename:</label>
+                  <label className="text-sm m-1 font-semibold">Middlename:</label>
                   <input
                     type="text"
                     placeholder="Middlename"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="middleName"
                     value={user.middleName}
                     onChange={handleChange}
-                    required
                   />
                 </div>
 
                 <div className="flex flex-col w-72">
-                  <label className="text-sm ml-1">Password:</label>
+                  <label className="text-sm m-1 font-semibold">Password:</label>
                   <div className="relative">
                     <input
                       type={visible ? "text" : "password"}
                       placeholder="Password"
-                      className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                      className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                       name="password"
                       value={user.password}
                       onChange={handleChange}
                       required
                     />
-                    <div className="absolute right-0 top-0 mt-4 mr-4 text-xl text-maroon" onClick={() => setVisible(!visible)}>
+                    <div className="absolute right-0 top-0 mt-4 mr-4 text-xl text-blue" onClick={() => setVisible(!visible)}>
                       {
                         visible ? <IoEyeOutline /> : <AiOutlineEyeInvisible />
                       }
                     </div>
                   </div>
-                  <label className="text-sm ml-1">Email:</label>
+                  <label className="text-sm m-1 font-semibold">Email:</label>
                   <input
                     type="email"
                     placeholder="example@gmail.com"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="email"
                     value={user.email}
                     onChange={handleChange}
                     required
                   />
 
-                  <label className="text-sm ml-1">Course:</label>
+                  <label className="text-sm m-1 font-semibold">Course:</label>
                   <input
                     type="text"
                     placeholder="Course"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="course"
                     value={user.course}
                     onChange={handleChange}
@@ -335,7 +358,7 @@ const UserListSuperAdmin = () => {
               <div className="flex justify-center pt-4">
                 <button
                   type="submit"
-                  className="bg-maroon text-white py-2 px-4 rounded-lg mr-2 hover:bg-blue">
+                  className="bg-blue text-white py-2 px-4 rounded-lg mr-2">
                   Create account
                 </button>
               </div>
@@ -347,8 +370,9 @@ const UserListSuperAdmin = () => {
 
 
       {showModalUpdate && (
-        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl" onClick={() => setShowModalUpdate(false)}>
-          <div className="bg-peach p-4 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50
+        " onClick={() => setShowModalUpdate(false)}>
+          <div className="bg-white p-4 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-xl font-bold mb-4 text-center">
               Student Information
             </h2>
@@ -448,12 +472,6 @@ const UserListSuperAdmin = () => {
           </div>
         </div>
       )}
-
-      <button
-        onClick={handleExport}
-        className='bg-maroon text-white text-sm py-2 px-4 flex items-center rounded-full absolute bottom-2 right-4 cursor-pointer'>
-        <BsFileEarmarkSpreadsheetFill className="mr-1" />Export as Spreadsheet
-      </button>
     </div>
   );
 };

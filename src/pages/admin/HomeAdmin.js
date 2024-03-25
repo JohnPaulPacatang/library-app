@@ -17,12 +17,12 @@ const HomeAdmin = () => {
       {
         type: "column",
         dataPoints: [
-          { label: "Monday", y: 10, color: "maroon" },
-          { label: "Tuesday", y: 15, color: "maroon" },
-          { label: "Wednesday", y: 15, color: "maroon" },
-          { label: "Thursday", y: 10, color: "maroon" },
-          { label: "Friday", y: 10, color: "maroon" },
-          { label: "Saturday", y: 3, color: "maroon" },
+          { label: "Monday", y: 10, color: "#59adff" },
+          { label: "Tuesday", y: 15, color: "#59adff" },
+          { label: "Wednesday", y: 15, color: "#59adff" },
+          { label: "Thursday", y: 10, color: "#59adff" },
+          { label: "Friday", y: 10, color: "#59adff" },
+          { label: "Saturday", y: 3, color: "#59adff" },
         ],
       },
     ],
@@ -60,13 +60,13 @@ const HomeAdmin = () => {
   var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
   return (
-    <div className="px-3 flex-1 mt-3">
-      <div className="p-4 mx-3 bg-white rounded-lg shadow-lg mb-3">
+    <div className="flex-1">
+      <div className="p-4 m-5 bg-white rounded-lg shadow mb-3">
         <div className="flex justify-between">
           <div className="Greetings">
             <p className="text-xl font-semibold pr-4">
               {getGreeting()},{" "}
-              <span className="text-maroon">Welcome {username}!👋</span>
+              <span className="text-blue">Welcome {username}!👋</span>
             </p>
           </div>
           <div>
@@ -88,27 +88,27 @@ const HomeAdmin = () => {
 
       <div className="statistics-section flex-1">
 
-        <div className="flex justify-between mt-10 mb-10 gap-5">
-          <div className="p-12 h-60 w-full bg-white mx-3 rounded-xl shadow-xl">
+        <div className="flex justify-between mt-10 mb-8 gap-5">
+          <div className="p-12 h-60 w-full bg-white mx-5 rounded-xl shadow">
             <p className="text-4xl text-center mt-5 font-bold">{walkIns}</p>
             <p className="center text-lg font-bold text-center my-3">Walk In</p>
           </div>
 
-          <div className="p-12 h-60 w-full bg-white mr-3 rounded-xl shadow-lg">
+          <div className="p-12 h-60 w-full bg-white mr-5 rounded-xl shadow">
             <p className="text-4xl text-center mt-5 font-bold">{borrowedToday}</p>
             <p className="center text-lg font-bold text-center my-3">
               Books Borrowed Today
             </p>
           </div>
 
-          <div className="p-12 h-60 w-full bg-white mr-3 rounded-xl shadow-lg">
+          <div className="p-12 h-60 w-full bg-white mr-5 rounded-xl shadow">
             <p className="text-4xl text-center mt-5 font-bold">{returned}</p>
             <p className="center text-lg font-bold text-center my-3">
               Books Returned Today
             </p>
           </div>
 
-          <div className="p-12 h-60 w-full bg-white mr-3 rounded-xl shadow-lg">
+          <div className="p-12 h-60 w-full bg-white mr-5 rounded-xl shadow">
             <p className="text-4xl text-center mt-5 font-bold">{overdue}</p>
             <p className="center text-lg font-bold text-center my-3">
               Overdue Books
@@ -117,7 +117,7 @@ const HomeAdmin = () => {
         </div>
 
         <div className="flex">
-          <div className="h-auto w-full bg-white mx-3 p-5 mt-5 rounded-xl shadow-lg">
+          <div className="h-auto w-full bg-white mx-5 p-5 mt-5 rounded-xl shadow">
             <p className="center text-lg font-bold text-center my-3">
               New Users per Day
             </p>
@@ -127,22 +127,22 @@ const HomeAdmin = () => {
             />
           </div>
 
-          <div className="bg-white mx-3 w-1/2 mt-5 rounded-xl shadow-xl flex flex-col">
+          <div className="bg-white mx-5 w-1/2 mt-5 rounded-xl shadow flex flex-col">
             <p className="text-xl font-bold text-center mt-10">Newly Registered Users</p>
             <div className="p-5 custom-scrollbar overflow-y-auto max-h-[400px]">
-              <p className="mt-5 p-3 w-full bg-maroon rounded-md text-white flex justify-between">
+              <p className="mt-5 p-3 w-full bg-gray rounded-md text-black flex justify-between">
                 1. Full Name: </p>
 
-              <p className="mt-5 p-3 w-full bg-maroon rounded-md text-white flex justify-between">
+              <p className="mt-5 p-3 w-full bg-gray rounded-md text-black flex justify-between">
                 2. Full Name: </p>
 
-              <p className="mt-5 p-3 w-full bg-maroon rounded-md text-white flex justify-between">
+              <p className="mt-5 p-3 w-full bg-gray rounded-md text-black flex justify-between">
                 3. Full Name: </p>
 
-              <p className="mt-5 p-3 w-full bg-maroon rounded-md text-white flex justify-between">
+              <p className="mt-5 p-3 w-full bg-gray rounded-md text-black flex justify-between">
                 4. Full Name: </p>
 
-              <p className="mt-5 p-3 w-full bg-maroon rounded-md text-white flex justify-between">
+              <p className="mt-5 p-3 w-full bg-gray rounded-md text-black flex justify-between">
                 5. Full Name: </p>
             </div>
           </div>

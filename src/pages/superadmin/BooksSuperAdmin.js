@@ -218,8 +218,8 @@ const BookSuperAdmin = () => {
 
 
   return (
-    <div className="px-3 flex-1">
-      <div className="bg-white my-3 px-2 py-2 rounded-xl shadow-lg flex justify-between search-container">
+    <div className="px-5 flex-1">
+      <div className="bg-white my-5 px-2 py-2 rounded-xl shadow flex justify-between search-container">
         <div className="flex items-center w-full">
           <BiSearch className="text-3xl mx-2 my-2 sm:text-4xl" />
 
@@ -234,7 +234,7 @@ const BookSuperAdmin = () => {
         <select
           id="table"
           name="table"
-          className="w-fit py-3 px-4 xl:ml-60 md:ml-32 bg-gray rounded-xl shadow-sm focus:outline-none focus:ring-maroon focus:border-maroon sm:text-sm"
+          className="w-fit py-3 px-4 xl:ml-60 md:ml-32 bg-gray rounded-xl shadow sm:text-sm"
           value={selectedTable}
           onChange={handleTableChange}>
           <option value="Books">Books</option>
@@ -245,23 +245,22 @@ const BookSuperAdmin = () => {
       </div>
       {selectedTable === 'Books' && (
         <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
-          <table className="bg-white w-full rounded-2xl px-2 py-2 shadow-xl">
+          <table className="bg-white w-full rounded-lg px-2 py-2 shadow-xl">
             <thead>
               <tr className="pb-2">
                 <th colSpan="10">
                   <div className="flex justify-between items-center px-5 py-4">
                     <h2 className="text-xl text-black">Book list</h2>
                     <div>
-
                       <button
-                        className="bg-gray text-black text-sm font-semibold rounded-xl p-3 hover:bg-maroon hover:text-white"
+                        className="bg-gray text-black text-sm font-semibold rounded-xl p-3 hover:bg-blue hover:text-white"
                         onClick={handleOpenModal}>
                         Add Book
                       </button>
                       <select
                         id="category"
                         name="category"
-                        className="w-fit py-3 px-4 ml-5 bg-gray rounded-xl font-semibold shadow-sm focus:outline-none focus:ring-maroon focus:border-maroon text-sm"
+                        className="w-fit py-3 px-4 ml-5 bg-gray rounded-xl font-semibold shadow-sm text-sm"
                         value={selectedCategory}
                         onChange={(e) => setSelectedCategory(e.target.value)}>
                         {categories.map((category) => (
@@ -304,18 +303,18 @@ const BookSuperAdmin = () => {
                         icon={<BsThreeDots style={{ fontSize: '2.5rem', marginLeft: '0.5rem' }} />}
                         variant='outline'
                       />
-                      <MenuList className="bg-white shadow-2xl rounded-lg p-1" zIndex={10}>
+                      <MenuList className="bg-white shadow rounded-lg p-1" zIndex={10}>
                         <MenuItem>
-                          <button className="text-sm text-white w-full bg-blue p-2 m-2 rounded-lg hover:shadow-xl"
+                          <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline"
                             onClick={() => { displayBook(book.id); handleOpenModalUpdate(); }}>Update</button>
                         </MenuItem>
                         <MenuItem>
-                          <button className="text-sm text-white w-full bg-red p-2 m-2 rounded-lg hover:shadow-xl "
+                          <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline"
                             onClick={() => { if (window.confirm("Are you sure you want to delete this book?")) { deleteBook(book.id); } }}>Delete
                           </button>
                         </MenuItem>
                         <MenuItem>
-                          <button className="text-sm text-black w-full bg-gray p-2 m-2 rounded-lg hover:shadow-xl"
+                          <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline"
                             onClick={handleOpenModalIssue}>Issue</button>
                         </MenuItem>
                       </MenuList>
@@ -338,7 +337,7 @@ const BookSuperAdmin = () => {
                     <h2 className="text-xl text-black">Book Issued</h2>
                     <button
                       onClick={handleExport}
-                      className="bg-maroon text-white text-sm py-2 px-4 flex items-center rounded-full cursor-pointer">
+                      className="bg-gray text-black text-sm p-3 flex items-center rounded-xl hover:bg-blue hover:text-white cursor-pointer">
                       <FaRegFilePdf className="mr-1" />
                       Export as PDF
                     </button>
@@ -365,7 +364,7 @@ const BookSuperAdmin = () => {
                   <td className="px-5 py-2">{issue.issueDate}</td>
                   <td className="px-5 py-2">{issue.returnDate}</td>
                   <td className="px-5">
-                    <button className="text-sm text-black bg-white border p-2 px-4 rounded-lg hover:shadow-xl hover:bg-maroon hover:text-white">Issue</button>
+                    <button className="text-sm text-blue font-normal py-2 my-2  rounded-lg hover:text-black">Mark as Returned</button>
                   </td>
                 </tr>
               ))}
@@ -384,7 +383,7 @@ const BookSuperAdmin = () => {
                     <h2 className="text-xl text-black">Overdue books</h2>
                     <button
                       onClick={handleExport}
-                      className="bg-maroon text-white text-sm py-2 px-4 flex items-center rounded-full cursor-pointer">
+                      className="bg-gray text-black text-sm p-3 flex items-center rounded-xl hover:bg-blue hover:text-white cursor-pointer">
                       <FaRegFilePdf className="mr-1" />
                       Export as PDF
                     </button>
@@ -410,7 +409,7 @@ const BookSuperAdmin = () => {
                     <td className="px-5 py-2">{overdue.title}</td>
                     <td className="px-5 py-2">{overdue.status}</td>
                     <td className="px-5">
-                      <button className="text-sm text-black bg-white border p-2 px-4 rounded-lg hover:shadow-xl hover:bg-maroon hover:text-white">Issue</button>
+                      <button className="text-sm text-blue font-normal py-2 my-2  rounded-lg hover:text-black">Mark as Returned</button>
                     </td>
                   </tr>
                 ))}
@@ -420,8 +419,8 @@ const BookSuperAdmin = () => {
       )}
 
       {showModal && (
-        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl" onClick={() => setShowModal(false)} >
-          <div className="bg-peach p-8 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModal(false)} >
+          <div className="bg-white p-8 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-2xl font-bold mb-4 text-center">
               Book Information
             </h2>
@@ -429,23 +428,23 @@ const BookSuperAdmin = () => {
             <form onSubmit={(e) => { e.preventDefault(); addBook(book); }}>
               <div className="grid grid-cols-2 gap-10">
                 <div className="flex flex-col w-72">
-                  <label className="text-sm ml-1 font-semibold">DDC ID</label>
+                  <label className="text-sm m-1 font-semibold">DDC ID</label>
                   <input
                     type="number"
                     step="any"
                     placeholder="DDC ID"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="ddcId"
                     value={book.ddcId}
                     onChange={handleChange}
                     required
                   />
 
-                  <label className="text-sm ml-1 font-semibold">Title</label>
+                  <label className="text-sm m-1 font-semibold">Title</label>
                   <input
                     type="text"
                     placeholder="Title"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="title"
                     value={book.title}
                     onChange={handleChange}
@@ -454,22 +453,22 @@ const BookSuperAdmin = () => {
                 </div>
 
                 <div className="flex flex-col w-72">
-                  <label className="text-sm ml-1 font-semibold">Author</label>
+                  <label className="text-sm m-1 font-semibold">Author</label>
                   <input
                     type="text"
                     placeholder="Author"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="author"
                     value={book.author}
                     onChange={handleChange}
                     required
                   />
 
-                  <label className="text-sm ml-1 font-semibold">Category</label>
+                  <label className="text-sm m-1 font-semibold">Category</label>
                   <input
                     type="text"
                     placeholder="Category"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="category"
                     value={book.category}
                     onChange={handleChange}
@@ -482,7 +481,7 @@ const BookSuperAdmin = () => {
                 <div className="flex flex-col">
                   <label className="text-sm ml-1 font-semibold">Availability</label>
                   <select
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 font-semibold"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 font-semibold"
                     name="availability"
                     value={book.availability}
                     onChange={handleChange}
@@ -495,7 +494,7 @@ const BookSuperAdmin = () => {
               </div>
 
               <div className="flex justify-center pt-4">
-                <button type="submit" className="bg-maroon text-white py-2 px-4 rounded-lg mr-2 hover:bg-blue" >
+                <button type="submit" className="bg-blue text-white py-2 px-4 rounded-lg mr-2" >
                   Add Book
                 </button>
               </div>
@@ -506,8 +505,8 @@ const BookSuperAdmin = () => {
 
 
       {showModalUpdate && (
-        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl" onClick={() => setShowModalUpdate(false)} >
-          <div className="bg-peach p-8 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModalUpdate(false)} >
+          <div className="bg-white p-8 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-2xl font-bold mb-4 text-center">
               Book Information
             </h2>
@@ -515,20 +514,20 @@ const BookSuperAdmin = () => {
             <form onSubmit={(e) => { e.preventDefault(); updateBook(bookData.id); }}>
               <div className="grid grid-cols-2 gap-10">
                 <div className="flex flex-col w-72">
-                  <label className="text-sm ml-1 font-semibold">DDC ID</label>
+                  <label className="text-sm m-1 font-semibold">DDC ID</label>
                   <input
                     type="number"
                     step="any"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="ddc_id"
                     defaultValue={bookData.ddc_id}
                     onChange={handleUpdate}
                   />
 
-                  <label className="text-sm ml-1 font-semibold">Title</label>
+                  <label className="text-sm m-1 font-semibold">Title</label>
                   <input
                     type="text"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="title"
                     defaultValue={bookData.title}
                     onChange={handleUpdate}
@@ -536,19 +535,19 @@ const BookSuperAdmin = () => {
                 </div>
 
                 <div className="flex flex-col w-72">
-                  <label className="text-sm ml-1 font-semibold">Author</label>
+                  <label className="text-sm m-1 font-semibold">Author</label>
                   <input
                     type="text"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="author"
                     defaultValue={bookData.author}
                     onChange={handleUpdate}
                   />
 
-                  <label className="text-sm ml-1 font-semibold">Category</label>
+                  <label className="text-sm m-1 font-semibold">Category</label>
                   <input
                     type="text"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="category"
                     defaultValue={bookData.category}
                     onChange={handleUpdate}
@@ -559,9 +558,9 @@ const BookSuperAdmin = () => {
 
               <div className="flex justify-center">
                 <div className="flex flex-col">
-                  <label className="text-sm ml-1 font-semibold">Availability</label>
+                  <label className="text-sm m-1 font-semibold">Availability</label>
                   <select
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 font-semibold"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 font-semibold"
                     name="availability"
                     defaultValue={bookData.availability}
                     onChange={handleUpdate}
@@ -588,8 +587,8 @@ const BookSuperAdmin = () => {
 
 
       {showModalIssue && (
-        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl" onClick={() => setShowModalIssue(false)} >
-          <div className="bg-peach p-8 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModalIssue(false)} >
+          <div className="bg-white p-8 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-2xl font-bold mb-4 text-center">
               Issue Book
             </h2>
@@ -598,7 +597,7 @@ const BookSuperAdmin = () => {
               <div className="grid grid-cols-2 gap-4">
 
                 <div>
-                  <label className="text-sm ml-1 font-semibold">
+                  <label className="text-sm m-1 font-semibold">
                     Student Number:
                   </label>
                   <input
@@ -606,12 +605,12 @@ const BookSuperAdmin = () => {
                     name="studentNumber"
                     id="studentNumber"
                     placeholder="12345678"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
 
                 <div >
-                  <label className="text-sm ml-1 font-semibold">
+                  <label className="text-sm m-1 font-semibold">
                     DDC ID:
                   </label>
                   <input
@@ -619,12 +618,12 @@ const BookSuperAdmin = () => {
                     name="docId"
                     id="docId"
                     placeholder="1234"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
 
                 <div >
-                  <label className="text-sm ml-1 font-semibold">
+                  <label className="text-sm m-1 font-semibold">
                     Book Title:
                   </label>
                   <input
@@ -632,29 +631,29 @@ const BookSuperAdmin = () => {
                     name="title"
                     id="title"
                     placeholder="Superbook"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
 
                 <div>
-                  <label className="text-sm ml-1 font-semibold">
+                  <label className="text-sm m-1 font-semibold">
                     Issue Date:
                   </label>
                   <input
                     type="date"
                     name="issueDate"
                     id="issueDate"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="returnDate" className="text-sm ml-1 font-semibold">Return Date:</label>
+                  <label htmlFor="returnDate" className="text-sm m-1 font-semibold">Return Date:</label>
                   <input
                     type="date"
                     name="returnDate"
                     id="returnDate"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
               </div>
@@ -663,7 +662,7 @@ const BookSuperAdmin = () => {
               <div className="flex justify-center pt-4">
                 <button
                   type="submit"
-                  className="bg-maroon hover:bg-blue hover:text-black text-white font-semibold py-2 px-4 border rounded-md shadow-sm mt-2">
+                  className="bg-blue text-white font-semibold py-2 px-4  rounded-md shadow-sm mt-2">
                   Submit
                 </button>
               </div>

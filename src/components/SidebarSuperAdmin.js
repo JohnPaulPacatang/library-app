@@ -1,11 +1,11 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
-import {TbSettings} from "react-icons/tb";
+import { FaUserCog } from "react-icons/fa";
 import { IoArrowUndoCircleOutline, IoArrowRedoCircleOutline } from "react-icons/io5";
-import { MdDashboard } from "react-icons/md";
-import { GiBookshelf } from "react-icons/gi";
-import { IoIosLogOut } from "react-icons/io";
+import { MdSpaceDashboard } from "react-icons/md";
+import { GiBookmarklet } from "react-icons/gi";
+import { GiExitDoor } from "react-icons/gi";
 import { LuBookDown } from "react-icons/lu";
 import Profile from "../assets/profile.jpg";
 import { handleLogout } from "./Logout";
@@ -23,7 +23,7 @@ const SidebarSuperAdmin = () => {
       {!isOpen ? (
 
         //Maliit na sidebar
-        <div className="relative top-0 left-0 h-full w-20 bg-maroon z-50 transition-sidebar rounded-r-xl">
+        <div className="relative top-0 left-0 h-full w-20 bg-black z-50 transition-sidebar ">
           <ul className="flex flex-col h-full gap-2">
             <li
               className="text-3xl text-center px-4 py-3 m-2 text-white hover:text-blue hover:rounded-xl cursor-pointer"
@@ -36,32 +36,26 @@ const SidebarSuperAdmin = () => {
 
             <Link to="/home-super-admin">
               <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/home-super-admin") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <MdDashboard />
+                <MdSpaceDashboard />
               </li>
             </Link>
 
             <Link to="/books-super-admin">
               <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/books-super-admin") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <GiBookshelf />
+                <GiBookmarklet />
               </li>
             </Link>
 
             <Link to="/manage-users">
               <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/manage-users") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <TbSettings />
-              </li>
-            </Link>
-
-            <Link to="/books-issued">
-              <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/books-issued") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <LuBookDown />
+                <FaUserCog  />
               </li>
             </Link>
 
             <div className="mt-auto">
               <hr className="m-2 text-white text-opacity-50" />
               <li className="text-3xl text-center px-4 py-3 m-2 text-white hover:bg-white hover:text-black hover:rounded-xl cursor-pointer" onClick={handleLogout}>
-                <IoIosLogOut />
+                <GiExitDoor />
               </li>
             </div>
           </ul>
@@ -70,7 +64,7 @@ const SidebarSuperAdmin = () => {
       ) : (
 
         // Malaking sidebar
-        <div className="relative top-0 left-0 h-full bg-maroon w-72 rounded-r-xl transition-sidebar">
+        <div className="relative top-0 left-0 h-full bg-black w-72  transition-sidebar">
           <ul className="flex flex-col min-h-screen gap-2">
             <div className="flex items-center m-2 p-2">
               <img
@@ -99,36 +93,29 @@ const SidebarSuperAdmin = () => {
 
             <Link to="/home-super-admin">
               <li className={`text-white text-base flex items-center px-4 py-3 m-3 ${isActive("/home-super-admin") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <MdDashboard className="text-3xl mr-2" />
+                <MdSpaceDashboard className="text-3xl mr-2" />
                 Dashboard
               </li>
             </Link>
 
             <Link to="/books-super-admin">
               <li className={`text-white text-base flex items-center px-4 py-3 m-3 ${isActive("/books-super-admin") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <GiBookshelf className="text-3xl mr-2" />
+                <GiBookmarklet className="text-3xl mr-2" />
                 Books
               </li>
             </Link>
 
             <Link to="/manage-users">
               <li className={`text-white text-base flex items-center px-4 py-3 m-3 ${isActive("/manage-users") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <TbSettings className="text-3xl mr-2" />
+                <FaUserCog  className="text-3xl mr-2" />
                 User Lists
-              </li>
-            </Link>
-
-            <Link to="/books-issued">
-              <li className={`text-white text-base flex items-center px-4 py-3 m-3 ${isActive("/books-issued") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <LuBookDown className="text-3xl mr-2" />
-                Book Issued
               </li>
             </Link>
 
             <div className="mt-auto">
               <hr className="m-2 text-gray text-opacity-50" />
               <li className="text-white text-base flex items-center px-4 py-3 m-3 hover:bg-white hover:text-black hover:rounded-xl cursor-pointer" onClick={handleLogout}>
-                <IoIosLogOut className="text-3xl mr-2" /> Log Out
+                <GiExitDoor className="text-3xl mr-2" /> Log Out
               </li>
             </div>
           </ul>

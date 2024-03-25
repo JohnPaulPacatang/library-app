@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { TbSettings } from "react-icons/tb";
+import { RiSettingsFill } from "react-icons/ri";
 import { IoArrowUndoCircleOutline, IoArrowRedoCircleOutline } from "react-icons/io5";
-import { MdDashboard } from "react-icons/md";
-import { GiBookshelf } from "react-icons/gi";
-import { IoIosHelpCircle, IoIosHelpCircleOutline, IoIosLogOut, } from "react-icons/io";
+import { MdSpaceDashboard } from "react-icons/md";
+import { GiArchiveResearch} from "react-icons/gi";
+import { IoIosHelpCircle, IoIosHelpCircleOutline } from "react-icons/io";
+import { GiExitDoor } from "react-icons/gi";
 import Profile from "../assets/profile.jpg";
 
 import { handleLogout } from "./Logout";
@@ -22,7 +23,7 @@ const SidebarUser = ({ userFirstName, userLastName }) => {
       {!isOpen ? (
 
         // Maliit na sidebar
-        <div className="relative top-0 left-0 h-full w-20 bg-maroon z-50 transition-sidebar rounded-r-xl">
+        <div className="relative top-0 left-0 h-full w-20 bg-black z-50 transition-sidebar">
           <ul className="flex flex-col h-full gap-2">
             <li className="text-3xl text-center px-4 py-3 m-2 text-white hover:text-blue hover:rounded-xl cursor-pointer" onClick={() => setisOpen(true)}>
               <IoArrowRedoCircleOutline />
@@ -32,19 +33,19 @@ const SidebarUser = ({ userFirstName, userLastName }) => {
 
             <Link to="/home-user">
               <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/home-user") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <MdDashboard />
+                <MdSpaceDashboard />
               </li>
             </Link>
 
             <Link to="/search-books">
               <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/search-books") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`} >
-                <GiBookshelf />
+                <GiArchiveResearch />
               </li>
             </Link>
 
             <Link to="/settings">
-              <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/settings") ? "bg-blue rounded-xl" : ""}hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <TbSettings />
+              <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/settings") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
+                <RiSettingsFill />
               </li>
             </Link>
 
@@ -57,7 +58,7 @@ const SidebarUser = ({ userFirstName, userLastName }) => {
             <div className="mt-auto">
               <hr className="m-2 text-white text-opacity-50" />
               <li className="text-3xl text-center px-4 py-3 m-2 text-white hover:bg-white hover:text-black hover:rounded-xl cursor-pointer" onClick={handleLogout}>
-                <IoIosLogOut />
+                <GiExitDoor />
               </li>
             </div>
           </ul>
@@ -66,7 +67,7 @@ const SidebarUser = ({ userFirstName, userLastName }) => {
       ) : (
 
         // Malaking sidebar
-        <div className="relative top-0 left-0 h-full bg-maroon w-72 rounded-r-xl transition-sidebar">
+        <div className="relative top-0 left-0 h-full bg-black w-72 transition-sidebar">
           <ul className="flex flex-col min-h-screen gap-2">
             <div className="flex items-center m-2 mt-4 p-1">
               <img
@@ -95,21 +96,21 @@ const SidebarUser = ({ userFirstName, userLastName }) => {
 
             <Link to="/home-user">
               <li className={`text-white text-base flex items-center px-4 py-3 m-3 ${isActive("/home-user") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <MdDashboard className="text-3xl mr-2" />
+                <MdSpaceDashboard className="text-3xl mr-2" />
                 Dashboard
               </li>
             </Link>
 
             <Link to="/search-books">
               <li className={`text-white text-base flex items-center px-4 py-3 m-3 ${isActive("/search-books") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <GiBookshelf className="text-3xl mr-2" />
+                <GiArchiveResearch className="text-3xl mr-2 text-" />
                 Search Books
               </li>
             </Link>
 
             <Link to="/settings">
               <li className={`text-white text-base flex items-center px-4 py-3 m-3 ${isActive("/settings") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <TbSettings className="text-3xl mr-2" />
+                <RiSettingsFill className="text-3xl mr-2" />
                 Account Settings
               </li>
             </Link>
@@ -124,7 +125,7 @@ const SidebarUser = ({ userFirstName, userLastName }) => {
             <div className="mt-auto">
               <hr className="m-2 text-gray text-opacity-50" />
               <li className="text-white text-base flex items-center px-4 py-3 m-3 hover:bg-white hover:text-black hover:rounded-xl cursor-pointer" onClick={handleLogout}>
-                <IoIosLogOut className="text-3xl mr-2" /> Log Out
+                <GiExitDoor className="text-3xl mr-2" /> Log Out
               </li>
             </div>
           </ul>

@@ -26,11 +26,11 @@ const Greetings = () => {
   };
 
   return (
-    <div className="p-3 m-3 bg-white rounded-lg">
+    <div className="p-4 m-5 bg-white rounded-lg shadow">
       <div className="flex justify-between">
         <div className="Greetings">
           <p className="text-xl font-semibold pr-4">
-            {getGreeting()}, <span className="text-maroon">Welcome {username}!👋</span>
+            {getGreeting()}, <span className="text-blue">Welcome {username}!👋</span>
           </p>
         </div>
         <div>
