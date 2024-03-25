@@ -6,7 +6,6 @@ import { IoArrowUndoCircleOutline, IoArrowRedoCircleOutline } from "react-icons/
 import { MdSpaceDashboard } from "react-icons/md";
 import { GiBookmarklet } from "react-icons/gi";
 import { GiExitDoor } from "react-icons/gi";
-import { LuBookDown } from "react-icons/lu";
 import Profile from "../assets/profile.jpg";
 import { handleLogout } from "./Logout";
 

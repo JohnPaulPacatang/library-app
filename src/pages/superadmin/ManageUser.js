@@ -384,7 +384,7 @@ const UserListSuperAdmin = () => {
 
                   <input
                     type="number"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="studentNumber"
                     defaultValue={userData.studentNumber}
                     onChange={handleUpdate}
@@ -393,7 +393,7 @@ const UserListSuperAdmin = () => {
                   <label className="text-sm ml-1">Lastname:</label>
                   <input
                     type="text"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="lastName"
                     defaultValue={userData.lastName}
                     onChange={handleUpdate}
@@ -402,7 +402,7 @@ const UserListSuperAdmin = () => {
                   <label className="text-sm ml-1">Firstname:</label>
                   <input
                     type="text"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="firstName"
                     defaultValue={userData.firstName}
                     onChange={handleUpdate}
@@ -411,7 +411,7 @@ const UserListSuperAdmin = () => {
                   <label className="text-sm ml-1">Middlename:</label>
                   <input
                     type="text"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="middleName"
                     defaultValue={userData.middleName}
                     onChange={handleUpdate}
@@ -423,7 +423,7 @@ const UserListSuperAdmin = () => {
                   <div className="relative">
                     <input
                       type={visible ? "text" : "password"}
-                      className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                      className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                       name="password"
                       defaultValue={userData.password}
                       onChange={handleUpdate}
@@ -438,7 +438,7 @@ const UserListSuperAdmin = () => {
                   <label className="text-sm ml-1">Email:</label>
                   <input
                     type="email"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="email"
                     defaultValue={userData.email}
                     onChange={handleUpdate}
@@ -447,7 +447,7 @@ const UserListSuperAdmin = () => {
                   <label className="text-sm ml-1">Course:</label>
                   <input
                     type="text"
-                    className="shadow-lg rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="course"
                     defaultValue={userData.course}
                     onChange={handleUpdate}
