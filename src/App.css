@@ -14,6 +14,7 @@
   max-height: 30rem;
 }
 
+
 .arrow-icon.rotated {
   transform: rotate(180deg);
 }
@@ -37,6 +38,6 @@
   background-color: #202020;
 }
 
-.input-border{
+.input-border {
   border: 1px solid #d2d6d8;
 }

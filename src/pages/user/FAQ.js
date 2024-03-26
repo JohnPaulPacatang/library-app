@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BsQuestionCircleFill } from "react-icons/bs";
+import { HiChevronDown } from "react-icons/hi2";
 
 const faqData = [
   {
@@ -56,33 +57,30 @@ function FAQ() {
     <div className="faq-container py-8 mx-5 rounded-lg flex-1">
       <h1 className="text-3xl font-semibold mb-8 text-left">
         Frequently Asked Questions
-        <BsQuestionCircleFill className="inline-block mb-1 ml-2" /> {}
+        <BsQuestionCircleFill className="inline-block mb-1 ml-2" /> { }
       </h1>
       <div className="faq-items">
         {faqData.map((faqItem, index) => (
           <div
             key={faqItem.id}
-            className={`faq-item shadow border-gray-300 py-3 bg-white my-8 pl-3 rounded-xl ${
-              index === expandedIndex ? " expanded" : ""
-            }`}
+            className={`faq-item shadow border-black py-3 bg-white my-8 pl-3 rounded-xl ${index === expandedIndex ? " expanded" : ""
+              }`}
           >
             <button
-              className={`faq-question w-full flex items-center text-left text-lg font-large focus:outline-none ${
-                index === expandedIndex ? " text-blue" : " text-gray-600"
-              }`}
+              className={`faq-question w-full flex items-center text-left text-lg font-large focus:outline-none ${index === expandedIndex ? " text-blue" : " text-black"
+                }`}
               onClick={() => toggleAccordion(index)}
             >
               {faqItem.question}
               <span
-                className={`ml-auto transition-transform arrow-icon text-xl mr-3 ${
-                  index === expandedIndex ? "rotated" : ""
-                }`}
+                className={`ml-auto transition-transform arrow-icon text-xl mr-3 ${index === expandedIndex ? "rotated" : ""
+                  }`}
               >
-                ▼
+                <HiChevronDown className="text-lg" />
               </span>
             </button>
             {index === expandedIndex && (
-              <div className="faq-answer visible mt-2 text-gray-600 pl-3 text-lg">
+              <div className="faq-answer visible mt-2 text-black pl-3 text-lg">
                 {faqItem.answer}
               </div>
             )}
