@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../utils/supabaseClient';
 import { FaRegFilePdf } from "react-icons/fa";
-import { BiSearch } from 'react-icons/bi';
+import { MdPersonSearch } from "react-icons/md";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { IoEyeOutline } from "react-icons/io5";
 import { toast } from 'react-toastify';
@@ -100,7 +100,7 @@ const UserListAdmin = () => {
     <div className='px-5 flex-1'>
       <div className='bg-white my-5 px-2 py-2 rounded-xl shadow flex justify-between'>
         <div className='flex items-center w-full'>
-          <BiSearch className='text-3xl mx-2 my-2 sm:text-4xl' />
+          <MdPersonSearch className='text-3xl mx-2 my-2' />
 
           <input
             type='text'

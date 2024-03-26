@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from '../../utils/supabaseClient';
-import { BiSearch } from "react-icons/bi";
+import { MdPersonSearch } from "react-icons/md";
 import { FaRegFilePdf } from "react-icons/fa";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { IoEyeOutline } from "react-icons/io5";
@@ -188,7 +188,7 @@ const UserListSuperAdmin = () => {
     <div className="px-5 flex-1">
       <div className="bg-white my-5 px-2 py-2 rounded-xl shadow flex justify-between search-container">
         <div className="flex items-center w-full">
-          <BiSearch className="text-3xl mx-2 my-2 sm:text-4xl" />
+          <MdPersonSearch className="text-3xl mx-2 my-2" />
 
           <input
             type="text"
@@ -407,7 +407,7 @@ const UserListSuperAdmin = () => {
             <form onSubmit={(e) => { e.preventDefault(); updateUser(userData.id); }}>
               <div className="grid grid-cols-2 gap-10">
                 <div className="flex flex-col w-72">
-                  <label className="text-sm ml-1">Student number:</label>
+                  <label className="text-sm ml-1 font-semibold">Student number:</label>
 
                   <input
                     type="number"
@@ -417,7 +417,7 @@ const UserListSuperAdmin = () => {
                     onChange={handleUpdate}
                   />
 
-                  <label className="text-sm ml-1">Lastname:</label>
+                  <label className="text-sm ml-1 font-semibold">Lastname:</label>
                   <input
                     type="text"
                     className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
@@ -426,7 +426,7 @@ const UserListSuperAdmin = () => {
                     onChange={handleUpdate}
                   />
 
-                  <label className="text-sm ml-1">Firstname:</label>
+                  <label className="text-sm ml-1 font-semibold">Firstname:</label>
                   <input
                     type="text"
                     className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
@@ -435,7 +435,7 @@ const UserListSuperAdmin = () => {
                     onChange={handleUpdate}
                   />
 
-                  <label className="text-sm ml-1">Middlename:</label>
+                  <label className="text-sm ml-1 font-semibold">Middlename:</label>
                   <input
                     type="text"
                     className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
@@ -446,7 +446,7 @@ const UserListSuperAdmin = () => {
                 </div>
 
                 <div className="flex flex-col w-72">
-                  <label className="text-sm ml-1">Password:</label>
+                  <label className="text-sm ml-1 font-semibold">Password:</label>
                   <div className="relative">
                     <input
                       type={visible ? "text" : "password"}
@@ -462,7 +462,7 @@ const UserListSuperAdmin = () => {
                     </div>
                   </div>
 
-                  <label className="text-sm ml-1">Email:</label>
+                  <label className="text-sm ml-1 font-semibold">Email:</label>
                   <input
                     type="email"
                     className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
@@ -471,7 +471,7 @@ const UserListSuperAdmin = () => {
                     onChange={handleUpdate}
                   />
 
-                  <label className="text-sm ml-1">Course:</label>
+                  <label className="text-sm ml-1 font-semibold">Course:</label>
                   <input
                     type="text"
                     className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
