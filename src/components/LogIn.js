@@ -52,7 +52,10 @@ function Login({ handleLogin }) {
       }
     } catch (error) {
       console.error(error);
-      toast.error(error.message);
+      toast.error(error.message, {
+        autoClose: 1000,
+        hideProgressBar: true
+      });
     }
   };
 
