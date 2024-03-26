@@ -115,7 +115,7 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
             <input
               type="password"
               placeholder="Current Password"
-              className="rounded shadow px-3 py-2 mb-4 w-full"
+              className="rounded-lg input-border shadow px-3 py-2 mb-4 w-full"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
             />
@@ -124,7 +124,7 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
             <input
               type="password"
               placeholder="New Password"
-              className="rounded shadow px-3 py-2 mb-4 w-full"
+              className="rounded-lg input-border shadow px-3 py-2 mb-4 w-full"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
             />
@@ -133,7 +133,7 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
             <input
               type="password"
               placeholder="Re-type Password"
-              className="rounded shadow px-3 py-2 mb-4 w-full"
+              className="rounded-lg input-border shadow px-3 py-2 mb-4 w-full"
               value={Password}
               onChange={(e) => setPassword(e.target.value)}
             />
