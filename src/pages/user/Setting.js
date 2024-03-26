@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import Profile from "../../assets/profile.jpg";
 
-const Setting = () => {
+const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userCourse }) => {
   const [showModal, setShowModal] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -65,30 +65,30 @@ const Setting = () => {
               <label className="block text-black font-bold mb-2">
                 First Name:
               </label>
-              <p className="text-black bg-gray p-3 rounded-lg w-4/5">Juan</p>
+              <p className="text-black bg-gray p-3 rounded-lg w-4/5">{userFirstName}</p>
             </div>
             <div className="mb-4">
               <label className="block text-black font-bold mb-2">
                 Middle Name:
               </label>
-              <p className="text-black bg-gray p-3 rounded-lg w-4/5">Tamad</p>
+              <p className="text-black bg-gray p-3 rounded-lg w-4/5">{userMiddleName}</p>
             </div>
             <div className="mb-4">
               <label className="block text-black font-bold mb-2">
                 Last Name:
               </label>
               <p className="text-black bg-gray p-3 rounded-lg w-4/5">
-                Dela Cruz
+               {userLastName}
               </p>
             </div>
             <div className="mb-4">
               <label className="block text-black font-bold mb-2">Course:</label>
-              <p className="text-black bg-gray p-3 rounded-lg w-4/5">BSTM</p>
+              <p className="text-black bg-gray p-3 rounded-lg w-4/5">{userCourse}</p>
             </div>
             <div className="mb-4">
               <label className="block text-black font-bold mb-2">Email:</label>
               <p className="text-black bg-gray p-3 rounded-lg w-4/5">
-                juandelacruz.scc@gmail.com
+               {userEmail}
               </p>
             </div>
           </div>
