@@ -106,6 +106,7 @@ function Login({ handleLogin }) {
                   onChange={(e) => setUsername(e.target.value)}
                   className="mt-1 pl-8 p-4 w-full rounded-xl bg-gray shadow-sm ring-black"
                   placeholder="Student No./Email"
+                  required
                 />
               </div>
             </div>
@@ -130,6 +131,7 @@ function Login({ handleLogin }) {
                   onChange={(e) => setPassword(e.target.value)}
                   className="mt-1 pl-8 p-4 w-full rounded-xl bg-gray shadow-sm"
                   placeholder="Enter Password"
+                  required
                 />
                 <div className="absolute right-0 top-0 mt-14 mr-4 text-xl text-blue" onClick={() => setVisible(!visible)}>
                   {
