@@ -13,7 +13,6 @@ export const handleLogout = () => {
     if (result.isConfirmed) {
       sessionStorage.removeItem('userRole');
       window.location.href = "/";
-
     }
   });
 };

@@ -73,8 +73,8 @@ const UserListSuperAdmin = () => {
       fetchUsers();
 
       toast.success("User added successfully", {
-        autoClose: 1000, 
-        hideProgressBar: true 
+        autoClose: 1000,
+        hideProgressBar: true
       });
 
       setUser({
@@ -89,8 +89,8 @@ const UserListSuperAdmin = () => {
 
     } catch (error) {
       toast.error("Error adding user. Please try again.", {
-        autoClose: 1000, 
-        hideProgressBar: true 
+        autoClose: 1000,
+        hideProgressBar: true
       });
     }
   }
@@ -101,18 +101,18 @@ const UserListSuperAdmin = () => {
         .from('users')
         .delete()
         .eq('id', userId);
-  
+
       fetchUsers();
- 
+
       toast.success("User deleted successfully", {
-        autoClose: 1000, 
-        hideProgressBar: true 
+        autoClose: 1000,
+        hideProgressBar: true
       });
-  
+
     } catch (error) {
       toast.error("Error deleting user. Please try again.", {
-        autoClose: 1000, 
-        hideProgressBar: true 
+        autoClose: 1000,
+        hideProgressBar: true
       });
     }
   }
@@ -153,14 +153,14 @@ const UserListSuperAdmin = () => {
       fetchUsers();
 
       toast.success("User updated successfully", {
-        autoClose: 1000, 
-        hideProgressBar: true 
+        autoClose: 1000,
+        hideProgressBar: true
       });
 
     } catch (error) {
       toast.error("Error updating user. Please try again.", {
-        autoClose: 1000, 
-        hideProgressBar: true 
+        autoClose: 1000,
+        hideProgressBar: true
       });
     }
   }
@@ -398,8 +398,7 @@ const UserListSuperAdmin = () => {
 
 
       {showModalUpdate && (
-        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50
-        " onClick={() => setShowModalUpdate(false)}>
+        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModalUpdate(false)}>
           <div className="bg-white p-4 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-xl font-bold mb-4 text-center">
               Student Information
