@@ -4,6 +4,8 @@ import { FaRegFilePdf } from "react-icons/fa";
 import { BiSearch } from 'react-icons/bi';
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { IoEyeOutline } from "react-icons/io5";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UserListAdmin = () => {
   const [showModal, setShowModal] = useState(false);
@@ -34,7 +36,6 @@ const UserListAdmin = () => {
 
   async function addUser() {
     try {
-      console.log("Adding user...");
       await supabase
         .from('users')
         .insert([
@@ -50,8 +51,12 @@ const UserListAdmin = () => {
         ]);
 
       setShowModal(false);
-      console.log("User added successfully.");
       fetchUsers();
+
+      toast.success("User added successfully", {
+        autoClose: 1000, 
+        hideProgressBar: true 
+      });
 
       setUser({
         studentNumber: '',
@@ -64,7 +69,10 @@ const UserListAdmin = () => {
       });
 
     } catch (error) {
-      console.error("Error adding user:", error);
+      toast.error("Error adding user. Please try again.", {
+        autoClose: 1000, 
+        hideProgressBar: true 
+      });
     }
   }
 
@@ -183,7 +191,7 @@ const UserListAdmin = () => {
                   <input
                     type="number"
                     placeholder="Student Number"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="studentNumber"
                     value={user.studentNumber}
                     onChange={handleChange}
@@ -194,7 +202,7 @@ const UserListAdmin = () => {
                   <input
                     type="text"
                     placeholder="Lastname"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="lastName"
                     value={user.lastName}
                     onChange={handleChange}
@@ -205,7 +213,7 @@ const UserListAdmin = () => {
                   <input
                     type="text"
                     placeholder="Firstname"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="firstName"
                     value={user.firstName}
                     onChange={handleChange}
@@ -216,7 +224,7 @@ const UserListAdmin = () => {
                   <input
                     type="text"
                     placeholder="Middlename"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="middleName"
                     value={user.middleName}
                     onChange={handleChange}
@@ -229,7 +237,7 @@ const UserListAdmin = () => {
                     <input
                       type={visible ? "text" : "password"}
                       placeholder="Password"
-                      className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                      className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                       name="password"
                       value={user.password}
                       onChange={handleChange}
@@ -245,7 +253,7 @@ const UserListAdmin = () => {
                   <input
                     type="email"
                     placeholder="example@gmail.com"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="email"
                     value={user.email}
                     onChange={handleChange}
@@ -256,7 +264,7 @@ const UserListAdmin = () => {
                   <input
                     type="text"
                     placeholder="Course"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="course"
                     value={user.course}
                     onChange={handleChange}

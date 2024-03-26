@@ -304,7 +304,7 @@ const BooksAdmin = () => {
                     name="studentNumber"
                     id="studentNumber"
                     placeholder="12345678"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
 
@@ -317,7 +317,7 @@ const BooksAdmin = () => {
                     name="docId"
                     id="docId"
                     placeholder="1234"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
 
@@ -330,7 +330,7 @@ const BooksAdmin = () => {
                     name="title"
                     id="title"
                     placeholder="Superbook"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
 
@@ -342,7 +342,7 @@ const BooksAdmin = () => {
                     type="date"
                     name="issueDate"
                     id="issueDate"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
 
@@ -352,7 +352,7 @@ const BooksAdmin = () => {
                     type="date"
                     name="returnDate"
                     id="returnDate"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
               </div>

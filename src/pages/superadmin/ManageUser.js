@@ -6,6 +6,8 @@ import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { IoEyeOutline } from "react-icons/io5";
 import { BsThreeDots } from "react-icons/bs";
 import { Menu, MenuButton, MenuList, MenuItem, IconButton } from "@chakra-ui/react";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UserListSuperAdmin = () => {
   const [showModal, setShowModal] = useState(false);
@@ -53,7 +55,6 @@ const UserListSuperAdmin = () => {
 
   async function addUser() {
     try {
-      console.log("Adding user...");
       await supabase
         .from('users')
         .insert([
@@ -69,8 +70,12 @@ const UserListSuperAdmin = () => {
         ]);
 
       setShowModal(false);
-      console.log("User added successfully.");
       fetchUsers();
+
+      toast.success("User added successfully", {
+        autoClose: 1000, 
+        hideProgressBar: true 
+      });
 
       setUser({
         studentNumber: '',
@@ -83,17 +88,33 @@ const UserListSuperAdmin = () => {
       });
 
     } catch (error) {
-      console.error("Error adding user:", error);
+      toast.error("Error adding user. Please try again.", {
+        autoClose: 1000, 
+        hideProgressBar: true 
+      });
     }
   }
 
   async function deleteUser(userId) {
-    await supabase
-      .from('users')
-      .delete()
-      .eq('id', userId);
-
-    fetchUsers();
+    try {
+      await supabase
+        .from('users')
+        .delete()
+        .eq('id', userId);
+  
+      fetchUsers();
+ 
+      toast.success("User deleted successfully", {
+        autoClose: 1000, 
+        hideProgressBar: true 
+      });
+  
+    } catch (error) {
+      toast.error("Error deleting user. Please try again.", {
+        autoClose: 1000, 
+        hideProgressBar: true 
+      });
+    }
   }
 
 
@@ -115,7 +136,6 @@ const UserListSuperAdmin = () => {
 
   async function updateUser(userId) {
     try {
-      console.log("Updating user...");
       await supabase
         .from('users')
         .update({
@@ -130,10 +150,18 @@ const UserListSuperAdmin = () => {
         .eq('id', userId);
 
       setShowModalUpdate(false);
-      console.log("User updated successfully.");
       fetchUsers();
+
+      toast.success("User updated successfully", {
+        autoClose: 1000, 
+        hideProgressBar: true 
+      });
+
     } catch (error) {
-      console.error("Error updating user:", error);
+      toast.error("Error updating user. Please try again.", {
+        autoClose: 1000, 
+        hideProgressBar: true 
+      });
     }
   }
 
@@ -273,7 +301,7 @@ const UserListSuperAdmin = () => {
                   <input
                     type="number"
                     placeholder="Student Number"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="studentNumber"
                     value={user.studentNumber}
                     onChange={handleChange}
@@ -284,7 +312,7 @@ const UserListSuperAdmin = () => {
                   <input
                     type="text"
                     placeholder="Lastname"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="lastName"
                     value={user.lastName}
                     onChange={handleChange}
@@ -295,7 +323,7 @@ const UserListSuperAdmin = () => {
                   <input
                     type="text"
                     placeholder="Firstname"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="firstName"
                     value={user.firstName}
                     onChange={handleChange}
@@ -306,7 +334,7 @@ const UserListSuperAdmin = () => {
                   <input
                     type="text"
                     placeholder="Middlename"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="middleName"
                     value={user.middleName}
                     onChange={handleChange}
@@ -319,7 +347,7 @@ const UserListSuperAdmin = () => {
                     <input
                       type={visible ? "text" : "password"}
                       placeholder="Password"
-                      className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                      className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                       name="password"
                       value={user.password}
                       onChange={handleChange}
@@ -335,7 +363,7 @@ const UserListSuperAdmin = () => {
                   <input
                     type="email"
                     placeholder="example@gmail.com"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="email"
                     value={user.email}
                     onChange={handleChange}
@@ -346,7 +374,7 @@ const UserListSuperAdmin = () => {
                   <input
                     type="text"
                     placeholder="Course"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="course"
                     value={user.course}
                     onChange={handleChange}
@@ -384,7 +412,7 @@ const UserListSuperAdmin = () => {
 
                   <input
                     type="number"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="studentNumber"
                     defaultValue={userData.studentNumber}
                     onChange={handleUpdate}
@@ -393,7 +421,7 @@ const UserListSuperAdmin = () => {
                   <label className="text-sm ml-1">Lastname:</label>
                   <input
                     type="text"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="lastName"
                     defaultValue={userData.lastName}
                     onChange={handleUpdate}
@@ -402,7 +430,7 @@ const UserListSuperAdmin = () => {
                   <label className="text-sm ml-1">Firstname:</label>
                   <input
                     type="text"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="firstName"
                     defaultValue={userData.firstName}
                     onChange={handleUpdate}
@@ -411,7 +439,7 @@ const UserListSuperAdmin = () => {
                   <label className="text-sm ml-1">Middlename:</label>
                   <input
                     type="text"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="middleName"
                     defaultValue={userData.middleName}
                     onChange={handleUpdate}
@@ -423,7 +451,7 @@ const UserListSuperAdmin = () => {
                   <div className="relative">
                     <input
                       type={visible ? "text" : "password"}
-                      className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                      className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                       name="password"
                       defaultValue={userData.password}
                       onChange={handleUpdate}
@@ -438,7 +466,7 @@ const UserListSuperAdmin = () => {
                   <label className="text-sm ml-1">Email:</label>
                   <input
                     type="email"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="email"
                     defaultValue={userData.email}
                     onChange={handleUpdate}
@@ -447,7 +475,7 @@ const UserListSuperAdmin = () => {
                   <label className="text-sm ml-1">Course:</label>
                   <input
                     type="text"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="course"
                     defaultValue={userData.course}
                     onChange={handleUpdate}

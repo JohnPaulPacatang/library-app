@@ -4,6 +4,8 @@ import { FaRegFilePdf } from "react-icons/fa";
 import { BiSearch } from "react-icons/bi";
 import { Menu, MenuButton, MenuList, MenuItem, IconButton } from "@chakra-ui/react";
 import { BsThreeDots } from "react-icons/bs";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const BookSuperAdmin = () => {
   const [showModal, setShowModal] = useState(false);
@@ -126,7 +128,6 @@ const BookSuperAdmin = () => {
 
   async function addBook() {
     try {
-      console.log("Adding books...");
       await supabase
         .from('books')
         .insert([
@@ -140,7 +141,6 @@ const BookSuperAdmin = () => {
         ]);
 
       setShowModal(false);
-      console.log("Book added successfully.");
       fetchBooks();
 
       setBook({
@@ -151,8 +151,16 @@ const BookSuperAdmin = () => {
         availability: '',
       });
 
+      toast.success("Book added successfully", {
+        autoClose: 1000,
+        hideProgressBar: true
+      });
+
     } catch (error) {
-      console.error("Error adding book:", error);
+      toast.error("Error adding book. Please try again.", {
+        autoClose: 1000,
+        hideProgressBar: true
+      });
     }
 
   }
@@ -173,7 +181,6 @@ const BookSuperAdmin = () => {
 
   async function updateBook(bookId) {
     try {
-      console.log("Updating book...");
       await supabase
         .from('books')
         .update({
@@ -186,20 +193,41 @@ const BookSuperAdmin = () => {
         .eq('id', bookId);
 
       setShowModalUpdate(false);
-      console.log("Book updated successfully.");
       fetchBooks();
+
+      toast.success("Book updated successfully", {
+        autoClose: 1000,
+        hideProgressBar: true
+      });
+
     } catch (error) {
-      console.error("Book updating user:", error);
+      toast.error("Error updating book. Please try again.", {
+        autoClose: 1000,
+        hideProgressBar: true
+      });
     }
   }
 
   async function deleteBook(bookId) {
-    await supabase
-      .from('books')
-      .delete()
-      .eq('id', bookId);
+    try {
+      await supabase
+        .from('books')
+        .delete()
+        .eq('id', bookId);
 
-    fetchBooks();
+      fetchBooks();
+
+      toast.success("Book deleted successfully", {
+        autoClose: 1000,
+        hideProgressBar: true
+      });
+
+    } catch (error) {
+      toast.error("Error deleting book. Please try again.", {
+        autoClose: 1000,
+        hideProgressBar: true
+      });
+    }
   }
 
   // Dropdown category and search
@@ -433,7 +461,7 @@ const BookSuperAdmin = () => {
                     type="number"
                     step="any"
                     placeholder="DDC ID"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="ddcId"
                     value={book.ddcId}
                     onChange={handleChange}
@@ -444,7 +472,7 @@ const BookSuperAdmin = () => {
                   <input
                     type="text"
                     placeholder="Title"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="title"
                     value={book.title}
                     onChange={handleChange}
@@ -457,7 +485,7 @@ const BookSuperAdmin = () => {
                   <input
                     type="text"
                     placeholder="Author"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="author"
                     value={book.author}
                     onChange={handleChange}
@@ -468,7 +496,7 @@ const BookSuperAdmin = () => {
                   <input
                     type="text"
                     placeholder="Category"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="category"
                     value={book.category}
                     onChange={handleChange}
@@ -481,7 +509,7 @@ const BookSuperAdmin = () => {
                 <div className="flex flex-col">
                   <label className="text-sm ml-1 font-semibold">Availability</label>
                   <select
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 font-semibold"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 font-semibold"
                     name="availability"
                     value={book.availability}
                     onChange={handleChange}
@@ -518,7 +546,7 @@ const BookSuperAdmin = () => {
                   <input
                     type="number"
                     step="any"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="ddc_id"
                     defaultValue={bookData.ddc_id}
                     onChange={handleUpdate}
@@ -527,7 +555,7 @@ const BookSuperAdmin = () => {
                   <label className="text-sm m-1 font-semibold">Title</label>
                   <input
                     type="text"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="title"
                     defaultValue={bookData.title}
                     onChange={handleUpdate}
@@ -538,7 +566,7 @@ const BookSuperAdmin = () => {
                   <label className="text-sm m-1 font-semibold">Author</label>
                   <input
                     type="text"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="author"
                     defaultValue={bookData.author}
                     onChange={handleUpdate}
@@ -547,7 +575,7 @@ const BookSuperAdmin = () => {
                   <label className="text-sm m-1 font-semibold">Category</label>
                   <input
                     type="text"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     name="category"
                     defaultValue={bookData.category}
                     onChange={handleUpdate}
@@ -560,7 +588,7 @@ const BookSuperAdmin = () => {
                 <div className="flex flex-col">
                   <label className="text-sm m-1 font-semibold">Availability</label>
                   <select
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 font-semibold"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 font-semibold"
                     name="availability"
                     defaultValue={bookData.availability}
                     onChange={handleUpdate}
@@ -605,7 +633,7 @@ const BookSuperAdmin = () => {
                     name="studentNumber"
                     id="studentNumber"
                     placeholder="12345678"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
 
@@ -618,7 +646,7 @@ const BookSuperAdmin = () => {
                     name="docId"
                     id="docId"
                     placeholder="1234"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
 
@@ -631,7 +659,7 @@ const BookSuperAdmin = () => {
                     name="title"
                     id="title"
                     placeholder="Superbook"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
 
@@ -643,7 +671,7 @@ const BookSuperAdmin = () => {
                     type="date"
                     name="issueDate"
                     id="issueDate"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
 
@@ -653,7 +681,7 @@ const BookSuperAdmin = () => {
                     type="date"
                     name="returnDate"
                     id="returnDate"
-                    className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
               </div>
@@ -662,7 +690,7 @@ const BookSuperAdmin = () => {
               <div className="flex justify-center pt-4">
                 <button
                   type="submit"
-                  className="bg-blue text-white font-semibold py-2 px-4  rounded-md shadow-sm mt-2">
+                  className="bg-blue text-white font-semibold py-2 px-4 rounded-md shadow-sm mt-2">
                   Submit
                 </button>
               </div>
