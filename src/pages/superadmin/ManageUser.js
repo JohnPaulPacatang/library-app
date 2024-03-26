@@ -193,7 +193,7 @@ const UserListSuperAdmin = () => {
           <input
             type="text"
             placeholder="Search"
-            className="w-full px-4 py-3 border border-opacity-25 rounded-3xl focus:outline-none focus:ring-1"
+            className="w-3/4 px-4 py-2 border border-opacity-25 rounded-xl focus:outline-none focus:ring-1"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />

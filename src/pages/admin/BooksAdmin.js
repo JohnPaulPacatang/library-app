@@ -23,57 +23,33 @@ const BooksAdmin = () => {
   const [issuedBooks] = useState([
     {
       studentNumber: "123456",
+      fullName: "John Paul Pacatang",
       docId: "789",
       title: "Sample Book 1",
       issueDate: "2024-03-07",
       returnDate: "2024-03-21",
+      status: "Issued",
     },
     {
       studentNumber: "456789",
+      fullName: "Prime John Clara",
       docId: "012",
       title: "Sample Book 2",
       issueDate: "2024-03-08",
       returnDate: "2024-03-22",
+      status: "Issued",
     },
     {
       studentNumber: "110011",
+      fullName: "Ryan Tresmanio",
       docId: "014",
       title: "Sample Book 3",
       issueDate: "2024-03-12",
       returnDate: "2024-03-22",
+      status: "Overdue",
     },
   ]);
 
-  const [overdueBooks] = useState([
-    {
-      studentNumber: "123456",
-      name: "John Doe",
-      docId: "DDC001",
-      title: "Introduction to React",
-      status: "Overdue",
-    },
-    {
-      studentNumber: "654321",
-      name: "Jane Smith",
-      docId: "DDC002",
-      title: "JavaScript Basics",
-      status: "Overdue",
-    },
-    {
-      studentNumber: "987654",
-      name: "Alice Johnson",
-      docId: "DDC003",
-      title: "HTML Essentials",
-      status: "Overdue",
-    },
-    {
-      studentNumber: "246813",
-      name: "Bob Johnson",
-      docId: "DDC004",
-      title: "CSS Mastery",
-      status: "Overdue",
-    },
-  ]);
 
   // Category data
   const categories = [
@@ -120,7 +96,7 @@ const BooksAdmin = () => {
           <input
             type="text"
             placeholder="Search"
-            className="w-full px-4 py-3 border border-opacity-25 rounded-3xl focus:outline-none focus:ring-1"
+            className="w-3/4 px-4 py-2 border border-opacity-25 rounded-xl focus:outline-none focus:ring-1"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -135,7 +111,6 @@ const BooksAdmin = () => {
           onChange={handleTableChange}>
           <option value="Books">Books</option>
           <option value="Issue">Issue</option>
-          <option value="Overdue">Overdue</option>
         </select>
       </div>
 
@@ -185,7 +160,7 @@ const BooksAdmin = () => {
                     {book.availability ? "Available" : "Not Available"}
                   </td>
                   <td className="px-5">
-                    <button className="text-sm text-white bg-blue border p-2 px-4 rounded-lg hover:text-white"  onClick={handleOpenModalIssue}>Issue</button>
+                    <button className="text-sm text-white bg-blue border p-2 px-4 rounded-lg hover:text-white" onClick={handleOpenModalIssue}>Issue</button>
                   </td>
                 </tr>
               ))}
@@ -214,10 +189,12 @@ const BooksAdmin = () => {
 
               <tr className="text-left text-black text-lg border-b border-gray">
                 <th className="px-5 py-4">Student No.</th>
+                <th className="px-5 py-4">Fullname</th>
                 <th className="px-5 py-4">DDC ID</th>
                 <th className="px-5 py-4">Title</th>
                 <th className="px-5 py-4">Issue Date</th>
                 <th className="px-5 py-4">Return Date</th>
+                <th className="px-5 py-4">Status</th>
                 <th className="px-5 py-4">Action</th>
               </tr>
             </thead>
@@ -226,60 +203,17 @@ const BooksAdmin = () => {
               {issuedBooks.map((issue, index) => (
                 <tr key={index} className="border-b border-gray text-sm">
                   <td className="px-5 py-2">{issue.studentNumber}</td>
+                  <td className="px-5 py-2">{issue.fullName}</td>
                   <td className="px-5 py-2">{issue.docId}</td>
                   <td className="px-5 py-2">{issue.title}</td>
                   <td className="px-5 py-2">{issue.issueDate}</td>
                   <td className="px-5 py-2">{issue.returnDate}</td>
+                  <td className="px-5 py-2">{issue.status}</td>
                   <td className="px-5">
                     <button className="text-sm text-blue font-normal py-2 my-2  rounded-lg hover:text-black">Mark as Returned</button>
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {selectedTable === 'Overdue' && (
-        <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
-          <table className="bg-white w-full rounded-2xl px-2 py-2 shadow-xl">
-            <thead className="sticky top-0 bg-white">
-              <tr className="pb-2">
-                <th colSpan="10">
-                  <div className="flex justify-between items-center px-5 py-4">
-                    <h2 className="text-xl text-black">Overdue books</h2>
-                    <button
-                      onClick={handleExport}
-                      className="bg-gray text-black text-sm p-3 flex items-center rounded-xl hover:bg-blue hover:text-white cursor-pointer">
-                      <FaRegFilePdf className="mr-1" />
-                      Export as PDF
-                    </button>
-                  </div>
-                </th>
-              </tr>
-              <tr className="text-left text-black text-lg border-b border-gray">
-                <th className="px-5 py-4">Student No.</th>
-                <th className="px-5 py-4">Name</th>
-                <th className="px-5 py-4">DDC ID</th>
-                <th className="px-5 py-4">Book Title</th>
-                <th className="px-5 py-4">Status</th>
-                <th className="px-5 py-4">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {overdueBooks &&
-                overdueBooks.map((overdue, index) => (
-                  <tr key={index} className="border-b border-gray text-sm">
-                    <td className="px-5 py-2">{overdue.studentNumber}</td>
-                    <td className="px-5 py-2">{overdue.name}</td>
-                    <td className="px-5 py-2">{overdue.docId}</td>
-                    <td className="px-5 py-2">{overdue.title}</td>
-                    <td className="px-5 py-2">{overdue.status}</td>
-                    <td className="px-5">
-                      <button className="text-sm text-blue font-normal py-2 my-2  rounded-lg hover:text-black">Mark as Returned</button>
-                    </td>
-                  </tr>
-                ))}
             </tbody>
           </table>
         </div>
