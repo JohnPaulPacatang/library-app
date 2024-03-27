@@ -71,7 +71,7 @@ const UserListSuperAdmin = () => {
       fetchUsers();
 
       toast.success("User added successfully", {
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: true
       });
 
@@ -87,7 +87,7 @@ const UserListSuperAdmin = () => {
 
     } catch (error) {
       toast.error("Error adding user. Please try again.", {
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: true
       });
     }
@@ -103,13 +103,13 @@ const UserListSuperAdmin = () => {
       fetchUsers();
 
       toast.success("User deleted successfully", {
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: true
       });
 
     } catch (error) {
       toast.error("Error deleting user. Please try again.", {
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: true
       });
     }
@@ -151,13 +151,13 @@ const UserListSuperAdmin = () => {
       fetchUsers();
 
       toast.success("User updated successfully", {
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: true
       });
 
     } catch (error) {
       toast.error("Error updating user. Please try again.", {
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: true
       });
     }

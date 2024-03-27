@@ -54,7 +54,7 @@ const UserListAdmin = () => {
       fetchUsers();
 
       toast.success("User added successfully", {
-        autoClose: 1000, 
+        autoClose: 2000, 
         hideProgressBar: true 
       });
 
@@ -70,7 +70,7 @@ const UserListAdmin = () => {
 
     } catch (error) {
       toast.error("Error adding user. Please try again.", {
-        autoClose: 1000, 
+        autoClose: 2000, 
         hideProgressBar: true 
       });
     }

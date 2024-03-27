@@ -7,6 +7,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 const BookSuperAdmin = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModalUpdate, setShowModalUpdate] = useState(false);
@@ -127,13 +128,13 @@ const BookSuperAdmin = () => {
       });
 
       toast.success("Book added successfully", {
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: true
       });
 
     } catch (error) {
       toast.error("Error adding book. Please try again.", {
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: true
       });
     }
@@ -171,13 +172,13 @@ const BookSuperAdmin = () => {
       fetchBooks();
 
       toast.success("Book updated successfully", {
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: true
       });
 
     } catch (error) {
       toast.error("Error updating book. Please try again.", {
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: true
       });
     }
@@ -193,13 +194,13 @@ const BookSuperAdmin = () => {
       fetchBooks();
 
       toast.success("Book deleted successfully", {
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: true
       });
 
     } catch (error) {
       toast.error("Error deleting book. Please try again.", {
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: true
       });
     }

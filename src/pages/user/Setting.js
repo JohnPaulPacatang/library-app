@@ -1,15 +1,75 @@
 import React, { useState } from "react";
-import Swal from "sweetalert2";
+import { supabase } from '../../utils/supabaseClient';
 import Profile from "../../assets/profile.jpg";
+import { AiOutlineEyeInvisible } from "react-icons/ai";
+import { IoEyeOutline } from "react-icons/io5";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userCourse }) => {
+const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userCourse, userPassword }) => {
   const [showModal, setShowModal] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [Password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [currentVisible, setCurrentVisible] = useState(false);
+  const [reTypeVisible, setReTypeVisible] = useState(false);
 
   const handleOpenModal = () => {
     setShowModal(true);
+    console.log(userPassword);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setPasswordError("");
+  };
+
+  const handleResetPassword = async (e) => {
+    e.preventDefault();
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setPasswordError("Please fill in all fields");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordError("New password and confirm password must match");
+      return;
+    }
+
+    if (currentPassword !== userPassword) {
+      setPasswordError("Current password is incorrect");
+      return;
+    }
+
+    try {
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({ password: newPassword })
+        .eq('email', userEmail);
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      toast.success("Password updated successfully", {
+        autoClose: 2000,
+        hideProgressBar: true
+      });
+
+      handleCloseModal();
+    } catch (error) {
+      console.error("Error updating password:", error.message);
+      toast.error("Error updating password", {
+        autoClose: 2000,
+        hideProgressBar: true
+      });
+      setPasswordError("Error updating password. Please try again later.");
+    }
   };
 
   return (
@@ -19,7 +79,10 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
           <ul className="list-unstyled">
             <li className="mb-2 flex flex-col items-center">
               <img src={Profile} alt="User profile" height={300} width={300} />
-              <button className="text-blue-600 hover:underline mt-2 font-semibold hover:text-blue"onClick={handleOpenModal}>
+              <button
+                className="text-black hover:text-blue hover:underline mt-2"
+                onClick={handleOpenModal}
+              >
                 Reset password
               </button>
             </li>
@@ -62,7 +125,6 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
               </p>
             </div>
           </div>
-          
         </div>
       </div>
 
@@ -71,44 +133,68 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
           <div className="bg-white p-6 rounded-lg">
             <h2 className="text-lg font-bold mb-4">Reset Password</h2>
 
-            <form>
-              <label className="text-sm ml-1 font-semibold">Current password:</label>
-              <input
-                type="password"
-                placeholder="Current Password"
-                className="rounded-lg input-border shadow px-3 py-2 mb-4 w-full"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-              />
+            <form onSubmit={handleResetPassword}> { }
 
-              <label className="text-sm ml-1 font-semibold">New password:</label>
-              <input
-                type="password"
-                placeholder="New Password"
-                className="rounded-lg input-border shadow px-3 py-2 mb-4 w-full"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
+              <div className="mb-4 relative">
+                <label className="text-sm ml-1 font-semibold">Current password:</label>
+                <input
+                 type={currentVisible ? "text" : "password"}
+                  placeholder="Current Password"
+                  className="rounded-lg input-border shadow px-3 py-2 mb-2 w-full"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                />
+                <div className="absolute right-0 top-0 mt-9 mr-4 text-lg text-blue" onClick={() => setCurrentVisible(!currentVisible)}>
+                  {
+                    currentVisible ? <IoEyeOutline /> : <AiOutlineEyeInvisible />
+                  }
+                </div>
+              </div>
 
-              <label className="text-sm ml-1 font-semibold">Re-type password:</label>
-              <input
-                type="password"
-                placeholder="Re-type Password"
-                className="rounded-lg input-border shadow px-3 py-2 mb-4 w-full"
-                value={Password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+              <div className="mb-4">
+                <label className="text-sm ml-1 font-semibold">New password:</label>
+                <input
+                  type="password"
+                  placeholder="New Password"
+                  className="rounded-lg input-border shadow px-3 py-2 mb-2 w-full"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                />
+              </div>
+
+              <div className=" relative">
+                <label className="text-sm ml-1 font-semibold">Re-type password:</label>
+                <input
+                  type={reTypeVisible ? "text" : "password"}
+                  placeholder="Re-type Password"
+                  className="rounded-lg input-border shadow px-3 py-2 mb-2 w-full"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+                <div className="absolute right-0 top-0 mt-9 mr-4 text-lg text-blue" onClick={() => setReTypeVisible(!reTypeVisible)}>
+                  {
+                    reTypeVisible ? <IoEyeOutline /> : <AiOutlineEyeInvisible />
+                  }
+                </div>
+              </div>
+
+              {passwordError && <p className="text-red my-2 text-base">{passwordError}</p>}
 
               <div className="flex justify-end">
-                <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded mr-2 bg-blue">
+                <button
+                  type="submit"
+                  className="bg-blue-600 text-white py-2 px-4 rounded mr-2 bg-blue"
+                >
                   Confirm
                 </button>
-                <button className="bg-gray-300 text-gray-800 py-2 px-4 rounded bg-gray" onClick={() => setShowModal(false)}>
+                <button
+                  className="bg-gray-300 text-gray-800 py-2 px-4 rounded bg-gray"
+                  onClick={handleCloseModal}
+                >
                   Cancel
                 </button>
               </div>
             </form>
-
           </div>
         </div>
       )}
@@ -116,4 +202,4 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
   );
 };
 
-export default Setting;
+export default Setting
