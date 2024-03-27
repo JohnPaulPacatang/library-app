@@ -6,7 +6,7 @@ import { MdSpaceDashboard } from "react-icons/md";
 import { GiArchiveResearch} from "react-icons/gi";
 import { IoIosHelpCircle, IoIosHelpCircleOutline } from "react-icons/io";
 import { GiExitDoor } from "react-icons/gi";
-import Profile from "../assets/profile.jpg";
+import Profile from "../assets/scclogo.webp";
 
 import { handleLogout } from "./Logout";
 
@@ -79,7 +79,7 @@ const SidebarUser = ({ userFirstName, userLastName }) => {
               />
 
               <div className="ml-3">
-                <h1 className="text-base font-semibold text-white">
+                <h1 className="text-base font-bold text-white">
                   {userFirstName} {userLastName}
                   <span className="block text-sm text-gray font-normal">
                     Student

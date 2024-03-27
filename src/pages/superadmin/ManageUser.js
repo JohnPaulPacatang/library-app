@@ -23,8 +23,6 @@ const UserListSuperAdmin = () => {
   };
 
   const [users, setUsers] = useState([]);
-
-
   const [user, setUser] = useState({});
   const [userData, setUserData] = useState({});
 
@@ -266,7 +264,7 @@ const UserListSuperAdmin = () => {
                       icon={<BsThreeDots style={{ fontSize: '2.5rem', marginLeft: '0.5rem' }} />}
                       variant='outline'
                     />
-                    <MenuList className="bg-white shadow rounded-lg p-1" zIndex={10}>
+                    <MenuList className="bg-white shadow rounded-lg p-1 input-border" zIndex={10}>
                       <MenuItem>
                         <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline"
                           onClick={() => { displayUser(user.id); handleOpenModalUpdate(); }}>Update</button>

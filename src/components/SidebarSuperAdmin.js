@@ -6,7 +6,7 @@ import { IoArrowUndoCircleOutline, IoArrowRedoCircleOutline } from "react-icons/
 import { MdSpaceDashboard } from "react-icons/md";
 import { GiBookmarklet } from "react-icons/gi";
 import { GiExitDoor } from "react-icons/gi";
-import Profile from "../assets/profile.jpg";
+import Profile from "../assets/scclogo.webp";
 import { handleLogout } from "./Logout";
 
 const SidebarSuperAdmin = () => {
@@ -16,7 +16,7 @@ const SidebarSuperAdmin = () => {
   const isActive = (path) => {
     return location.pathname === path;
   };
-  
+
   return (
     <div>
       {!isOpen ? (
@@ -47,7 +47,7 @@ const SidebarSuperAdmin = () => {
 
             <Link to="/manage-users">
               <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/manage-users") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <FaUserCog  />
+                <FaUserCog />
               </li>
             </Link>
 
@@ -75,7 +75,7 @@ const SidebarSuperAdmin = () => {
               />
 
               <div className="ml-3">
-                <h1 className="text-base font-semibold text-white">
+                <h1 className="text-base font-bold text-white">
                   Administrator
                   <span className="block text-sm text-gray font-normal">
                     Super Admin
@@ -106,7 +106,7 @@ const SidebarSuperAdmin = () => {
 
             <Link to="/manage-users">
               <li className={`text-white text-base flex items-center px-4 py-3 m-3 ${isActive("/manage-users") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <FaUserCog  className="text-3xl mr-2" />
+                <FaUserCog className="text-3xl mr-2" />
                 User Lists
               </li>
             </Link>

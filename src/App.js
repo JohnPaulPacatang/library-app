@@ -28,6 +28,7 @@ function App() {
   const storedUserMiddleName = sessionStorage.getItem('userMiddleName');
   const storedUserEmail = sessionStorage.getItem('userEmail');
   const storedUserCourse = sessionStorage.getItem('userCourse');
+ 
 
   const [userRole, setUserRole] = useState(storedUserRole);
   const [userFirstName, setUserFirstName] = useState(storedUserFirstName || "");
@@ -35,6 +36,7 @@ function App() {
   const [userMiddleName, setUserMiddleName] = useState(storedUserMiddleName || "");
   const [userEmail, setUserEmail] = useState(storedUserEmail || "");
   const [userCourse, setUserCourse] = useState(storedUserCourse || "");
+
 
   useEffect(() => {
     if (userRole && userFirstName && userLastName && userMiddleName && userEmail && userCourse) {
@@ -71,7 +73,7 @@ function App() {
       <Routes>
         <Route path="/home-user" element={<HomeUser userFirstName={userFirstName} />} />
         <Route path="/search-books" element={<SearchBooksUser />} />
-        <Route path="/settings" element={<Setting userFirstName={userFirstName} userLastName={userLastName} userMiddleName={userMiddleName} userEmail={userEmail} userCourse={userCourse}/>} />
+        <Route path="/settings" element={<Setting userFirstName={userFirstName} userLastName={userLastName} userMiddleName={userMiddleName} userEmail={userEmail} userCourse={userCourse} />} />
         <Route path="/faq" element={<FAQ />} />
       </Routes>
     );

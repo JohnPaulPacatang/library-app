@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import Swal from "sweetalert2";
 import Profile from "../../assets/profile.jpg";
@@ -42,12 +41,9 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
         <div className="m-auto p-10 mr-4">
           <ul className="list-unstyled">
             <li className="mb-2 flex flex-col items-center">
-              <img src={Profile} alt="User profile" height={250} width={300} />
-              <button className="text-white bg-blue rounded-md px-4 py-1 hover:underline">
-                Upload photo
-              </button>
+              <img src={Profile} alt="User profile" height={300} width={300}/>
               <button
-                className="text-blue-600 hover:underline mt-2"
+                className="text-blue font-semibold hover:underline mt-2"
                 onClick={handleOpenModal}
               >
                 Reset password
@@ -92,17 +88,7 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
               </p>
             </div>
           </div>
-          <div className="applyButton flex justify-end pr-10 mr-10">
-            <button
-              className="button-1 bg-blue-600 text-white py-2 px-4 rounded mr-2 bg-blue hover:bg-black active:bg-green"
-              onClick={handleApplyButton}
-            >
-              Apply
-            </button>
-            <button className="button-2 bg-gray-300 text-gray-800 py-2 px-4 rounded border border-gray">
-              Cancel
-            </button>
-          </div>
+          
         </div>
       </div>
 

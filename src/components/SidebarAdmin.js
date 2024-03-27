@@ -6,7 +6,7 @@ import { IoArrowUndoCircleOutline, IoArrowRedoCircleOutline } from "react-icons/
 import { MdSpaceDashboard } from "react-icons/md";
 import { GiBookmarklet } from "react-icons/gi";
 import { GiExitDoor } from "react-icons/gi";
-import Profile from "../assets/profile.jpg";
+import Profile from "../assets/scclogo.webp";
 import { FaPersonWalkingArrowRight } from "react-icons/fa6";
 import { handleLogout } from "./Logout";
 
@@ -82,7 +82,7 @@ const SidebarAdmin = () => {
               />
 
               <div className="ml-3">
-                <h1 className="text-base font-semibold text-white">
+                <h1 className="text-base font-bold text-white">
                   Administrator
                   <span className="block text-sm text-gray font-normal">
                     Librarian
