@@ -45,7 +45,7 @@ function Login({ handleLogin }) {
       }
 
       if (data.length === 1 && data[0].password === password) {
-        handleLogin("user", data[0].first_name, data[0].last_name, data[0].middle_name, data[0].email, data[0].course ,data[0].img_url);
+        handleLogin("user", data[0].first_name, data[0].last_name, data[0].middle_name, data[0].email, data[0].course ,data[0].id);
         navigate("/home-user");
       } else {
         throw new Error("Invalid username or password");

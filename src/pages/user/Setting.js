@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Swal from "sweetalert2";
 import Profile from "../../assets/profile.jpg";
 
 const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userCourse }) => {
@@ -24,16 +23,7 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
     console.log("Resetting password...");
     handleCloseModal();
   };
-
-  const handleApplyButton = () => {
-    Swal.fire({
-      position: "center",
-      icon: "success",
-      title: "Changes are saved!",
-      showConfirmButton: false,
-      timer: 1700,
-    });
-  };
+ 
 
   return (
     <div className="flex-1 px-5">
