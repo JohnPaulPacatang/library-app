@@ -2,7 +2,7 @@
 
 This project was bootstrapped with Create React App.
 
-![Taguro](https://i.imgflip.com/3seymh.jpg?a475248) ![HAHA](https://scontent.fmnl17-3.fna.fbcdn.net/v/t1.6435-9/89235472_794699167691193_2181385173487058944_n.png?_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGxkkZU-PE2BDZbfC-RaJYaPjSkS6ew-H4-NKRLp7D4fsgexgueqZjepDX7qJoRV9sB8hMAUlGLSrBPNDPws1fD&_nc_ohc=V2d_UGDsAQUAX_ASjIh&_nc_ht=scontent.fmnl17-3.fna&oh=00_AfAEfypK7Awyk0MGE-N_1VHAX5zwl2jTIZ9inPfT_zgu-w&oe=662E4184)
+![HAHA](https://scontent.fmnl17-3.fna.fbcdn.net/v/t1.6435-9/89235472_794699167691193_2181385173487058944_n.png?_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGxkkZU-PE2BDZbfC-RaJYaPjSkS6ew-H4-NKRLp7D4fsgexgueqZjepDX7qJoRV9sB8hMAUlGLSrBPNDPws1fD&_nc_ohc=V2d_UGDsAQUAX_ASjIh&_nc_ht=scontent.fmnl17-3.fna&oh=00_AfAEfypK7Awyk0MGE-N_1VHAX5zwl2jTIZ9inPfT_zgu-w&oe=662E4184)
 
 ## Available Scripts
 
@@ -70,5 +70,7 @@ This section has moved [here](https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved [here](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify).
+
+![blink](https://media0.giphy.com/media/l3q2K5jinAlChoCLS/200w.gif?cid=6c09b952005b9tcytkjrv1z4e1kgxvazsm6n884fxozrn0mb&ep=v1_gifs_search&rid=200w.gif&ct=g)
 
 
