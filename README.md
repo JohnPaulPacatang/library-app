@@ -6,7 +6,6 @@ This project was bootstrapped with Create React App.
 
 ![code](https://scontent.fmnl17-3.fna.fbcdn.net/v/t1.15752-9/432453466_2383553215183439_6079832675097484047_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeE6TointbaLV5TwJMUmiKB5rk2GbifBWgauTYZuJ8FaBmJ73wNLyywxrlGcO_G7D-xhWl8E9PRiiqWAEivoTff0&_nc_ohc=uikjE9qSo4wAX9e-O3Q&_nc_ht=scontent.fmnl17-3.fna&oh=03_AdSY5hlIcd-oPrSIPUA-c4ZxqZSceWChcOh16Clper7I-Q&oe=662E4035)
 
-![TESTING](https://i.redd.it/ranp5l72rvqc1.jpeg)
 ## Available Scripts
 
 In the project directory, you can run:
