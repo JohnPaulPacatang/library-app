@@ -3,6 +3,7 @@
 This project was bootstrapped with Create React App.
 
 ![React Logo](https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png)
+![Taguro](https://i.imgflip.com/3seymh.jpg?a475248)
 
 ## Available Scripts
 
@@ -71,4 +72,4 @@ This section has moved [here](https://facebook.github.io/create-react-app/docs/d
 
 This section has moved [here](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify).
 
-[Taguro](https://i.imgflip.com/3seymh.jpg?a475248).
+
