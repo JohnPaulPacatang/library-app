@@ -1,85 +1,160 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaRegFilePdf } from "react-icons/fa";
+import { supabase } from '../../utils/supabaseClient';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-const LibraryLog = () => {
+const Attendance = () => {
   const [showModal, setShowModal] = useState(false);
-
   const [studentNumber, setStudentNumber] = useState('');
-  const [Name, setName] = useState('');
+  const [name, setName] = useState('');
   const [course, setCourse] = useState('');
-
-
-
-  // Define userList here
-  const userList = [
-    {
-      studentNumber: 20226535,
-      name: 'Pacatang, John Paul B.',
-      course: 'BSCS',
-      date: '3/22/2024',
-      timein: '01:57 PM',
-      timeout: '02:57 PM',
-      action: 'Signed Out',
-    },
-    {
-      studentNumber: 20226869,
-      name: 'Tresmanio, Ryan T.',
-      course: 'BSCS',
-      date: '3/20/2024',
-      timein: '12:57 AM',
-      timeout: '01:38 PM',
-      action: 'Signed Out',
-    },
-    {
-      studentNumber: 20225301,
-      name: 'Clara, Prime John F.',
-      course: 'BSCS',
-      date: '3/22/2024',
-      timein: '01:57 pm',
-      timeout: '02:57 pm',
-      action: 'Signed Out',
-    },
-    {
-      studentNumber: 20227468,
-      name: 'Mantes, Reynold V.',
-      course: 'BSCS',
-      date: '3/25/2024',
-      timein: '01:25 pm',
-      timeout: '04:23 pm',
-      action: 'Signed Out',
-    },
-    {
-      studentNumber: 20220000,
-      name: 'Yunting, Joannes Paulus',
-      course: 'BSCS',
-      date: '3/22/2024',
-      timein: '03:12 pm',
-      timeout: '06:24 pm',
-      action: 'Signed Out',
-    },
-  ];
+  const [attendanceData, setAttendanceData] = useState([]);
 
   const handleOpenModal = () => {
     setShowModal(true);
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
+  useEffect(() => {
+    fetchAttendanceData();
+  }, []);
 
-    setStudentNumber('');
-    setName('');
-    setCourse('');
+  useEffect(() => {
+    if (studentNumber) {
+      fetchStudentInfo(studentNumber);
+    }
+  }, [studentNumber]);
 
+  const fetchStudentInfo = async (studentNumber) => {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('first_name, last_name, course')
+        .eq('student_number', studentNumber)
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      if (data) {
+        setName(`${data.first_name} ${data.last_name}`);
+        setCourse(data.course);
+
+      } else {
+        setName('');
+        setCourse('');
+      }
+    } catch (error) {
+      console.error('Error fetching student info:', error.message);
+    }
   };
 
-  const handleSignIn = () => {
-    alert('Oke na...');
-    handleCloseModal();
-  };
+  async function fetchAttendanceData() {
+    const { data } = await supabase.from('attendance').select('*');
+    setAttendanceData(data);
+  }
+
+  async function handleSignIn(event) {
+    event.preventDefault();
+
+    try {
+      const currentTime = new Date();
+      const localTime = new Date(currentTime.getTime() - currentTime.getTimezoneOffset() * 60000);
+      const formattedTime = localTime.toISOString().split('T')[1].split('.')[0];
+
+      if (!name || !course) {
+        toast.warn('Invalid student number or no accound found.', {
+          autoClose: 2000,
+          hideProgressBar: true
+        });
+        return;
+      }
+
+      await supabase
+        .from('attendance')
+        .insert([
+          {
+            studnum: studentNumber,
+            studentname: name,
+            course: course,
+            time_in: formattedTime,
+            time_out: null,
+            date: new Date().toISOString().split('T')[0],
+          },
+        ]);
+
+      setStudentNumber('');
+      setName('');
+      setCourse('');
+
+      setShowModal(false);
+      fetchAttendanceData();
+
+      toast.success("Sign in successfully", {
+        autoClose: 2000,
+        hideProgressBar: true
+      });
+
+    } catch (error) {
+      console.error('Error adding:', error.message);
+      toast.error("Error adding. Please try again.", {
+        autoClose: 2000,
+        hideProgressBar: true
+      });
+    }
+  }
+
+  async function handleSignOut(studentNumber) {
+    try {
+      const currentTime = new Date();
+      const localTime = new Date(currentTime.getTime() - currentTime.getTimezoneOffset() * 60000);
+      const formattedTime = localTime.toISOString().split('T')[1].split('.')[0];
+
+      await supabase
+        .from('attendance')
+        .update({ time_out: formattedTime })
+        .eq('studnum', studentNumber);
+
+      fetchAttendanceData();
+
+      toast.success("Signed out", {
+        autoClose: 2000,
+        hideProgressBar: true
+      });
+
+    } catch (error) {
+      console.error('Error signing out:', error.message);
+      toast.error("Error signing out. Please try again.", {
+        autoClose: 2000,
+        hideProgressBar: true
+      });
+    }
+  }
+
+  // async function handleDeleteAttendance(id) {
+  //   try {
+
+  //     await supabase.from('attendance').delete().eq('id', id);
+  //     fetchAttendanceData();
+  //     toast.success("deleted successfully", {
+  //       autoClose: 2000,
+  //       hideProgressBar: true
+  //     });
+
+  //   } catch (error) {
+  //     console.error('Error deleting attendance entry:', error.message);
+  //     toast.error("Error deleting attendance entry. Please try again.", {
+  //       autoClose: 2000,
+  //       hideProgressBar: true
+  //     });
+  //   }
+  // }
+
 
   const handleExport = () => {
-    alert('Succesfully exported as PDF...');
-  };
+    alert('Successfully exported as PDF...')
+  }
 
   return (
     <div className='px-5 my-5 flex-1'>
@@ -91,7 +166,7 @@ const LibraryLog = () => {
                 <div className='flex justify-between items-center px-5 py-4'>
                   <h2 className='text-xl text-black'>Library Log</h2>
                   <div className="flex items-center gap-3">
-                  <button
+                    <button
                       onClick={handleExport}
                       className="bg-gray text-black text-sm p-3 flex items-center rounded-xl hover:bg-blue hover:text-white cursor-pointer">
                       <FaRegFilePdf className="mr-1" />
@@ -100,7 +175,7 @@ const LibraryLog = () => {
                     <button
                       className="bg-gray text-black text-sm font-semibold rounded-xl p-3 hover:bg-blue hover:text-white"
                       onClick={handleOpenModal}>
-                      Add User
+                      Sign in
                     </button>
                   </div>
                 </div>
@@ -110,24 +185,48 @@ const LibraryLog = () => {
             <tr className='text-left text-black text-lg border-b border-gray'>
               <th className='px-5 py-4 w-1/6'>Student No.</th>
               <th className='px-5 py-4 w-1/6'>Name</th>
-              <th className='px-4 py-4 w-1/6'>Course</th>
-              <th className='px-4 py-4 w-1/6'>Date</th>
-              <th className='px-4 py-4 w-1/6'>Time In</th>
-              <th className='px-4 py-4 w-1/6'>Time Out</th>
-              <th className='px-4 py-4 w-1/6'>Action</th>
+              <th className="px-5 py-4 w-1/6">Course</th>
+              <th className="px-5 py-4 w-1/6">Date</th>
+              <th className="px-5 py-4 ">Time In</th>
+              <th className="px-5 py-4 ">Time Out</th>
+              <th className="px-5 py-4 ">Action</th>
             </tr>
           </thead>
 
           <tbody>
-            {userList.map((item) => (
-              <tr key={item.studentNumber} className='border-b border-gray text-sm'>
-                <td className='px-5 py-2 w-1/12'>{item.studentNumber}</td>
-                <td className='px-5 py-2 w-1/12'>{item.name}</td>
-                <td className="px-5 py-2 w-1/12">{item.course}</td>
-                <td className="px-5 py-2 w-1/12">{item.date}</td>
-                <td className="px-5 py-2 w-1/12">{item.timein}</td>
-                <td className="px-5 py-2 w-1/12">{item.timeout}</td>
-                <td className="px-5 py-2 w-1/12 text-red">{item.action}</td>
+            {attendanceData.map((item, index) => (
+              <tr key={index} className='border-b border-gray text-sm'>
+                <td className='px-5 py-2'>{item.studnum}</td>
+                <td className='px-5 py-2'>{item.studentname}</td>
+                <td className="px-5 py-2">{item.course}</td>
+                <td className="px-5 py-2">{item.date}</td>
+                <td className="px-5 py-2">
+                  {new Date(`2000-01-01T${item.time_in}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </td>
+
+                <td className="px-5 py-2">
+                  {item.time_out ?
+                    new Date(`2000-01-01T${item.time_out}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                    :
+                    '--: -- : -- :--'}
+                </td>
+
+                <td className="px-5 py-2">
+                  {!item.time_out ? (
+                    <button
+                      onClick={() => handleSignOut(item.studnum)}
+                      className="text-red px-3 py-1 rounded-md inline">
+                      Sign out
+                    </button>
+                  ) : (
+                    <span className="text-green">Signed out</span>
+                  )}
+                  {/* <button
+                    onClick={() => handleDeleteAttendance(item.id)}
+                    className="bg-red ml-4 text-white px-3 py-1 rounded-md">
+                    Delete
+                  </button> */}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -135,59 +234,56 @@ const LibraryLog = () => {
       </div>
 
       {showModal && (
-        <div
-          className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50"
-          onClick={() => setShowModal(false)}>
-          <div
-            className="bg-white p-12 rounded-lg shadow"
-            onClick={(e) => e.stopPropagation()}
-          >
+        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModal(false)}>
+          <div className="bg-white p-12 rounded-lg shadow" onClick={(e) => e.stopPropagation()}>
             <h2 className="text-2xl font-bold mb-8 text-center">
               Student Information
             </h2>
 
-            <div className="flex flex-col w-80">
-              <div className="flex flex-col w-90">
+            <form onSubmit={handleSignIn}>
+
+              <div className="flex flex-col w-96">
                 <label className="text-base font-semibold m-1">Student number</label>
                 <input
                   type="number"
                   placeholder="Student Number"
-                  className="shadow rounded-xl text-sm px-5 py-4 mb-5 w-full"
+                  className="shadow rounded-xl text-sm px-3 py-3 mb-3 input-border w-full"
                   value={studentNumber}
                   required
-                  onChange={(e) => setStudentNumber(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setStudentNumber(value);
+                    if (!value) {
+                      setName('');
+                      setCourse('');
+                    }
+                  }}
                 />
 
                 <label className="text-base font-semibold m-1 ">Name</label>
                 <input
                   type="text"
                   placeholder="Name"
-                  className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                  value={Name}
-                  required
-                  onChange={(e) => setName(e.target.value)}
-
+                  className="shadow rounded-xl text-sm px-3 py-3 mb-3 input-border w-full"
+                  value={name}
+                  readOnly
                 />
                 <label className="text-base font-semibold m-1">Course</label>
                 <input
                   type="text"
                   placeholder="Course"
-                  className="shadow rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                  className="shadow rounded-xl text-sm px-3 py-3 mb-3 input-border w-full"
                   value={course}
-                  required
-                  onChange={(e) => setCourse(e.target.value)}
+                  readOnly
                 />
               </div>
-            </div>
 
-            <div className="flex justify-center pt-4">
-              <button
-                className="bg-blue text-white py-2 px-4 rounded-lg mr-2"
-                onClick={handleSignIn}
-              >
-                Sign in
-              </button>
-            </div>
+              <div className="flex justify-center pt-4">
+                <button type='submit' className="bg-blue text-white py-2 px-4 rounded-lg mr-2">
+                  Sign in
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
@@ -196,4 +292,4 @@ const LibraryLog = () => {
   );
 };
 
-export default LibraryLog;
+export default Attendance;
