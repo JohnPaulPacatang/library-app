@@ -4,6 +4,7 @@ This project was bootstrapped with Create React App.
 
 ![HAHA](https://scontent.fmnl17-3.fna.fbcdn.net/v/t1.6435-9/89235472_794699167691193_2181385173487058944_n.png?_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGxkkZU-PE2BDZbfC-RaJYaPjSkS6ew-H4-NKRLp7D4fsgexgueqZjepDX7qJoRV9sB8hMAUlGLSrBPNDPws1fD&_nc_ohc=V2d_UGDsAQUAX_ASjIh&_nc_ht=scontent.fmnl17-3.fna&oh=00_AfAEfypK7Awyk0MGE-N_1VHAX5zwl2jTIZ9inPfT_zgu-w&oe=662E4184)
 
+![code](https://media.tenor.com/hmDMrE1yMAkAAAAC/when-the-coding-when-the.gif)
 ## Available Scripts
 
 In the project directory, you can run:
