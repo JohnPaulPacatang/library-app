@@ -6,7 +6,7 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const SA_Dashboard = () => {
   const [newUsers] = useState(100);
-  const [topPick] = useState(500);
+  const [topPick] = useState("The Origin of Species");
   const [borrowed] = useState(50);
   const [overdue] = useState(50);
   const options = {
@@ -40,7 +40,7 @@ const SA_Dashboard = () => {
         </div>
 
         <div className="p-12 h-60 w-full bg-white mr-5 rounded-xl shadow">
-          <p className="text-4xl text-center mt-5 font-bold">{topPick}</p>
+          <p className="text-3xl text-blue text-center mt-5 font-bold">{topPick}</p>
           <p className="center text-lg font-bold text-center my-3">
             Top Picked Book
           </p>
@@ -68,11 +68,11 @@ const SA_Dashboard = () => {
           </p>
           <CanvasJSChart
             options={options}
-            /* onRef={ref => this.chart = ref} */
+          /* onRef={ref => this.chart = ref} */
           />
         </div>
 
-        <div className="bg-white mx-5 w-1/2 mt-5 rounded-xl shadow-xl flex flex-col">
+        <div className="bg-white mx-5 w-1/2 mt-5 rounded-xl shadow flex flex-col">
           <p className="text-xl font-bold text-center mt-10">Top Borrower</p>
           <div className="p-10">
             <p className="mt-5 p-3 w-full bg-gray rounded-md text-black flex justify-between">

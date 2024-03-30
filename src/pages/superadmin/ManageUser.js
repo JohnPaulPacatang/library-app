@@ -446,6 +446,7 @@ const UserListSuperAdmin = () => {
                 <div className="flex flex-col w-72">
                   <label className="text-sm ml-1 font-semibold">Password:</label>
                   <div className="relative">
+
                     <input
                       type={visible ? "text" : "password"}
                       className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
@@ -453,11 +454,13 @@ const UserListSuperAdmin = () => {
                       defaultValue={userData.password}
                       onChange={handleUpdate}
                     />
-                    <div className="absolute right-0 top-0 mt-4 mr-4 text-xl text-maroon" onClick={() => setVisible(!visible)}>
+
+                    <div className="absolute right-0 top-0 mt-4 mr-4 text-xl text-blue" onClick={() => setVisible(!visible)}>
                       {
                         visible ? <IoEyeOutline /> : <AiOutlineEyeInvisible />
                       }
                     </div>
+
                   </div>
 
                   <label className="text-sm ml-1 font-semibold">Email:</label>
