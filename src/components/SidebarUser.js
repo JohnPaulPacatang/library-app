@@ -6,7 +6,7 @@ import { MdSpaceDashboard } from "react-icons/md";
 import { GiArchiveResearch} from "react-icons/gi";
 import { IoIosHelpCircle, IoIosHelpCircleOutline } from "react-icons/io";
 import { GiExitDoor } from "react-icons/gi";
-import Profile from "../assets/scclogo.webp";
+import Profile from "../assets/profile.jpg";
 
 import { handleLogout } from "./Logout";
 

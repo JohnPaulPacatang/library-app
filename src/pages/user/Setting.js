@@ -83,7 +83,7 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
                 className="text-black hover:text-blue hover:underline mt-2"
                 onClick={handleOpenModal}
               >
-                Reset password
+                Change password
               </button>
             </li>
           </ul>
@@ -131,7 +131,7 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
       {showModal && (
         <div className="fixed inset-0 z-10 flex justify-center items-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg">
-            <h2 className="text-lg font-bold mb-4">Reset Password</h2>
+            <h2 className="text-lg font-bold mb-4">Change Password</h2>
 
             <form onSubmit={handleResetPassword}> { }
 
