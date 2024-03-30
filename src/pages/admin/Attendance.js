@@ -28,9 +28,9 @@ const Attendance = () => {
   const fetchStudentInfo = async (studentNumber) => {
     try {
       const { data, error } = await supabase
-        .from('users')
-        .select('first_name, last_name, course')
-        .eq('student_number', studentNumber)
+        .from('users') 
+        .select('first_name, last_name, course') 
+        .eq('student_number', studentNumber) 
         .single();
 
       if (error) {
@@ -64,7 +64,7 @@ const Attendance = () => {
       const formattedTime = localTime.toISOString().split('T')[1].split('.')[0];
 
       if (!name || !course) {
-        toast.warn('Invalid student number or no accound found.', {
+        toast.warn('Invalid student number or no account found.', {
           autoClose: 2000,
           hideProgressBar: true
         });
@@ -218,7 +218,7 @@ const Attendance = () => {
                       className="text-red px-3 py-1 rounded-md inline">
                       Sign out
                     </button>
-                  ) : (
+                        ) : (
                     <span className="text-green">Signed out</span>
                   )}
                   {/* <button

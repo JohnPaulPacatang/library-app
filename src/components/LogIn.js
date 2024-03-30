@@ -50,6 +50,7 @@ function Login({ handleLogin }) {
       } else {
         throw new Error("Invalid username or password");
       }
+      
     } catch (error) {
       console.error(error);
       toast.error(error.message, {
