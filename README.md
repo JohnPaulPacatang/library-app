@@ -4,9 +4,6 @@ This project was bootstrapped with Create React App.
 
 ![HAHA](https://wikigrisser-next.com/heroes/Toguro%20Brothers/Toguro%20Brothers.png)
 
-![ANONG ANO](https://scontent.fmnl17-3.fna.fbcdn.net/v/t1.6435-9/89235472_794699167691193_2181385173487058944_n.png?_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGxkkZU-PE2BDZbfC-RaJYaPjSkS6ew-H4-NKRLp7D4fsgexgueqZjepDX7qJoRV9sB8hMAUlGLSrBPNDPws1fD&_nc_ohc=V2d_UGDsAQUAX_ASjIh&_nc_ht=scontent.fmnl17-3.fna&oh=00_AfAEfypK7Awyk0MGE-N_1VHAX5zwl2jTIZ9inPfT_zgu-w&oe=662E4184)
-
-
 ## Available Scripts
 
 In the project directory, you can run:
@@ -74,4 +71,4 @@ This section has moved [here](https://facebook.github.io/create-react-app/docs/d
 
 This section has moved [here](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify).
 
-![code](https://scontent.fmnl17-3.fna.fbcdn.net/v/t1.15752-9/432453466_2383553215183439_6079832675097484047_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeE6TointbaLV5TwJMUmiKB5rk2GbifBWgauTYZuJ8FaBmJ73wNLyywxrlGcO_G7D-xhWl8E9PRiiqWAEivoTff0&_nc_ohc=uikjE9qSo4wAX9e-O3Q&_nc_ht=scontent.fmnl17-3.fna&oh=03_AdSY5hlIcd-oPrSIPUA-c4ZxqZSceWChcOh16Clper7I-Q&oe=662E4035)
+![code](https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/85bfb2bd-13b4-479d-9479-87d1e7c7f42e/dcd2iwn-23393745-7f2c-4772-993f-5367affcef81.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzg1YmZiMmJkLTEzYjQtNDc5ZC05NDc5LTg3ZDFlN2M3ZjQyZVwvZGNkMml3bi0yMzM5Mzc0NS03ZjJjLTQ3NzItOTkzZi01MzY3YWZmY2VmODEucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.xYm857W5kxPLSw7JsmRO7sGQcwGeYeG5pIars0Icaik)
