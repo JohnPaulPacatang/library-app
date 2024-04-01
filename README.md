@@ -4,7 +4,8 @@ This project was bootstrapped with Create React App.
 
 ![HAHA](https://wikigrisser-next.com/heroes/Toguro%20Brothers/Toguro%20Brothers.png)
 
-![code](https://scontent.fmnl17-3.fna.fbcdn.net/v/t1.15752-9/432453466_2383553215183439_6079832675097484047_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeE6TointbaLV5TwJMUmiKB5rk2GbifBWgauTYZuJ8FaBmJ73wNLyywxrlGcO_G7D-xhWl8E9PRiiqWAEivoTff0&_nc_ohc=uikjE9qSo4wAX9e-O3Q&_nc_ht=scontent.fmnl17-3.fna&oh=03_AdSY5hlIcd-oPrSIPUA-c4ZxqZSceWChcOh16Clper7I-Q&oe=662E4035)
+![ANONG ANO](https://scontent.fmnl17-3.fna.fbcdn.net/v/t1.6435-9/89235472_794699167691193_2181385173487058944_n.png?_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGxkkZU-PE2BDZbfC-RaJYaPjSkS6ew-H4-NKRLp7D4fsgexgueqZjepDX7qJoRV9sB8hMAUlGLSrBPNDPws1fD&_nc_ohc=V2d_UGDsAQUAX_ASjIh&_nc_ht=scontent.fmnl17-3.fna&oh=00_AfAEfypK7Awyk0MGE-N_1VHAX5zwl2jTIZ9inPfT_zgu-w&oe=662E4184)
+
 
 ## Available Scripts
 
@@ -73,4 +74,4 @@ This section has moved [here](https://facebook.github.io/create-react-app/docs/d
 
 This section has moved [here](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify).
 
-![sad](https://i.pinimg.com/originals/a1/fd/c1/a1fdc1126575a2d81d7ce641d6430559.gif)
+![code](https://scontent.fmnl17-3.fna.fbcdn.net/v/t1.15752-9/432453466_2383553215183439_6079832675097484047_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeE6TointbaLV5TwJMUmiKB5rk2GbifBWgauTYZuJ8FaBmJ73wNLyywxrlGcO_G7D-xhWl8E9PRiiqWAEivoTff0&_nc_ohc=uikjE9qSo4wAX9e-O3Q&_nc_ht=scontent.fmnl17-3.fna&oh=03_AdSY5hlIcd-oPrSIPUA-c4ZxqZSceWChcOh16Clper7I-Q&oe=662E4035)
