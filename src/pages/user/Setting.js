@@ -17,7 +17,6 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
 
   const handleOpenModal = () => {
     setShowModal(true);
-    console.log(userPassword);
   };
 
   const handleCloseModal = () => {
@@ -37,7 +36,7 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
     }
 
     if (newPassword !== confirmPassword) {
-      setPasswordError("New password and confirm password must match");
+      setPasswordError("New password must match Re-type password");
       return;
     }
 
@@ -183,12 +182,12 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="bg-blue-600 text-white py-2 px-4 rounded mr-2 bg-blue"
+                  className="text-white py-2 px-4 rounded mr-2 bg-blue"
                 >
                   Confirm
                 </button>
                 <button
-                  className="bg-gray-300 text-gray-800 py-2 px-4 rounded bg-gray"
+                  className="text-black py-2 px-4 rounded bg-gray"
                   onClick={handleCloseModal}
                 >
                   Cancel

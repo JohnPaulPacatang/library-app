@@ -5,26 +5,39 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Attendance = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [studentNumber, setStudentNumber] = useState('');
-  const [name, setName] = useState('');
-  const [course, setCourse] = useState('');
-  const [attendanceData, setAttendanceData] = useState([]);
 
+  // Modals
+  const [showModal, setShowModal] = useState(false);
   const handleOpenModal = () => {
     setShowModal(true);
   };
 
+
+  // Para sa form 
+  const [studentNumber, setStudentNumber] = useState('');
+  const [name, setName] = useState('');
+  const [course, setCourse] = useState('');
+
+
+  // Pang fetch ng table
+  const [attendanceData, setAttendanceData] = useState([]);
+  
+  
+  // Realtime fetch
   useEffect(() => {
     fetchAttendanceData();
   }, []);
 
+
+  // Realtime fetch sa form pag nag type stud no.
   useEffect(() => {
     if (studentNumber) {
       fetchStudentInfo(studentNumber);
     }
   }, [studentNumber]);
 
+
+  // Tawag ng info na need sa form and dito rin ni set yung pang format ng fullname
   const fetchStudentInfo = async (studentNumber) => {
     try {
       const { data, error } = await supabase
@@ -37,6 +50,7 @@ const Attendance = () => {
         throw error;
       }
 
+      // Dito naka set yung fullname and course matik 
       if (data) {
         setName(`${data.first_name} ${data.last_name}`);
         setCourse(data.course);
@@ -50,19 +64,27 @@ const Attendance = () => {
     }
   };
 
+
+  // Pang fetch ng data sa table
   async function fetchAttendanceData() {
     const { data } = await supabase.from('attendance').select('*');
     setAttendanceData(data);
   }
 
+
+  // Pang add sa attendance database
   async function handleSignIn(event) {
     event.preventDefault();
 
     try {
+
+      // Pang format ng time 
       const currentTime = new Date();
       const localTime = new Date(currentTime.getTime() - currentTime.getTimezoneOffset() * 60000);
       const formattedTime = localTime.toISOString().split('T')[1].split('.')[0];
 
+
+      // Pang check kung may acc kaba
       if (!name || !course) {
         toast.warn('Invalid student number or no account found.', {
           autoClose: 2000,
@@ -71,6 +93,8 @@ const Attendance = () => {
         return;
       }
 
+
+      // Dito na yung add
       await supabase
         .from('attendance')
         .insert([
@@ -83,7 +107,9 @@ const Attendance = () => {
             date: new Date().toISOString().split('T')[0],
           },
         ]);
+        
 
+      // Pang empty ng form  
       setStudentNumber('');
       setName('');
       setCourse('');
@@ -105,12 +131,18 @@ const Attendance = () => {
     }
   }
 
+
+  // Para sa sign out button pang update 
   async function handleSignOut(studentNumber) {
     try {
+
+      // Format ng time
       const currentTime = new Date();
       const localTime = new Date(currentTime.getTime() - currentTime.getTimezoneOffset() * 60000);
       const formattedTime = localTime.toISOString().split('T')[1].split('.')[0];
 
+
+      // Update ng signout
       await supabase
         .from('attendance')
         .update({ time_out: formattedTime })
@@ -132,6 +164,8 @@ const Attendance = () => {
     }
   }
 
+
+  // Pang delete
   // async function handleDeleteAttendance(id) {
   //   try {
 

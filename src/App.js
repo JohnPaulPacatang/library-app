@@ -21,7 +21,7 @@ import BooksSuperAdmin from "./pages/superadmin/BooksSuperAdmin";
 import ManageUser from "./pages/superadmin/ManageUser";
 
 function App() {
-  // dito nya tinatanggap yung bato ng handle submit
+  // dito nya tinatanggap yung bato ng handle submit pati users info
   const storedUserRole = sessionStorage.getItem('userRole');
   const storedUserFirstName = sessionStorage.getItem('userFirstName');
   const storedUserLastName = sessionStorage.getItem('userLastName');
@@ -37,7 +37,7 @@ function App() {
   const [userEmail, setUserEmail] = useState(storedUserEmail || "");
   const [userCourse, setUserCourse] = useState(storedUserCourse || "");
   const [userPassword, setUserPassword] = useState(storedUserPassword || "");
-
+  
   useEffect(() => {
     if (userRole && userFirstName && userLastName && userMiddleName && userEmail && userCourse && userPassword) {
       sessionStorage.setItem('userFirstName', userFirstName);
@@ -49,7 +49,7 @@ function App() {
     }
   }, [userRole, userFirstName, userLastName, userMiddleName, userEmail, userCourse, userPassword]);
 
-  // tas dito nireread na yung user role para ma set
+  // tas dito nireread na yung user role para ma set pati users info
   const handleLogin = (role, firstName, lastName, middleName, email, course, password) => {
     setUserRole(role);
     setUserFirstName(firstName);
@@ -69,7 +69,7 @@ function App() {
 
   // Render sidebar and routes based on user role
   let sidebarComponent, routesComponent;
-
+  
   if (userRole === "user") {
     sidebarComponent = <SidebarUser userFirstName={userFirstName} userLastName={userLastName} />;
     routesComponent = (

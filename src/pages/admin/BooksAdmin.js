@@ -9,11 +9,21 @@ const BooksAdmin = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [showModalIssue, setShowModalIssue] = useState(false);
 
+  // Category data
+  const categories = [
+    "All",
+    "History and Geography",
+    "Literature",
+    "Psychology and Philosophy",
+    "Natural Sciences",
+  ];
+
   const handleOpenModalIssue = () => {
     setShowModalIssue(true);
   };
 
 
+  // Pang select table
   const [selectedTable, setSelectedTable] = useState('Books');
 
   const handleTableChange = (event) => {
@@ -50,16 +60,7 @@ const BooksAdmin = () => {
     },
   ]);
 
-
-  // Category data
-  const categories = [
-    "All",
-    "History and Geography",
-    "Literature",
-    "Psychology and Philosophy",
-    "Natural Sciences",
-  ];
-
+  // Pang fetch books 
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
@@ -70,7 +71,6 @@ const BooksAdmin = () => {
     const { data } = await supabase.from('books').select('*');
     setBooks(data);
   }
-
 
   // Dropdown category and search
   const filteredData = books.filter((book) =>

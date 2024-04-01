@@ -10,6 +10,8 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const UserListSuperAdmin = () => {
+
+  // Modals
   const [showModal, setShowModal] = useState(false);
   const [showModalUpdate, setShowModalUpdate] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -22,14 +24,22 @@ const UserListSuperAdmin = () => {
     setShowModalUpdate(true);
   };
 
+
+  // Fetch users para sa table
   const [users, setUsers] = useState([]);
+
+  // Ginagamit sa add saka update
   const [user, setUser] = useState({});
   const [userData, setUserData] = useState({});
 
+
+  // Pang realtime fetch
   useEffect(() => {
     fetchUsers();
   }, []);
 
+
+  // Pang display table
   async function fetchUsers() {
     const { data } = await supabase
       .from('users')
@@ -37,6 +47,8 @@ const UserListSuperAdmin = () => {
     setUsers(data);
   }
 
+
+  // Pang handle sa mga form
   function handleChange(event) {
     setUser((prevFormData) => ({
       ...prevFormData,
@@ -51,6 +63,8 @@ const UserListSuperAdmin = () => {
     }));
   }
 
+
+  // Pang add user
   async function addUser() {
     try {
       await supabase
@@ -75,6 +89,8 @@ const UserListSuperAdmin = () => {
         hideProgressBar: true
       });
 
+
+      // Pang empty ng form
       setUser({
         studentNumber: '',
         lastName: '',
@@ -93,6 +109,8 @@ const UserListSuperAdmin = () => {
     }
   }
 
+
+  // Pang delete user
   async function deleteUser(userId) {
     try {
       await supabase
@@ -115,7 +133,7 @@ const UserListSuperAdmin = () => {
     }
   }
 
-
+  // Pang display user info para sa update
   function displayUser(userId) {
     const user = users.find((user) => user.id === userId);
     if (user) {
@@ -132,6 +150,8 @@ const UserListSuperAdmin = () => {
     }
   }
 
+
+  // Pang update papunta sa database
   async function updateUser(userId) {
     try {
       await supabase
@@ -163,6 +183,8 @@ const UserListSuperAdmin = () => {
     }
   }
 
+
+  // Search bar saka category
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const categories = ["All", "BSCS", "BSTM", "BSHM", "POLSCI", "BEED", "BSBA"];

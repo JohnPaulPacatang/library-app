@@ -8,25 +8,36 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const UserListAdmin = () => {
+
+  // Modals
   const [showModal, setShowModal] = useState(false);
   const [visible, setVisible] = useState(false);
   const handleOpenModal = () => {
     setShowModal(true);
   };
 
+  // Pang fetch ng users sa table
   const [users, setUsers] = useState([]);
+
+  // Ginagamit sa add
   const [user, setUser] = useState({
   });
 
+
+  // Pang realtime fetch
   useEffect(() => {
     fetchUsers();
   }, []);
 
+
+  // Fetch users para sa table
   async function fetchUsers() {
     const { data } = await supabase.from('users').select('*');
     setUsers(data);
   }
 
+
+  // Pang handle ng mga input sa form
   function handleChange(event) {
     setUser((prevFormData) => ({
       ...prevFormData,
@@ -34,6 +45,8 @@ const UserListAdmin = () => {
     }));
   }
 
+    
+  // Add user to database
   async function addUser() {
     try {
       await supabase
@@ -54,10 +67,12 @@ const UserListAdmin = () => {
       fetchUsers();
 
       toast.success("User added successfully", {
-        autoClose: 2000, 
-        hideProgressBar: true 
+        autoClose: 2000,
+        hideProgressBar: true
       });
 
+
+      // Pang empty ng form 
       setUser({
         studentNumber: '',
         lastName: '',
@@ -70,12 +85,14 @@ const UserListAdmin = () => {
 
     } catch (error) {
       toast.error("Error adding user. Please try again.", {
-        autoClose: 2000, 
-        hideProgressBar: true 
+        autoClose: 2000,
+        hideProgressBar: true
       });
     }
   }
 
+
+  // Search bar and category
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const categories = ["All", "BSCS", "BSTM", "BSHM", "POLSCI", "BEED", "BSBA"];

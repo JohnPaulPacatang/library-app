@@ -9,6 +9,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 const BookSuperAdmin = () => {
+
+  // Modals
   const [showModal, setShowModal] = useState(false);
   const [showModalUpdate, setShowModalUpdate] = useState(false);
   const [showModalIssue, setShowModalIssue] = useState(false);
@@ -30,11 +32,23 @@ const BookSuperAdmin = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const [selectedTable, setSelectedTable] = useState('Books');
 
+  // Pang select table
+  const [selectedTable, setSelectedTable] = useState('Books');
   const handleTableChange = (event) => {
     setSelectedTable(event.target.value);
   };
+
+
+   // Category sa books
+   const categories = [
+    "All",
+    "History and Geography",
+    "Literature",
+    "Psychology and Philosophy",
+    "Natural Sciences",
+  ];
+
 
   const [issuedBooks] = useState([
     {
@@ -66,28 +80,27 @@ const BookSuperAdmin = () => {
     },
   ]);
 
-  // Category data
-  const categories = [
-    "All",
-    "History and Geography",
-    "Literature",
-    "Psychology and Philosophy",
-    "Natural Sciences",
-  ];
 
+  // Fetch books para sa table
   const [books, setBooks] = useState([]);
+
+  // Ginagamit sa Add saka update
   const [book, setBook] = useState([]);
   const [bookData, setBookData] = useState([]);
 
+  // Para sa realtime fetch
   useEffect(() => {
     fetchBooks();
   }, []);
 
+  // Fetch table
   async function fetchBooks() {
     const { data } = await supabase.from('books').select('*');
     setBooks(data);
   }
 
+
+  // Pang handle sa mga modal form
   function handleChange(event) {
     setBook((prevFormData) => ({
       ...prevFormData,
@@ -102,6 +115,8 @@ const BookSuperAdmin = () => {
     }));
   }
 
+
+  // Add book
   async function addBook() {
     try {
       await supabase
@@ -119,6 +134,8 @@ const BookSuperAdmin = () => {
       setShowModal(false);
       fetchBooks();
 
+
+      //Pang null ng form
       setBook({
         ddcId: '',
         title: '',
@@ -138,9 +155,10 @@ const BookSuperAdmin = () => {
         hideProgressBar: true
       });
     }
-
   }
 
+
+  // Pang display ng book info para sa update
   function displayBook(bookId) {
     const book = books.find((book) => book.id === bookId);
     if (book) {
@@ -155,6 +173,7 @@ const BookSuperAdmin = () => {
     }
   }
 
+  // Pang update ng book info
   async function updateBook(bookId) {
     try {
       await supabase
@@ -184,6 +203,8 @@ const BookSuperAdmin = () => {
     }
   }
 
+
+  // Delete book
   async function deleteBook(bookId) {
     try {
       await supabase
@@ -205,6 +226,7 @@ const BookSuperAdmin = () => {
       });
     }
   }
+
 
   // Dropdown category and search
   const filteredData = books.filter((book) =>

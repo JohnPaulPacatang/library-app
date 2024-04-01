@@ -18,6 +18,8 @@ function Login({ handleLogin }) {
     event.preventDefault();
 
     try {
+
+      // Pang tawag acc galing env
       const adminUsername = process.env.REACT_APP_ADMIN_USERNAME;
       const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD;
       const superadminUsername = process.env.REACT_APP_SUPERADMIN_USERNAME;
@@ -35,6 +37,8 @@ function Login({ handleLogin }) {
         return;
       }
 
+
+      // Pang authenticate ng users acc galing database
       const { data, error } = await supabase
         .from('users')
         .select('*')
@@ -44,17 +48,20 @@ function Login({ handleLogin }) {
         throw new Error("Invalid username or password");
       }
 
+      // Authenticate ng stud no. saka password
       if (data.length === 1 && data[0].password === password) {
-        handleLogin("user", data[0].first_name, data[0].last_name, data[0].middle_name, data[0].email, data[0].course ,data[0].password);
+
+        // Pang bato ng role na user saka mga info ng nakalogin
+        handleLogin("user", data[0].first_name, data[0].last_name, data[0].middle_name, data[0].email, data[0].course, data[0].password);
         navigate("/home-user");
       } else {
         throw new Error("Invalid username or password");
       }
-      
+
     } catch (error) {
       console.error(error);
       toast.error(error.message, {
-        autoClose: 1000,
+        autoClose: 2000,
         hideProgressBar: true
       });
     }
