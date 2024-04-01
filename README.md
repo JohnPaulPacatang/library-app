@@ -2,7 +2,7 @@
 
 This project was bootstrapped with Create React App.
 
-![HAHA](blob:https://www.facebook.com/f37ed58a-b125-46a0-b18a-daf498d7a56b)
+![HAHA](https://wikigrisser-next.com/heroes/Toguro%20Brothers/Toguro%20Brothers.png)
 
 ## Available Scripts
 
