@@ -93,7 +93,6 @@ const Attendance = () => {
         return;
       }
 
-
       // Dito na yung add
       await supabase
         .from('attendance')
@@ -302,6 +301,7 @@ const Attendance = () => {
                   value={name}
                   readOnly
                 />
+                
                 <label className="text-base font-semibold m-1">Course</label>
                 <input
                   type="text"

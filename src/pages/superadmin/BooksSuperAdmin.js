@@ -32,16 +32,14 @@ const BookSuperAdmin = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-
   // Pang select table
   const [selectedTable, setSelectedTable] = useState('Books');
   const handleTableChange = (event) => {
     setSelectedTable(event.target.value);
   };
 
-
-   // Category sa books
-   const categories = [
+  // Category sa books
+  const categories = [
     "All",
     "History and Geography",
     "Literature",
@@ -50,53 +48,49 @@ const BookSuperAdmin = () => {
   ];
 
 
-  const [issuedBooks] = useState([
-    {
-      studentNumber: "123456",
-      fullName: "John Paul Pacatang",
-      docId: "789",
-      title: "Sample Book 1",
-      issueDate: "2024-03-07",
-      returnDate: "2024-03-21",
-      status: "Issued",
-    },
-    {
-      studentNumber: "456789",
-      fullName: "Prime John Clara",
-      docId: "012",
-      title: "Sample Book 2",
-      issueDate: "2024-03-08",
-      returnDate: "2024-03-22",
-      status: "Issued",
-    },
-    {
-      studentNumber: "110011",
-      fullName: "Ryan Tresmanio",
-      docId: "014",
-      title: "Sample Book 3",
-      issueDate: "2024-03-12",
-      returnDate: "2024-03-22",
-      status: "Overdue",
-    },
-  ]);
-
-
   // Fetch books para sa table
   const [books, setBooks] = useState([]);
+
 
   // Ginagamit sa Add saka update
   const [book, setBook] = useState([]);
   const [bookData, setBookData] = useState([]);
+  const [bookIssued, setBookIssued] = useState([]);
+  const [studentNumber, setStudentNumber] = useState('');
+  const [fullName, setFullname] = useState('');
 
   // Para sa realtime fetch
   useEffect(() => {
     fetchBooks();
   }, []);
 
+
+  useEffect(() => {
+    if (studentNumber) {
+      fetchStudentInfo(studentNumber);
+    }
+  }, [studentNumber])
+
+
+  useEffect(() => {
+    fetchBookIssued();
+  }, []);
+
+
   // Fetch table
   async function fetchBooks() {
-    const { data } = await supabase.from('books').select('*');
-    setBooks(data);
+    const { data } = await supabase
+      .from('books')
+      .select('*')
+    setBooks(data)
+  }
+
+
+  async function fetchBookIssued() {
+    const { data } = await supabase
+      .from('borrowbooks')
+      .select('*')
+    setBookIssued(data)
   }
 
 
@@ -114,7 +108,6 @@ const BookSuperAdmin = () => {
       [event.target.name]: event.target.value,
     }));
   }
-
 
   // Add book
   async function addBook() {
@@ -226,6 +219,86 @@ const BookSuperAdmin = () => {
       });
     }
   }
+
+  const fetchStudentInfo = async (studentNumber) => {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('first_name, last_name')
+        .eq('student_number', studentNumber)
+        .single();
+
+      if (error) {
+        throw error;
+      }
+
+      if (data) {
+        setFullname(`${data.first_name} ${data.last_name}`);
+      } else {
+        setFullname('');
+      }
+    } catch (error) {
+      console.error('Error fetching student info:', error.message);
+    }
+  };
+
+
+  function displayBookIssue(bookId) {
+    const book = books.find((book) => book.id === bookId);
+    if (book) {
+      setBookData({
+        ddc_id: book.ddc_id,
+        title: book.title,
+      });
+    }
+  }
+
+  const issueBook = async (e) => {
+    e.preventDefault();
+    try {
+      if (!fullName) {
+        toast.warn('Invalid student number or no account found.', {
+          autoClose: 2000,
+          hideProgressBar: true
+        });
+        return;
+      }
+
+      const { error } = await supabase.from('borrowbooks').insert([
+        {
+          student_no: studentNumber,
+          full_name: fullName,
+          ddc_no: bookData.ddc_id,
+          book_title: bookData.title,
+          issue_date: e.target.issueDate.value,
+          return_date: e.target.returnDate.value
+        }
+      ]);
+
+      if (error) {
+        throw error;
+      }
+
+      toast.success("Issued successfully", {
+        autoClose: 2000,
+        hideProgressBar: true
+      });
+
+      setStudentNumber('');
+      setFullname('')
+      setShowModalIssue(false);
+      fetchBookIssued();
+
+    } catch (error) {
+      console.error('Error issuing book:', error.message);
+      toast.error("Failed to issue book.", {
+        autoClose: 2000,
+        hideProgressBar: true
+      });
+    }
+  };
+
+
 
 
   // Dropdown category and search
@@ -339,8 +412,10 @@ const BookSuperAdmin = () => {
                           </button>
                         </MenuItem>
                         <MenuItem>
-                          <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline"
-                            onClick={handleOpenModalIssue}>Issue</button>
+                          <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline" onClick={() => {
+                            displayBookIssue(book.id);
+                            handleOpenModalIssue();
+                          }}>Issue</button>
                         </MenuItem>
                       </MenuList>
                     </Menu>
@@ -383,15 +458,15 @@ const BookSuperAdmin = () => {
             </thead>
 
             <tbody>
-              {issuedBooks.map((issue, index) => (
-                <tr key={index} className="border-b border-gray text-sm">
-                  <td className="px-5 py-2">{issue.studentNumber}</td>
-                  <td className="px-5 py-2">{issue.fullName}</td>
-                  <td className="px-5 py-2">{issue.docId}</td>
-                  <td className="px-5 py-2">{issue.title}</td>
-                  <td className="px-5 py-2">{issue.issueDate}</td>
-                  <td className="px-5 py-2">{issue.returnDate}</td>
-                  <td className="px-5 py-2">{issue.status}</td>
+              {bookIssued.map((issue) => (
+                <tr key={issue.transaction_id} className="border-b border-gray text-sm">
+                  <td className="px-5 py-2">{issue.student_no}</td>
+                  <td className="px-5 py-2">{issue.full_name}</td>
+                  <td className="px-5 py-2">{issue.ddc_no}</td>
+                  <td className="px-5 py-2">{issue.book_title}</td>
+                  <td className="px-5 py-2">{issue.issue_date}</td>
+                  <td className="px-5 py-2">{issue.return_date}</td>
+                  <td className="px-5 py-2">WALA PA</td>
                   <td className="px-5">
                     <button className="text-sm text-blue font-normal py-2 my-2  rounded-lg hover:text-black">Mark as Returned</button>
                   </td>
@@ -577,7 +652,7 @@ const BookSuperAdmin = () => {
               Issue Book
             </h2>
 
-            <form>
+            <form onSubmit={issueBook}>
               <div className="grid grid-cols-2 gap-4">
 
                 <div>
@@ -585,10 +660,32 @@ const BookSuperAdmin = () => {
                     Student Number:
                   </label>
                   <input
+                    type="number"
+                    name="studentNumber"
+                    placeholder="Student Number"
+                    value={studentNumber}
+                    required
+                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setStudentNumber(value);
+                      if (!value) {
+                        setFullname('');
+                      }
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label className="text-sm m-1 font-semibold">
+                    Fullname:
+                  </label>
+                  <input
                     type="text"
                     name="studentNumber"
-                    id="studentNumber"
-                    placeholder="12345678"
+                    value={fullName}
+                    readOnly
+                    placeholder="Fullname"
                     className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
@@ -598,10 +695,9 @@ const BookSuperAdmin = () => {
                     DDC ID:
                   </label>
                   <input
-                    type="text"
-                    name="docId"
-                    id="docId"
-                    placeholder="1234"
+                    type="number"
+                    name="ddc_id"
+                    defaultValue={bookData.ddc_id}
                     className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
@@ -613,8 +709,7 @@ const BookSuperAdmin = () => {
                   <input
                     type="text"
                     name="title"
-                    id="title"
-                    placeholder="Superbook"
+                    defaultValue={bookData.title}
                     className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
@@ -626,7 +721,6 @@ const BookSuperAdmin = () => {
                   <input
                     type="date"
                     name="issueDate"
-                    id="issueDate"
                     className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
@@ -636,17 +730,15 @@ const BookSuperAdmin = () => {
                   <input
                     type="date"
                     name="returnDate"
-                    id="returnDate"
                     className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
               </div>
 
-
               <div className="flex justify-center pt-4">
                 <button
                   type="submit"
-                  className="bg-blue text-white font-semibold py-2 px-4 rounded-md shadow-sm mt-2">
+                  className="bg-blue text-white font-semibold py-2 px-4  rounded-md shadow-sm mt-2">
                   Submit
                 </button>
               </div>
