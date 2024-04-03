@@ -21,8 +21,8 @@ const Attendance = () => {
 
   // Pang fetch ng table
   const [attendanceData, setAttendanceData] = useState([]);
-  
-  
+
+
   // Realtime fetch
   useEffect(() => {
     fetchAttendanceData();
@@ -41,9 +41,9 @@ const Attendance = () => {
   const fetchStudentInfo = async (studentNumber) => {
     try {
       const { data, error } = await supabase
-        .from('users') 
-        .select('first_name, last_name, course') 
-        .eq('student_number', studentNumber) 
+        .from('users')
+        .select('first_name, last_name, course')
+        .eq('student_number', studentNumber)
         .single();
 
       if (error) {
@@ -106,7 +106,7 @@ const Attendance = () => {
             date: new Date().toISOString().split('T')[0],
           },
         ]);
-        
+
 
       // Pang empty ng form  
       setStudentNumber('');
@@ -227,8 +227,8 @@ const Attendance = () => {
           </thead>
 
           <tbody>
-            {attendanceData.map((item, index) => (
-              <tr key={index} className='border-b border-gray text-sm'>
+            {attendanceData.map((item) => (
+              <tr key={item.id} className='border-b border-gray text-sm'>
                 <td className='px-5 py-2'>{item.studnum}</td>
                 <td className='px-5 py-2'>{item.studentname}</td>
                 <td className="px-5 py-2">{item.course}</td>
@@ -251,7 +251,7 @@ const Attendance = () => {
                       className="text-red px-3 py-1 rounded-md inline">
                       Sign out
                     </button>
-                        ) : (
+                  ) : (
                     <span className="text-green">Signed out</span>
                   )}
                   {/* <button
@@ -286,11 +286,11 @@ const Attendance = () => {
                   onChange={(e) => {
                     const value = e.target.value;
                     if (value.length < studentNumber.length) {
-                        setName('');
-                        setCourse('');
+                      setName('');
+                      setCourse('');
                     }
                     setStudentNumber(value);
-                }}
+                  }}
                 />
 
                 <label className="text-base font-semibold m-1 ">Name</label>
@@ -301,7 +301,7 @@ const Attendance = () => {
                   value={name}
                   readOnly
                 />
-                
+
                 <label className="text-base font-semibold m-1">Course</label>
                 <input
                   type="text"
