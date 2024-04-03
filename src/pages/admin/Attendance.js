@@ -285,12 +285,12 @@ const Attendance = () => {
                   required
                   onChange={(e) => {
                     const value = e.target.value;
-                    setStudentNumber(value);
-                    if (!value) {
-                      setName('');
-                      setCourse('');
+                    if (value.length < studentNumber.length) {
+                        setName('');
+                        setCourse('');
                     }
-                  }}
+                    setStudentNumber(value);
+                }}
                 />
 
                 <label className="text-base font-semibold m-1 ">Name</label>
