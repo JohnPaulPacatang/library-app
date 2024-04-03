@@ -227,7 +227,7 @@ const Attendance = () => {
           </thead>
 
           <tbody>
-            {attendanceData.map((item) => (
+            {attendanceData.sort((a, b) => new Date(a.date) - new Date(b.date)).map((item) => (
               <tr key={item.id} className='border-b border-gray text-sm'>
                 <td className='px-5 py-2'>{item.studnum}</td>
                 <td className='px-5 py-2'>{item.studentname}</td>
