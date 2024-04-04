@@ -20,6 +20,10 @@ const UserSearchBooks = () => {
 
   useEffect(() => {
     fetchBooks();
+    const interval = setInterval(() => {
+      fetchBooks();
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   async function fetchBooks() {
@@ -29,13 +33,13 @@ const UserSearchBooks = () => {
 
   // Dropdown category and search
   const filteredData = books.filter((book) =>
-  (selectedCategory === "All" || book.category === selectedCategory) &&
-  (
-    (book.title?.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    (book.author?.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    (book.category?.toLowerCase().includes(searchQuery.toLowerCase()))
-  )
-);
+    (selectedCategory === "All" || book.category === selectedCategory) &&
+    (
+      (book.title?.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (book.author?.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (book.category?.toLowerCase().includes(searchQuery.toLowerCase()))
+    )
+  );
 
 
   return (

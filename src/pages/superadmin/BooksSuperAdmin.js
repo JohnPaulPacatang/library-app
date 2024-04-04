@@ -62,19 +62,19 @@ const BookSuperAdmin = () => {
 
   // Para sa realtime fetch
   useEffect(() => {
-    fetchBooks();
-  }, []);
-
-
-  useEffect(() => {
     if (studentNumber) {
       fetchStudentInfo(studentNumber);
     }
   }, [studentNumber])
 
-
   useEffect(() => {
+    fetchBooks();
     fetchBookIssued();
+    const interval = setInterval(() => {
+      fetchBooks();
+      fetchBookIssued();
+    }, 1000);
+    return () => clearInterval(interval);
   }, []);
 
 
@@ -266,16 +266,18 @@ const BookSuperAdmin = () => {
         return;
       }
 
-      const { error } = await supabase.from('borrowbooks').insert([
-        {
-          student_no: studentNumber,
-          full_name: fullName,
-          ddc_no: bookData.ddc_id,
-          book_title: bookData.title,
-          issue_date: e.target.issueDate.value,
-          return_date: e.target.returnDate.value
-        }
-      ]);
+      const { error } = await supabase.from('borrowbooks')
+        .insert([
+          {
+            student_no: studentNumber,
+            full_name: fullName,
+            ddc_no: bookData.ddc_id,
+            book_title: bookData.title,
+            issue_date: e.target.issueDate.value,
+            return_date: e.target.returnDate.value,
+            status: 'Issued',
+          }
+        ]);
 
       if (error) {
         throw error;
@@ -310,6 +312,41 @@ const BookSuperAdmin = () => {
     }
   };
 
+  const markAsReturned = async (ddcId) => {
+    try {
+      const { updateError } = await supabase
+        .from('books')
+        .update({ availability: true })
+        .eq('ddc_id', ddcId);
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      const { updateStatus } = await supabase
+        .from('borrowbooks')
+        .update({ status: 'Returned' })
+        .eq('transaction_id', transactionId);
+
+      if (updateStatus) {
+        throw updateError;
+      }
+
+      toast.success("Book marked as returned", {
+        autoClose: 2000,
+        hideProgressBar: true
+      });
+
+      fetchBooks();
+    } catch (error) {
+      console.error('Error marking book as returned:', error.message);
+      toast.error("Failed to mark book as returned.", {
+        autoClose: 2000,
+        hideProgressBar: true
+      });
+    }
+  };
+
 
   // Dropdown category and search
   const filteredData = books.filter((book) =>
@@ -320,35 +357,6 @@ const BookSuperAdmin = () => {
       (book.category?.toLowerCase().includes(searchQuery.toLowerCase()))
     )
   );
-
-
-  const pollingInterval = 1000; //realtime daw eh hehe
-  useEffect(() => {
-    const fetchBookAvailability = async () => {
-      try {
-        const { data: newBooksData } = await supabase.from('books').select('*');
-        setBooks(newBooksData);
-        const bookAvailabilityPromises = newBooksData.map(async book => {
-          const { data: bookAvailabilityData } = await supabase
-            .from('books')
-            .select('availability')
-            .eq('id', book.id)
-            .single();
-
-          return { ...book, availability: bookAvailabilityData.availability };
-        });
-        const updatedBooks = await Promise.all(bookAvailabilityPromises);
-        setBooks(updatedBooks);
-      } catch (error) {
-        console.error('Error fetching book availability:', error.message);
-      }
-    };
-    fetchBookAvailability();
-    const pollingIntervalId = setInterval(fetchBookAvailability, pollingInterval);
-  
-    return () => clearInterval(pollingIntervalId);
-  }, []);
-  
 
   const handleExport = () => {
     alert("Succesfully exported as PDF...");
@@ -505,9 +513,18 @@ const BookSuperAdmin = () => {
                   <td className="px-5 py-2">{issue.book_title}</td>
                   <td className="px-5 py-2">{issue.issue_date}</td>
                   <td className="px-5 py-2">{issue.return_date}</td>
-                  <td className="px-5 py-2">WALA PA</td>
+                  <td className="px-5 py-2">{issue.status}</td>
                   <td className="px-5">
-                    <button className="text-sm text-blue font-normal py-2 my-2  rounded-lg hover:text-black">Mark as Returned</button>
+                  {issue.status === 'Returned' ? (
+                      <span className="text-green">Already Returned</span>
+                    ) : (
+                      <button
+                        className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black"
+                        onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}
+                      >
+                        Mark as Returned
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}

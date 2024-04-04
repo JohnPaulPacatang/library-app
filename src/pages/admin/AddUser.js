@@ -27,6 +27,10 @@ const UserListAdmin = () => {
   // Pang realtime fetch
   useEffect(() => {
     fetchUsers();
+    const interval = setInterval(() => {
+      fetchUsers();
+    }, 1000); 
+    return () => clearInterval(interval);
   }, []);
 
 
