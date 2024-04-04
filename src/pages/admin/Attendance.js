@@ -10,6 +10,7 @@ const Attendance = () => {
   const [showModal, setShowModal] = useState(false);
   const handleOpenModal = () => {
     setShowModal(true);
+    setStudentNumber('');
   };
 
 
@@ -285,7 +286,7 @@ const Attendance = () => {
                   required
                   onChange={(e) => {
                     const value = e.target.value;
-                    if (value.length < studentNumber.length) {
+                    if (value.length !== studentNumber.length) {
                       setName('');
                       setCourse('');
                     }

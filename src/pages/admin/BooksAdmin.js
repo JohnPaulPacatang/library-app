@@ -22,8 +22,8 @@ const BooksAdmin = () => {
 
   const handleOpenModalIssue = () => {
     setShowModalIssue(true);
+    setStudentNumber('');
   };
-
 
   // Pang select table
   const [selectedTable, setSelectedTable] = useState('Books');
@@ -54,6 +54,12 @@ const BooksAdmin = () => {
     fetchBookIssued();
   }, []);
 
+  async function fetchBooks() {
+    const { data } = await supabase
+      .from('books')
+      .select('*');
+    setBooks(data);
+  }
 
   async function fetchBookIssued() {
     const { data } = await supabase
@@ -62,12 +68,6 @@ const BooksAdmin = () => {
     setBookIssued(data);
   }
 
-  async function fetchBooks() {
-    const { data } = await supabase
-      .from('books')
-      .select('*');
-    setBooks(data);
-  }
 
   const fetchStudentInfo = async (studentNumber) => {
     try {
@@ -90,12 +90,13 @@ const BooksAdmin = () => {
       console.error('Error fetching student info:', error.message);
     }
   };
- 
+
 
   function displayBookIssue(bookId) {
     const book = books.find((book) => book.id === bookId);
     if (book) {
       setBookData({
+        id: book.id,
         ddc_id: book.ddc_id,
         title: book.title,
       });
@@ -128,6 +129,15 @@ const BooksAdmin = () => {
         throw error;
       }
 
+      const { updateError } = await supabase
+        .from('books')
+        .update({ availability: false })
+        .eq('id', bookData.id);
+
+      if (updateError) {
+        throw updateError;
+      }
+
       toast.success("Issued successfully", {
         autoClose: 2000,
         hideProgressBar: true
@@ -136,6 +146,7 @@ const BooksAdmin = () => {
       setStudentNumber('');
       setFullname('')
       setShowModalIssue(false);
+      fetchBooks();
       fetchBookIssued();
 
     } catch (error) {
@@ -157,6 +168,37 @@ const BooksAdmin = () => {
       (book.category?.toLowerCase().includes(searchQuery.toLowerCase()))
     )
   );
+
+
+  const pollingInterval = 1000; //realtime daw eh hehe
+  useEffect(() => {
+    const fetchBookAvailability = async () => {
+      try {
+        const { data: newBooksData } = await supabase.from('books').select('*');
+        setBooks(newBooksData);
+        const bookAvailabilityPromises = newBooksData.map(async book => {
+          const { data: bookAvailabilityData } = await supabase
+            .from('books')
+            .select('availability')
+            .eq('id', book.id)
+            .single();
+
+          return { ...book, availability: bookAvailabilityData.availability };
+        });
+        const updatedBooks = await Promise.all(bookAvailabilityPromises);
+        setBooks(updatedBooks);
+      } catch (error) {
+        console.error('Error fetching book availability:', error.message);
+      }
+    };
+    fetchBookAvailability();
+    const pollingIntervalId = setInterval(fetchBookAvailability, pollingInterval);
+  
+    return () => clearInterval(pollingIntervalId);
+  }, []);
+
+
+
 
   const handleExport = () => {
     alert("Succesfully exported as PDF...");
@@ -225,7 +267,7 @@ const BooksAdmin = () => {
             </thead>
 
             <tbody>
-              {filteredData.map((book) => (
+              {filteredData.sort((a, b) => parseFloat(a.ddc_id) - parseFloat(b.ddc_id)).map((book) => (
                 <tr key={book.id} className="border-b border-gray text-sm">
                   <td className="px-5 py-2">{book.ddc_id}</td>
                   <td className="px-5 py-2">{book.title}</td>
@@ -321,10 +363,10 @@ const BooksAdmin = () => {
                     className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                     onChange={(e) => {
                       const value = e.target.value;
-                      setStudentNumber(value);
-                      if (!value) {
+                      if (value.length !== studentNumber.length) {
                         setFullname('');
                       }
+                      setStudentNumber(value);
                     }}
                   />
                 </div>
