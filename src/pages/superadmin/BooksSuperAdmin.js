@@ -312,7 +312,7 @@ const BookSuperAdmin = () => {
     }
   };
 
-  const markAsReturned = async (ddcId) => {
+  const markAsReturned = async (ddcId, transactionId) => {
     try {
       const { updateError } = await supabase
         .from('books')
