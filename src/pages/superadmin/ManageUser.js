@@ -251,7 +251,7 @@ const UserListSuperAdmin = () => {
         }
     });
 
-    doc.save("UserList.pdf");
+    doc.save("Users list.pdf");
 };
 
   return (

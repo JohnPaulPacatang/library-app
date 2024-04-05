@@ -4,6 +4,8 @@ import { FaRegFilePdf } from "react-icons/fa";
 import { BiSearch } from "react-icons/bi";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 const BooksAdmin = () => {
   // Dropdown category and search
@@ -224,6 +226,8 @@ const BooksAdmin = () => {
     )
   );
 
+  
+
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
   const handleDateChange = (e) => {
@@ -234,7 +238,52 @@ const BooksAdmin = () => {
 
 
   const handleExport = () => {
-    alert("Succesfully exported as PDF...");
+    const doc = new jsPDF();
+    const margin = 16;
+  
+    const addText = (text, x, y, size = 12) => {
+      doc.setFont("Poppins", "sans-serif");
+      doc.setFontSize(size);
+      doc.setTextColor(0, 0, 0);
+      doc.text(text, x, y);
+    };
+  
+    const currentDate = new Date(selectedDate).toLocaleDateString();
+  
+    addText("Library Management System", (doc.internal.pageSize.width - doc.getStringUnitWidth("Library Management System") * doc.internal.getFontSize() / doc.internal.scaleFactor) / 2, margin, 20);
+    addText("Book Issued", margin, margin + 20);
+    addText("Date: " + currentDate, doc.internal.pageSize.width - 35, margin + 20, 10);
+  
+    const startY = Math.max(margin + 16, margin + 16 + doc.getTextDimensions("Book Issued").h + 2);
+  
+    const tableHeaders = ["Student No.", "FullName", "DDCID", "Title", "IssueDate", "ReturnDate", "Status"];
+    const tableData = filteredBookIssued.map(issue => [
+      issue.student_no,
+      issue.full_name,
+      issue.ddc_no,
+      issue.book_title,
+      issue.issue_date,
+      issue.return_date,
+      issue.status === 'Overdue' ? { content: issue.status, styles: { textColor: [255, 0, 0] } } : issue.status
+    ]);
+  
+    doc.autoTable({
+      startY: startY,
+      head: [tableHeaders],
+      body: tableData,
+      margin: { top: startY },
+      tableLineColor: [0, 0, 0],
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0]
+      },
+      bodyStyles: {
+        lineWidth: 0.1,
+        textColor: [0, 0, 0]
+      }
+    });
+  
+    doc.save("Issued books.pdf");
   };
 
 
@@ -362,7 +411,7 @@ const BooksAdmin = () => {
             </thead>
 
             <tbody>
-              {filteredBookIssued.sort((a, b) => new Date(a.return_date) - new Date(b.return_date)).map((issue) => (
+              {filteredBookIssued.filter(issue => issue.issue_date === selectedDate && String(issue.student_no).includes(searchQuery)).sort((a, b) => new Date(a.return_date) - new Date(b.return_date)).map((issue) => (
                 <tr key={issue.transaction_id} className="border-b border-gray text-sm">
                   <td className="px-5 py-2">{issue.student_no}</td>
                   <td className="px-5 py-2">{issue.full_name}</td>

@@ -28,21 +28,30 @@ const SA_Dashboard = () => {
     ],
   };
 
-  
 
   const [totalUsers, setTotalUsers] = useState([]);
+  const [totalunavailable, setTotalUnavailble] = useState(0); // Initialize totalAvailableBooks as a number
+  const [overdueBooks, setOverdueBooks] = useState(0); // Initialize overdueBooks as a number
+
 
   useEffect(() => {
     fetchTotalUsers();
-    const intervalId = setInterval(fetchTotalUsers, 1000);
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []); 
+    fetchTotalUnavailableBooks();
+    fetchOverdueBooks();
+    const interval = setInterval(() => {
+      fetchTotalUsers();
+      fetchTotalUnavailableBooks();
+      fetchOverdueBooks();
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+  
 
   const fetchTotalUsers = async () => {
     try {
-      const { data: total, error } = await supabase.from('users').select('*');
+      const { data: total, error } = await supabase
+        .from('users')
+        .select('*');
       if (error) {
         throw error;
       }
@@ -52,65 +61,39 @@ const SA_Dashboard = () => {
     }
   };
 
-  
-
-  const [totalunavailable, setTotalUnavailble] = useState(0); // Initialize totalAvailableBooks as a number
-
-  useEffect(() => {
-    fetchTotalUnavailableBooks();
-    const intervalId = setInterval(fetchTotalUnavailableBooks, 1000);
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []); 
-
   const fetchTotalUnavailableBooks = async () => {
     try {
       const { data: notavailableBooks, error } = await supabase
         .from('books')
         .select('*')
         .eq('availability', 'FALSE'); // Fetch records where availability is 'TRUE'
-  
+
       if (error) {
         throw error;
       }
-  
+
       setTotalUnavailble(notavailableBooks.length); // Set totalAvailableBooks to the count of available books
     } catch (error) {
       console.error('Error fetching available books:', error.message);
     }
   };
 
-  const [overdueBooks, setOverdueBooks] = useState(0); // Initialize overdueBooks as a number
-
-  useEffect(() => {
-    fetchOverdueBooks();
-    const intervalId = setInterval(fetchOverdueBooks, 1000);
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []); 
-
   const fetchOverdueBooks = async () => {
     try {
-      const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
       const { data: overdue, error } = await supabase
         .from('borrowbooks')
         .select('*')
-        .lt('return_date', today) 
-        .eq('status', 'Overdue'); 
-  
+        .eq('status', 'Overdue');
       if (error) {
         throw error;
       }
-  
       setOverdueBooks(overdue.length); // Set overdueBooks to the count of overdue books
     } catch (error) {
       console.error('Error fetching overdue books:', error.message);
     }
   };
-  
-      
+
+
   return (
     <div className="statistics-section flex-1">
       <Greetings></Greetings>
