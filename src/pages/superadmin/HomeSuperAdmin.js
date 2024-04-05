@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CanvasJSReact from "@canvasjs/react-charts";
 import Greetings from "./Greetings";
+import { supabase } from '../../utils/supabaseClient';
 
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const SA_Dashboard = () => {
-  const [newUsers] = useState(100);
   const [topPick] = useState("The Origin of Species");
-  const [borrowed] = useState(50);
-  const [overdue] = useState(50);
   const options = {
     height: 400,
     axisY: {
@@ -30,13 +28,96 @@ const SA_Dashboard = () => {
     ],
   };
 
+  
+
+  const [totalUsers, setTotalUsers] = useState([]);
+
+  useEffect(() => {
+    fetchTotalUsers();
+    const intervalId = setInterval(fetchTotalUsers, 1000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []); 
+
+  const fetchTotalUsers = async () => {
+    try {
+      const { data: total, error } = await supabase.from('users').select('*');
+      if (error) {
+        throw error;
+      }
+      setTotalUsers(total);
+    } catch (error) {
+      console.error('Error fetching data:', error.message);
+    }
+  };
+
+  
+
+  const [totalunavailable, setTotalUnavailble] = useState(0); // Initialize totalAvailableBooks as a number
+
+  useEffect(() => {
+    fetchTotalUnavailableBooks();
+    const intervalId = setInterval(fetchTotalUnavailableBooks, 1000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []); 
+
+  const fetchTotalUnavailableBooks = async () => {
+    try {
+      const { data: notavailableBooks, error } = await supabase
+        .from('books')
+        .select('*')
+        .eq('availability', 'FALSE'); // Fetch records where availability is 'TRUE'
+  
+      if (error) {
+        throw error;
+      }
+  
+      setTotalUnavailble(notavailableBooks.length); // Set totalAvailableBooks to the count of available books
+    } catch (error) {
+      console.error('Error fetching available books:', error.message);
+    }
+  };
+
+  const [overdueBooks, setOverdueBooks] = useState(0); // Initialize overdueBooks as a number
+
+  useEffect(() => {
+    fetchOverdueBooks();
+    const intervalId = setInterval(fetchOverdueBooks, 1000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []); 
+
+  const fetchOverdueBooks = async () => {
+    try {
+      const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+      const { data: overdue, error } = await supabase
+        .from('borrowbooks')
+        .select('*')
+        .lt('return_date', today) 
+        .eq('status', 'Overdue'); 
+  
+      if (error) {
+        throw error;
+      }
+  
+      setOverdueBooks(overdue.length); // Set overdueBooks to the count of overdue books
+    } catch (error) {
+      console.error('Error fetching overdue books:', error.message);
+    }
+  };
+  
+      
   return (
     <div className="statistics-section flex-1">
       <Greetings></Greetings>
       <div className="flex justify-between mt-10 mb-8 gap-5">
         <div className="p-12 h-60 w-full bg-white mx-5 rounded-xl shadow">
-          <p className="text-4xl text-center mt-5 font-bold">{newUsers}</p>
-          <p className="center text-lg font-bold text-center my-3">New Users</p>
+          <p className="text-4xl text-center mt-5 font-bold">{totalUsers.length}</p>
+          <p className="center text-lg font-bold text-center my-3">Total Users</p>
         </div>
 
         <div className="p-12 h-60 w-full bg-white mr-5 rounded-xl shadow">
@@ -47,14 +128,14 @@ const SA_Dashboard = () => {
         </div>
 
         <div className="p-12 h-60 w-full bg-white mr-5 rounded-xl shadow">
-          <p className="text-4xl text-center mt-5 font-bold">{borrowed}</p>
+          <p className="text-4xl text-center mt-5 font-bold">{totalunavailable}</p>
           <p className="center text-lg font-bold text-center my-3">
-            Borrowed Books
+            Currently Issued Books
           </p>
         </div>
 
         <div className="p-12 h-60 w-full bg-white mr-5 rounded-xl shadow">
-          <p className="text-4xl text-center mt-5 font-bold">{overdue}</p>
+          <p className="text-4xl text-center mt-5 font-bold">{overdueBooks}</p>
           <p className="center text-lg font-bold text-center my-3">
             Overdue Books
           </p>

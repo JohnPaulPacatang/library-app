@@ -70,11 +70,6 @@ const BookSuperAdmin = () => {
   useEffect(() => {
     fetchBooks();
     fetchBookIssued();
-    const interval = setInterval(() => {
-      fetchBooks();
-      fetchBookIssued();
-    }, 1000);
-    return () => clearInterval(interval);
   }, []);
 
 
@@ -86,12 +81,25 @@ const BookSuperAdmin = () => {
     setBooks(data)
   }
 
-
   async function fetchBookIssued() {
-    const { data } = await supabase
+    const { data: borrowData } = await supabase
       .from('borrowbooks')
-      .select('*')
-    setBookIssued(data)
+      .select('*');
+  
+    const currentDate = new Date();
+    const updatedBorrowData = borrowData.map(async (borrow) => {
+      const returnDate = new Date(borrow.return_date);
+      if (returnDate < currentDate && borrow.status !== "Returned") {
+        borrow.status = "Overdue";
+        await supabase
+          .from('borrowbooks')
+          .update({ status: "Overdue" })
+          .eq('transaction_id', borrow.transaction_id);
+      }
+      return borrow;
+    });
+  
+    setBookIssued(await Promise.all(updatedBorrowData));
   }
 
 
@@ -337,6 +345,7 @@ const BookSuperAdmin = () => {
         hideProgressBar: true
       });
 
+      fetchBookIssued();
       fetchBooks();
     } catch (error) {
       console.error('Error marking book as returned:', error.message);
@@ -505,7 +514,7 @@ const BookSuperAdmin = () => {
             </thead>
 
             <tbody>
-              {bookIssued.map((issue) => (
+              {bookIssued.sort((a, b) => new Date(a.issue_date) - new Date(b.issue_date)).map((issue) => (
                 <tr key={issue.transaction_id} className="border-b border-gray text-sm">
                   <td className="px-5 py-2">{issue.student_no}</td>
                   <td className="px-5 py-2">{issue.full_name}</td>
@@ -513,7 +522,7 @@ const BookSuperAdmin = () => {
                   <td className="px-5 py-2">{issue.book_title}</td>
                   <td className="px-5 py-2">{issue.issue_date}</td>
                   <td className="px-5 py-2">{issue.return_date}</td>
-                  <td className="px-5 py-2">{issue.status}</td>
+                  <td className={`px-5 py-2 ${issue.status === 'Overdue' ? 'text-red' : 'text-black'}`}>{issue.status}</td>
                   <td className="px-5">
                   {issue.status === 'Returned' ? (
                       <span className="text-green">Already Returned</span>
