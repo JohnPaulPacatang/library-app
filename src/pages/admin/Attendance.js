@@ -196,7 +196,7 @@ const Attendance = () => {
 
   return (
     <div className='px-5 my-5 flex-1'>
-      <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
+      <div className="attendance-table overflow-y-auto rounded-xl custom-scrollbar">
         <table className='bg-white w-full rounded-2xl px-2 py-2 shadow-xl'>
           <thead className='sticky top-0 bg-white'>
             <tr className='pb-2'>
