@@ -7,10 +7,10 @@ const UserDashboard = ({ userFirstName }) => {
   useEffect(() => {
     const intervalID = setInterval(() => {
       setCurrentTime(new Date());
-    }, 1000); 
-    
+    }, 1000);
+
     return () => clearInterval(intervalID);
-  }, []); 
+  }, []);
 
   const hour = currentTime.getHours();
   const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });

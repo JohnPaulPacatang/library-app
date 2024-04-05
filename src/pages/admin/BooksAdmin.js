@@ -226,7 +226,7 @@ const BooksAdmin = () => {
     )
   );
 
-  
+
 
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
@@ -240,22 +240,22 @@ const BooksAdmin = () => {
   const handleExport = () => {
     const doc = new jsPDF();
     const margin = 16;
-  
+
     const addText = (text, x, y, size = 12) => {
       doc.setFont("Poppins", "sans-serif");
       doc.setFontSize(size);
       doc.setTextColor(0, 0, 0);
       doc.text(text, x, y);
     };
-  
+
     const currentDate = new Date(selectedDate).toLocaleDateString();
-  
+
     addText("Library Management System", (doc.internal.pageSize.width - doc.getStringUnitWidth("Library Management System") * doc.internal.getFontSize() / doc.internal.scaleFactor) / 2, margin, 20);
     addText("Book Issued", margin, margin + 20);
     addText("Date: " + currentDate, doc.internal.pageSize.width - 35, margin + 20, 10);
-  
+
     const startY = Math.max(margin + 16, margin + 16 + doc.getTextDimensions("Book Issued").h + 2);
-  
+
     const tableHeaders = ["Student No.", "FullName", "DDCID", "Title", "IssueDate", "ReturnDate", "Status"];
     const tableData = filteredBookIssued.map(issue => [
       issue.student_no,
@@ -266,7 +266,7 @@ const BooksAdmin = () => {
       issue.return_date,
       issue.status === 'Overdue' ? { content: issue.status, styles: { textColor: [255, 0, 0] } } : issue.status
     ]);
-  
+
     doc.autoTable({
       startY: startY,
       head: [tableHeaders],
@@ -282,7 +282,7 @@ const BooksAdmin = () => {
         textColor: [0, 0, 0]
       }
     });
-  
+
     doc.save("Issued books.pdf");
   };
 
@@ -360,10 +360,14 @@ const BooksAdmin = () => {
                     {book.availability ? "Available" : "Not Available"}
                   </td>
                   <td className="px-5">
-                    <button className="text-sm text-white bg-blue border p-2 px-4 rounded-lg hover:text-white" onClick={() => {
-                      displayBookIssue(book.id);
-                      handleOpenModalIssue();
-                    }}>Issue</button>
+                    {book.availability ? (
+                      <button className="text-sm text-white bg-blue border p-2 px-4 rounded-lg hover:text-white" onClick={() => {
+                        displayBookIssue(book.id);
+                        handleOpenModalIssue();
+                      }}>Issue book</button>
+                    ) : (
+                      <button className="text-sm text-black bg-gray p-2 px-4 rounded-lg cursor-not-allowed" disabled>Unavailable</button>
+                    )}
                   </td>
                 </tr>
               ))}
