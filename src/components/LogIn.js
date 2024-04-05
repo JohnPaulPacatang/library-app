@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { supabase } from '../utils/supabaseClient';
 import { FaUser, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -13,6 +13,32 @@ function Login({ handleLogin }) {
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
   const navigate = useNavigate();
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchUserData();
+    },3000); 
+
+    return () => clearInterval(interval); // Cleanup function
+  }, []); // Empty dependency array to run effect only once on mount
+
+  const fetchUserData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('student_number', username);
+
+      if (error) {
+        throw new Error("Failed to fetch user data");
+      }
+
+      console.log("User data:", data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();

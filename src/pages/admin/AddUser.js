@@ -6,6 +6,8 @@ import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { IoEyeOutline } from "react-icons/io5";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 const UserListAdmin = () => {
 
@@ -123,8 +125,46 @@ const UserListAdmin = () => {
 
 
   const handleExport = () => {
-    alert('Succesfully exported as PDF...');
-  };
+    const doc = new jsPDF();
+    const margin = 16;
+
+    const addText = (text, x, y, size = 12) => {
+        doc.setFont("Poppins", "sans-serif");
+        doc.setFontSize(size);
+        doc.setTextColor(0, 0, 0);
+        doc.text(text, x, y);
+    };
+
+    const today = new Date();
+    const date = today.toLocaleDateString();
+
+    addText("Library Management System", (doc.internal.pageSize.width - doc.getStringUnitWidth("Library Management System") * doc.internal.getFontSize() / doc.internal.scaleFactor) / 2, margin, 20);
+    addText("User List", margin, margin + 20);
+    addText("Date: " + date, doc.internal.pageSize.width - 35, margin + 20, 10);
+
+    const startY = Math.max(margin + 16, margin + 16 + doc.getTextDimensions("User List").h + 2);
+
+    const tableHeaders = ["Student No.", "Lastname", "Firstname", "Middlename", "Email", "Course"];
+    const tableData = filteredData.map(user => [user.student_number, user.last_name, user.first_name, user.middle_name, user.email, user.course]);
+
+    doc.autoTable({
+        startY: startY,
+        head: [tableHeaders],
+        body: tableData,
+        margin: { top: startY },
+        tableLineColor: [0, 0, 0],
+        headStyles: {
+            fillColor: [255, 255, 255],
+            textColor: [0, 0, 0]
+        },
+        bodyStyles: {
+            lineWidth: 0.1,
+            textColor: [0, 0, 0]
+        }
+    });
+
+    doc.save("UserList.pdf");
+};
 
   return (
     <div className='px-5 flex-1'>
