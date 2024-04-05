@@ -20,6 +20,10 @@ const UserSearchBooks = () => {
 
   useEffect(() => {
     fetchBooks();
+    const interval = setInterval(() => {
+      fetchBooks();
+    }, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   async function fetchBooks() {

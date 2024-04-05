@@ -49,6 +49,11 @@ const BooksAdmin = () => {
   useEffect(() => {
     fetchBooks();
     fetchBookIssued();
+    const interval = setInterval(() => {
+      fetchBooks();
+      fetchBookIssued();
+    }, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   async function fetchBooks() {
@@ -341,7 +346,7 @@ const BooksAdmin = () => {
             </thead>
 
             <tbody>
-              {bookIssued.sort((a, b) => new Date(a.issue_date) - new Date(b.issue_date)).map((issue) => (
+              {bookIssued.map((issue) => (
                 <tr key={issue.transaction_id} className="border-b border-gray text-sm">
                   <td className="px-5 py-2">{issue.student_no}</td>
                   <td className="px-5 py-2">{issue.full_name}</td>

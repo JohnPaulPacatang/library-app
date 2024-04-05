@@ -27,6 +27,10 @@ const Attendance = () => {
   // Realtime fetch
   useEffect(() => {
     fetchAttendanceData();
+    const interval = setInterval(() => {
+      fetchAttendanceData();
+    }, 3000);
+    return () => clearInterval(interval);
   }, []);
 
 

@@ -70,6 +70,11 @@ const BookSuperAdmin = () => {
   useEffect(() => {
     fetchBooks();
     fetchBookIssued();
+    const interval = setInterval(() => {
+      fetchBooks();
+      fetchBookIssued();
+    }, 3000);
+    return () => clearInterval(interval);
   }, []);
 
 
@@ -85,7 +90,7 @@ const BookSuperAdmin = () => {
     const { data: borrowData } = await supabase
       .from('borrowbooks')
       .select('*');
-  
+
     const currentDate = new Date();
     const updatedBorrowData = borrowData.map(async (borrow) => {
       const returnDate = new Date(borrow.return_date);
@@ -98,7 +103,7 @@ const BookSuperAdmin = () => {
       }
       return borrow;
     });
-  
+
     setBookIssued(await Promise.all(updatedBorrowData));
   }
 
@@ -514,7 +519,7 @@ const BookSuperAdmin = () => {
             </thead>
 
             <tbody>
-              {bookIssued.sort((a, b) => new Date(a.issue_date) - new Date(b.issue_date)).map((issue) => (
+              {bookIssued.map((issue) => (
                 <tr key={issue.transaction_id} className="border-b border-gray text-sm">
                   <td className="px-5 py-2">{issue.student_no}</td>
                   <td className="px-5 py-2">{issue.full_name}</td>
@@ -524,7 +529,7 @@ const BookSuperAdmin = () => {
                   <td className="px-5 py-2">{issue.return_date}</td>
                   <td className={`px-5 py-2 ${issue.status === 'Overdue' ? 'text-red' : 'text-black'}`}>{issue.status}</td>
                   <td className="px-5">
-                  {issue.status === 'Returned' ? (
+                    {issue.status === 'Returned' ? (
                       <span className="text-green">Already Returned</span>
                     ) : (
                       <button
