@@ -64,7 +64,7 @@ const HomeAdmin = () => {
     return () => {
       clearInterval(intervalId);
     };
-  }, []); 
+  }, []);
 
   const fetchTotalIssuedToday = async () => {
     try {
@@ -94,7 +94,7 @@ const HomeAdmin = () => {
     return () => {
       clearInterval(intervalId);
     };
-  }, []); 
+  }, []);
 
   const fetchTotalavailableBooks = async () => {
     try {
@@ -102,11 +102,11 @@ const HomeAdmin = () => {
         .from('books')
         .select('*')
         .eq('availability', 'TRUE'); // Fetch records where availability is 'TRUE'
-  
+
       if (error) {
         throw error;
       }
-  
+
       setTotalavailble(notavailableBooks.length); // Set totalAvailableBooks to the count of available books
     } catch (error) {
       console.error('Error fetching available books:', error.message);
@@ -153,7 +153,7 @@ const HomeAdmin = () => {
     return () => {
       clearInterval(intervalId);
     };
-  }, []); 
+  }, []);
 
   const fetchNewestUsers = async () => {
     try {
@@ -162,13 +162,13 @@ const HomeAdmin = () => {
         .select('last_name, first_name, middle_name')
         .order('timestamp', { ascending: false })
         .range(0, 9);
-       
+
 
       if (error) {
         throw error;
       }
 
-      setNewestUsers(newestUsersData); 
+      setNewestUsers(newestUsersData);
     } catch (error) {
       console.error('Error fetching newest users:', error.message);
     }
@@ -176,7 +176,7 @@ const HomeAdmin = () => {
 
   //Returned Today
 
-  const [totalReturned, setTotalReturned] = useState(0); 
+  const [totalReturned, setTotalReturned] = useState(0);
 
   useEffect(() => {
     fetchTotalReturned();
@@ -184,22 +184,22 @@ const HomeAdmin = () => {
     return () => {
       clearInterval(intervalId);
     };
-  }, []); 
+  }, []);
 
   const fetchTotalReturned = async () => {
     try {
-      const today = new Date().toISOString().split('T')[0]; 
+      const today = new Date().toISOString().split('T')[0];
       const { data: returned, error } = await supabase
         .from('borrowbooks')
         .select('*')
-        .eq('status', 'Returned') 
-        .eq('return_date', today); 
-  
+        .eq('status', 'Returned')
+        .eq('return_date', today);
+
       if (error) {
         throw error;
       }
-  
-      setTotalReturned(returned.length); 
+
+      setTotalReturned(returned.length);
     } catch (error) {
       console.error('Error fetching returned books:', error.message);
     }
@@ -241,11 +241,11 @@ const HomeAdmin = () => {
           </div>
 
           <div className="p-12 h-60 w-full bg-white mr-5 rounded-xl shadow">
-      <p className="text-4xl text-center mt-5 font-bold">{totalIssuedToday}</p>
-      <p className="center text-lg font-bold text-center my-3">
-        Books Borrowed Today
-      </p>
-    </div>
+            <p className="text-4xl text-center mt-5 font-bold">{totalIssuedToday}</p>
+            <p className="center text-lg font-bold text-center my-3">
+              Books Borrowed Today
+            </p>
+          </div>
 
           <div className="p-12 h-60 w-full bg-white mr-5 rounded-xl shadow">
             <p className="text-4xl text-center mt-5 font-bold">{totalAvailable}</p>
@@ -257,7 +257,7 @@ const HomeAdmin = () => {
           <div className="p-12 h-60 w-full bg-white mr-5 rounded-xl shadow">
             <p className="text-4xl text-center mt-5 font-bold">{totalReturned}</p>
             <p className="center text-lg font-bold text-center my-3">
-              Returned Books Today
+              Expected Returns Today
             </p>
           </div>
         </div>
@@ -276,15 +276,15 @@ const HomeAdmin = () => {
           <div className="bg-white mx-5 w-1/2 mt-5 rounded-xl shadow flex flex-col">
             <p className="text-xl font-bold text-center mt-10">Newly Registered Users</p>
             <div className="p-5 custom-scrollbar overflow-y-auto max-h-[400px]">
-            <ul>
+              <ul>
 
-            
-        {newestUsers.map((user, index) => (
-          <li className="mt-5 p-3 w-full bg-gray rounded-md text-black flex justify-between" key={index}>
-            {user.last_name}, {user.first_name} {user.middle_name}
-          </li>
-        ))}
-      </ul>
+
+                {newestUsers.map((user, index) => (
+                  <li className="mt-5 p-3 w-full bg-gray rounded-md text-black flex justify-between" key={index}>
+                    {user.last_name}, {user.first_name} {user.middle_name}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
         </div>

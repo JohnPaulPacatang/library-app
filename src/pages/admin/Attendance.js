@@ -3,9 +3,10 @@ import { FaRegFilePdf } from "react-icons/fa";
 import { supabase } from '../../utils/supabaseClient';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 const Attendance = () => {
-
   // Modals
   const [showModal, setShowModal] = useState(false);
   const handleOpenModal = () => {
@@ -13,16 +14,13 @@ const Attendance = () => {
     setStudentNumber('');
   };
 
-
   // Para sa form 
   const [studentNumber, setStudentNumber] = useState('');
   const [name, setName] = useState('');
   const [course, setCourse] = useState('');
 
-
   // Pang fetch ng table
   const [attendanceData, setAttendanceData] = useState([]);
-
 
   // Realtime fetch
   useEffect(() => {
@@ -33,14 +31,12 @@ const Attendance = () => {
     return () => clearInterval(interval);
   }, []);
 
-
   // Realtime fetch sa form pag nag type stud no.
   useEffect(() => {
     if (studentNumber) {
       fetchStudentInfo(studentNumber);
     }
   }, [studentNumber]);
-
 
   // Tawag ng info na need sa form and dito rin ni set yung pang format ng fullname
   const fetchStudentInfo = async (studentNumber) => {
@@ -69,25 +65,21 @@ const Attendance = () => {
     }
   };
 
-
   // Pang fetch ng data sa table
   async function fetchAttendanceData() {
     const { data } = await supabase.from('attendance').select('*');
     setAttendanceData(data);
   }
 
-
   // Pang add sa attendance database
   async function handleSignIn(event) {
     event.preventDefault();
 
     try {
-
       // Pang format ng time 
       const currentTime = new Date();
       const localTime = new Date(currentTime.getTime() - currentTime.getTimezoneOffset() * 60000);
       const formattedTime = localTime.toISOString().split('T')[1].split('.')[0];
-
 
       // Pang check kung may acc kaba
       if (!name || !course) {
@@ -112,7 +104,6 @@ const Attendance = () => {
           },
         ]);
 
-
       // Pang empty ng form  
       setStudentNumber('');
       setName('');
@@ -135,16 +126,13 @@ const Attendance = () => {
     }
   }
 
-
   // Para sa sign out button pang update 
   async function handleSignOut(studentNumber) {
     try {
-
       // Format ng time
       const currentTime = new Date();
       const localTime = new Date(currentTime.getTime() - currentTime.getTimezoneOffset() * 60000);
       const formattedTime = localTime.toISOString().split('T')[1].split('.')[0];
-
 
       // Update ng signout
       await supabase
@@ -168,35 +156,67 @@ const Attendance = () => {
     }
   }
 
+  // Handle date change
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value);
+  };
 
-  // Pang delete
-  // async function handleDeleteAttendance(id) {
-  //   try {
+  const filteredData = attendanceData.filter((item) => item.date === selectedDate);
 
-  //     await supabase.from('attendance').delete().eq('id', id);
-  //     fetchAttendanceData();
-  //     toast.success("deleted successfully", {
-  //       autoClose: 2000,
-  //       hideProgressBar: true
-  //     });
-
-  //   } catch (error) {
-  //     console.error('Error deleting attendance entry:', error.message);
-  //     toast.error("Error deleting attendance entry. Please try again.", {
-  //       autoClose: 2000,
-  //       hideProgressBar: true
-  //     });
-  //   }
-  // }
-
-
+  // Export as PDF
   const handleExport = () => {
-    alert('Successfully exported as PDF...')
-  }
+    const doc = new jsPDF();
+    const margin = 16;
+
+    const addText = (text, x, y, size = 12) => {
+      doc.setFont("Poppins", "sans-serif");
+      doc.setFontSize(size);
+      doc.setTextColor(0, 0, 0);
+      doc.text(text, x, y);
+    };
+
+    const currentDate = new Date(selectedDate).toLocaleDateString();
+
+    addText("Library Management System", (doc.internal.pageSize.width - doc.getStringUnitWidth("Library Management System") * doc.internal.getFontSize() / doc.internal.scaleFactor) / 2, margin, 20);
+    addText("Library Log", margin, margin + 20);
+    addText("Date: " + currentDate, doc.internal.pageSize.width - 35, margin + 20, 10);
+
+    const startY = Math.max(margin + 16, margin + 16 + doc.getTextDimensions("Library Log").h + 2);
+
+    const tableHeaders = ["Student No.", "Name", "Course", "Date", "Time In", "Time Out"];
+    const tableData = filteredData.map(user => [
+      user.studnum,
+      user.studentname,
+      user.course,
+      user.date,
+      user.time_in ? new Date(`2000-01-01T${user.time_in}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : '--: -- : -- :--',
+      user.time_out ? new Date(`2000-01-01T${user.time_out}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true }) : '--: -- : -- :--'
+    ]);
+
+    doc.autoTable({
+      startY: startY,
+      head: [tableHeaders],
+      body: tableData,
+      margin: { top: startY },
+      tableLineColor: [0, 0, 0],
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0]
+      },
+      bodyStyles: {
+        lineWidth: 0.1,
+        textColor: [0, 0, 0]
+      }
+    });
+
+    doc.save("LibraryLog.pdf");
+  };
+
 
   return (
     <div className='px-5 my-5 flex-1'>
-      <div className="attendance-table overflow-y-auto rounded-xl custom-scrollbar">
+      <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
         <table className='bg-white w-full rounded-2xl px-2 py-2 shadow-xl'>
           <thead className='sticky top-0 bg-white'>
             <tr className='pb-2'>
@@ -204,6 +224,12 @@ const Attendance = () => {
                 <div className='flex justify-between items-center px-5 py-4'>
                   <h2 className='text-xl text-black'>Library Log</h2>
                   <div className="flex items-center gap-3">
+                    <input
+                      type="date"
+                      value={selectedDate}
+                      onChange={handleDateChange}
+                      className="bg-gray font-semibold rounded-lg px-3 py-2 outline-none"
+                    />
                     <button
                       onClick={handleExport}
                       className="bg-gray text-black text-sm p-3 flex items-center rounded-xl hover:bg-blue hover:text-white cursor-pointer">
@@ -232,7 +258,7 @@ const Attendance = () => {
           </thead>
 
           <tbody>
-            {attendanceData.sort((a, b) => new Date(a.date) - new Date(b.date)).map((item) => (
+            {filteredData.sort((a, b) => new Date(a.date) - new Date(b.date)).map((item) => (
               <tr key={item.id} className='border-b border-gray text-sm'>
                 <td className='px-5 py-2'>{item.studnum}</td>
                 <td className='px-5 py-2'>{item.studentname}</td>
@@ -279,7 +305,6 @@ const Attendance = () => {
             </h2>
 
             <form onSubmit={handleSignIn}>
-
               <div className="flex flex-col w-96">
                 <label className="text-base font-semibold m-1">Student number</label>
                 <input

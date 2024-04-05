@@ -372,6 +372,14 @@ const BookSuperAdmin = () => {
     )
   );
 
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+
+  const handleDateChange = (e) => {
+    setSelectedDate(e.target.value);
+  };
+
+  const filteredBookIssued = bookIssued.filter((issue) => issue.issue_date === selectedDate);
+
   const handleExport = () => {
     alert("Succesfully exported as PDF...");
   };
@@ -496,12 +504,20 @@ const BookSuperAdmin = () => {
                 <th colSpan="10">
                   <div className="flex justify-between items-center px-5 py-4">
                     <h2 className="text-xl text-black">Book Issued</h2>
-                    <button
-                      onClick={handleExport}
-                      className="bg-gray text-black text-sm p-3 flex items-center rounded-xl hover:bg-blue hover:text-white cursor-pointer">
-                      <FaRegFilePdf className="mr-1" />
-                      Export as PDF
-                    </button>
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="date"
+                        value={selectedDate}
+                        onChange={handleDateChange}
+                        className="bg-gray font-semibold rounded-lg px-3 py-2 outline-none"
+                      />
+                      <button
+                        onClick={handleExport}
+                        className="bg-gray text-black text-sm p-3 flex items-center rounded-xl hover:bg-blue hover:text-white cursor-pointer">
+                        <FaRegFilePdf className="mr-1" />
+                        Export as PDF
+                      </button>
+                    </div>
                   </div>
                 </th>
               </tr>
@@ -519,7 +535,7 @@ const BookSuperAdmin = () => {
             </thead>
 
             <tbody>
-              {bookIssued.map((issue) => (
+              {filteredBookIssued.sort((a, b) => new Date(a.return_date) - new Date(b.return_date)).map((issue) => (
                 <tr key={issue.transaction_id} className="border-b border-gray text-sm">
                   <td className="px-5 py-2">{issue.student_no}</td>
                   <td className="px-5 py-2">{issue.full_name}</td>
