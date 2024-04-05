@@ -784,6 +784,7 @@ const BookSuperAdmin = () => {
                     type="number"
                     name="ddc_id"
                     defaultValue={bookData.ddc_id}
+                    readOnly
                     className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
@@ -796,6 +797,7 @@ const BookSuperAdmin = () => {
                     type="text"
                     name="title"
                     defaultValue={bookData.title}
+                    readOnly
                     className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                   />
                 </div>
