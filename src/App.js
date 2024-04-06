@@ -29,6 +29,7 @@ function App() {
   const storedUserEmail = sessionStorage.getItem('userEmail');
   const storedUserCourse = sessionStorage.getItem('userCourse');
   const storedUserPassword = sessionStorage.getItem('userPassword');
+  const storedUserStudentNumber = sessionStorage.getItem('userStudentNumber');
 
   const [userRole, setUserRole] = useState(storedUserRole);
   const [userFirstName, setUserFirstName] = useState(storedUserFirstName || "");
@@ -37,6 +38,7 @@ function App() {
   const [userEmail, setUserEmail] = useState(storedUserEmail || "");
   const [userCourse, setUserCourse] = useState(storedUserCourse || "");
   const [userPassword, setUserPassword] = useState(storedUserPassword || "");
+  const [userStudentNumber, setUserStudentNumber] = useState(storedUserStudentNumber || "");
   
   useEffect(() => {
     if (userRole && userFirstName && userLastName && userMiddleName && userEmail && userCourse && userPassword) {
@@ -46,11 +48,12 @@ function App() {
       sessionStorage.setItem('userEmail', userEmail);
       sessionStorage.setItem('userCourse', userCourse);
       sessionStorage.setItem('userPassword', userPassword);
+      sessionStorage.setItem('userStudentNumber', userStudentNumber);
     }
-  }, [userRole, userFirstName, userLastName, userMiddleName, userEmail, userCourse, userPassword]);
+  }, [userRole, userFirstName, userLastName, userMiddleName, userEmail, userCourse, userPassword, userStudentNumber]);
 
   // tas dito nireread na yung user role para ma set pati users info
-  const handleLogin = (role, firstName, lastName, middleName, email, course, password) => {
+  const handleLogin = (role, firstName, lastName, middleName, email, course, password, studentnumber) => {
     setUserRole(role);
     setUserFirstName(firstName);
     setUserLastName(lastName);
@@ -58,6 +61,7 @@ function App() {
     setUserEmail(email);
     setUserCourse(course);
     setUserPassword(password);
+    setUserStudentNumber(studentnumber);
     sessionStorage.setItem('userRole', role);
     sessionStorage.setItem('userFirstName', firstName);
     sessionStorage.setItem('userLastName', lastName);
@@ -65,6 +69,7 @@ function App() {
     sessionStorage.setItem('userEmail', email);
     sessionStorage.setItem('userCourse', course);
     sessionStorage.setItem('userPassword', password);
+    sessionStorage.setItem('userStudentNumber', studentnumber);
   }
 
   // Render sidebar and routes based on user role
@@ -74,7 +79,7 @@ function App() {
     sidebarComponent = <SidebarUser userFirstName={userFirstName} userLastName={userLastName} />;
     routesComponent = (
       <Routes>
-        <Route path="/home-user" element={<HomeUser userFirstName={userFirstName} />} />
+        <Route path="/home-user" element={<HomeUser userFirstName={userFirstName} userStudentNumber={userStudentNumber} />} />
         <Route path="/search-books" element={<SearchBooksUser />} />
         <Route path="/settings" element={<Setting userFirstName={userFirstName} userLastName={userLastName} userMiddleName={userMiddleName} userEmail={userEmail} userCourse={userCourse} userPassword={userPassword}/>} />
         <Route path="/faq" element={<FAQ />} />

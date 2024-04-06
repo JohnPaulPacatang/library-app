@@ -62,7 +62,6 @@ const HomeAdmin = () => {
   const [overdueBooks, setOverdueBooks] = useState(0); // Initialize overdueBooks as a number
   const [newestUsers, setNewestUsers] = useState([]); // Initialize newestUsers as an array
 
-
   useEffect(() => {
     fetchTotalWalkInsToday();
     fetchTotalIssuedToday();

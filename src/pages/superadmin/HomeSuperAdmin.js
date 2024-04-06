@@ -6,7 +6,6 @@ import { supabase } from '../../utils/supabaseClient';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const SA_Dashboard = () => {
-  const [topPick] = useState("The Origin of Species");
   const options = {
     height: 400,
     axisY: {
@@ -45,7 +44,7 @@ const SA_Dashboard = () => {
     }, 1000);
     return () => clearInterval(interval);
   }, []);
-  
+
 
   const fetchTotalUsers = async () => {
     try {
@@ -93,6 +92,94 @@ const SA_Dashboard = () => {
     }
   };
 
+  const [borrowedBooks, setBorrowedBooks] = useState([]);
+  const [topPickedBook, setTopPickedBook] = useState(null);
+  const [borrowedBookss, setBorrowedBookss] = useState([]);
+  const [topStudents, setTopStudents] = useState([]);
+
+  useEffect(() => {
+    const fetchBorrowedBooks = async () => {
+      try {
+        const { data, error } = await supabase.from('borrowbooks').select('book_title');
+        if (error) {
+          throw error;
+        }
+        setBorrowedBooks(data);
+      } catch (error) {
+        console.error('Error fetching borrowed books:', error.message);
+      }
+    };
+
+    const interval = setInterval(fetchBorrowedBooks, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const countBooks = () => {
+      const bookCounts = {};
+
+      borrowedBooks.forEach(book => {
+        const { book_title } = book;
+        if (bookCounts[book_title]) {
+          bookCounts[book_title]++;
+        } else {
+          bookCounts[book_title] = 1;
+        }
+      });
+
+      const sortedBooks = Object.entries(bookCounts).sort((a, b) => b[1] - a[1]);
+
+      if (sortedBooks.length > 0) {
+        const [topBookId,] = sortedBooks[0];
+        setTopPickedBook(topBookId);
+      }
+    };
+
+    const interval = setInterval(countBooks, 1000);
+
+    return () => clearInterval(interval);
+  }, [borrowedBooks]);
+
+  useEffect(() => {
+    const fetchBorrowedBooks = async () => {
+      const { data, error } = await supabase.from('borrowbooks').select('full_name');
+      if (error) {
+        console.error('Error fetching borrowed books:', error.message);
+        return;
+      }
+      setBorrowedBookss(data);
+    };
+    const interval = setInterval(fetchBorrowedBooks, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const countStudents = () => {
+      const studentCounts = {};
+
+      borrowedBookss.forEach(book => {
+        const { full_name } = book;
+        if (studentCounts[full_name]) {
+          studentCounts[full_name]++;
+        } else {
+          studentCounts[full_name] = 1;
+        }
+      });
+
+      const sortedStudents = Object.entries(studentCounts)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 5);
+
+      setTopStudents(sortedStudents);
+    };
+
+    const interval = setInterval(countStudents, 1000);
+
+    return () => clearInterval(interval);
+  }, [borrowedBookss]);
+
 
   return (
     <div className="statistics-section flex-1">
@@ -104,7 +191,7 @@ const SA_Dashboard = () => {
         </div>
 
         <div className="p-12 h-60 w-full bg-white mr-5 rounded-xl shadow">
-          <p className="text-3xl text-blue text-center mt-5 font-bold">{topPick}</p>
+          <p className="text-xl text-blue text-center mt-5 font-bold">{topPickedBook}</p>
           <p className="center text-lg font-bold text-center my-3">
             Top Picked Book
           </p>
@@ -139,30 +226,18 @@ const SA_Dashboard = () => {
         <div className="bg-white mx-5 w-1/2 mt-5 rounded-xl shadow flex flex-col">
           <p className="text-xl font-bold text-center mt-10">Top Borrower</p>
           <div className="p-10">
-            <p className="mt-5 p-3 w-full bg-gray rounded-md text-black flex justify-between">
-              1. Full Name: <span>10 Books</span>
-            </p>
-
-            <p className="mt-5 p-3 w-full bg-gray rounded-md text-black flex justify-between">
-              2. Full Name: <span>7 Books</span>
-            </p>
-
-            <p className="mt-5 p-3 w-full bg-gray rounded-md text-black flex justify-between">
-              3. Full Name: <span>5 Books</span>
-            </p>
-
-            <p className="mt-5 p-3 w-full bg-gray rounded-md text-black flex justify-between">
-              4. Full Name: <span>4 Books</span>
-            </p>
-
-            <p className="mt-5 p-3 w-full bg-gray rounded-md text-black flex justify-between">
-              5. Full Name: <span>2 Books</span>
-            </p>
+            {topStudents.map(([student, count], index) => (
+              <p key={index} className="mt-5 p-3 w-full bg-gray rounded-md text-black flex justify-between">
+                {`${index + 1}. ${student}`} <span>{`${count}`}</span>
+              </p>
+            ))}
           </div>
+
         </div>
       </div>
     </div>
   );
 };
+
 
 export default SA_Dashboard;

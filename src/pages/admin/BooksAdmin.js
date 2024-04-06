@@ -20,6 +20,8 @@ const BooksAdmin = () => {
     "Literature",
     "Psychology and Philosophy",
     "Natural Sciences",
+    "Fantasy Fiction",
+    "Fiction",
   ];
 
   const handleOpenModalIssue = () => {
@@ -225,8 +227,6 @@ const BooksAdmin = () => {
       (book.category?.toLowerCase().includes(searchQuery.toLowerCase()))
     )
   );
-
-
 
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
