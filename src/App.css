@@ -6,6 +6,10 @@
   max-height: 51rem;
 }
 
+.transaction-table {
+  max-height: 48rem;
+}
+
 .admin-table {
   max-height: 50rem;
 }
@@ -15,9 +19,8 @@
 }
 
 .notification-height {
-  max-height: 30rem;
+  max-height: 27rem;
 }
-
 
 .arrow-icon.rotated {
   transform: rotate(180deg);

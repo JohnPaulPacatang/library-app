@@ -45,15 +45,15 @@ const SidebarAdmin = () => {
               </li>
             </Link>
 
-            <Link to="/create-accounts">
-              <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/create-accounts") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <FaUserCog />
-              </li>
-            </Link>
-
             <Link to="/books-admin">
               <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/books-admin") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
                 <GiBookmarklet />
+              </li>
+            </Link>
+
+            <Link to="/create-accounts">
+              <li className={`text-3xl text-center px-4 py-3 m-2 text-white ${isActive("/create-accounts") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
+                <FaUserCog />
               </li>
             </Link>
 
@@ -109,15 +109,15 @@ const SidebarAdmin = () => {
               </li>
             </Link>
 
-            <Link to="/create-accounts">
-              <li className={`text-white text-base flex items-center px-4 py-3 m-3 ${isActive("/create-accounts") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
-                <FaUserCog className="text-3xl mr-2" />Create Account
-              </li>
-            </Link>
-
             <Link to="/books-admin">
               <li className={`text-white text-base flex items-center px-4 py-3 m-3 ${isActive("/books-admin") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
                 <GiBookmarklet className="text-3xl mr-2" />Books
+              </li>
+            </Link>
+
+            <Link to="/create-accounts">
+              <li className={`text-white text-base flex items-center px-4 py-3 m-3 ${isActive("/create-accounts") ? "bg-blue rounded-xl" : ""} hover:bg-white hover:text-black hover:rounded-xl cursor-pointer`}>
+                <FaUserCog className="text-3xl mr-2" />Create Account
               </li>
             </Link>
 

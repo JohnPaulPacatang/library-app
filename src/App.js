@@ -92,8 +92,8 @@ function App() {
       <Routes>
         <Route path="/home-admin" element={<HomeAdmin />} />
         <Route path="/attendance-log" element={<Attendance />} />
-        <Route path="/create-accounts" element={<AddUser />} />
         <Route path="/books-admin" element={<BooksAdmin />} />
+        <Route path="/create-accounts" element={<AddUser />} />
       </Routes>
     );
   } else if (userRole === "super-admin") {

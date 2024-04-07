@@ -130,6 +130,12 @@ const BookSuperAdmin = () => {
   // Add book
   async function addBook() {
     try {
+
+      const currentTime = new Date();
+      const localTime = new Date(currentTime.getTime() - currentTime.getTimezoneOffset() * 60000);
+      const formattedTime = localTime.toISOString().split('T')[1].split('.')[0];
+      const formattedDate = new Date().toISOString().split('T')[0];
+
       await supabase
         .from('books')
         .insert([
@@ -139,6 +145,7 @@ const BookSuperAdmin = () => {
             author: book.author,
             category: book.category,
             availability: book.availability === 'true' ? true : false,
+            created: `${formattedDate} ${formattedTime}`,
           },
         ]);
 
