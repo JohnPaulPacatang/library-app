@@ -3,7 +3,7 @@ import CanvasJSReact from "@canvasjs/react-charts";
 import Greetings from "./Greetings";
 import { supabase } from '../../utils/supabaseClient';
 
-var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const SA_Dashboard = () => {
   const options = {
