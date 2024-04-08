@@ -54,7 +54,7 @@ const UserDashboard = ({ userFirstName, userStudentNumber }) => {
             const currentDate = new Date();
             const timeDiff = Math.abs(currentDate.getTime() - createdDate.getTime());
             const diffHours = Math.ceil(timeDiff / (1000 * 3600));
-            return diffHours <= 24; // Only return books created within the last 24 hours
+            return diffHours <= 24; 
           });
           setNewBooksAdded(newBooks);
         } else {

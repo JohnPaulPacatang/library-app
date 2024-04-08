@@ -14,7 +14,6 @@ const UserSearchBooks = () => {
     "Literature",
     "Psychology and Philosophy",
     "Natural Sciences",
-    "Fantasy Fiction",
     "Fiction",
   ];
 
