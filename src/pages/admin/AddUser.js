@@ -57,10 +57,7 @@ const UserListAdmin = () => {
   // Add user to database
   async function addUser() {
     try {
-
-      const currentTime = new Date();
-      const localTime = new Date(currentTime.getTime() - currentTime.getTimezoneOffset() * 60000);
-      const formattedTime = localTime.toISOString().split('T')[1].split('.')[0];
+      
       const formattedDate = new Date().toISOString().split('T')[0];
 
       await supabase
@@ -74,7 +71,7 @@ const UserListAdmin = () => {
             middle_name: user.middleName,
             email: user.email,
             course: user.course,
-            timestamp: `${formattedDate} ${formattedTime}`,
+            timestamp: formattedDate, 
           },
         ]);
 

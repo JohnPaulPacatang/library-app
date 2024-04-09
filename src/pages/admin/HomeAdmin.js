@@ -4,26 +4,91 @@ import { supabase } from '../../utils/supabaseClient';
 
 const HomeAdmin = () => {
 
+  const [borrowedBooksByDay, setBorrowedBooksByDay] = useState({});
+
+  useEffect(() => {
+    fetchBorrowedBooks();
+    const interval = setInterval(fetchBorrowedBooks, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchBorrowedBooks = async () => {
+    try {
+      const { data: borrowedBooks, error } = await supabase
+        .from('borrowbooks')
+        .select('issue_date');
+
+      if (error) {
+        throw error;
+      }
+
+      const counts = {
+        Sunday: 0,
+        Monday: 0,
+        Tuesday: 0,
+        Wednesday: 0,
+        Thursday: 0,
+        Friday: 0,
+        Saturday: 0
+      };
+
+      borrowedBooks.forEach(book => {
+        const dayOfWeek = new Date(book.issue_date).getDay();
+        switch (dayOfWeek) {
+          case 0:
+            counts.Sunday++;
+            break;
+          case 1:
+            counts.Monday++;
+            break;
+          case 2:
+            counts.Tuesday++;
+            break;
+          case 3:
+            counts.Wednesday++;
+            break;
+          case 4:
+            counts.Thursday++;
+            break;
+          case 5:
+            counts.Friday++;
+            break;
+          case 6:
+            counts.Saturday++;
+            break;
+          default:
+            break;
+        }
+      });
+
+      setBorrowedBooksByDay(counts);
+    } catch (error) {
+      console.error('Error fetching borrowed books:', error.message);
+    }
+  };
+
   const options = {
     height: 400,
     axisY: {
-      maximum: 30,
+      maximum: 16,
     },
-
     data: [
       {
         type: "column",
         dataPoints: [
-          { label: "Monday", y: 10, color: "#59adff" },
-          { label: "Tuesday", y: 15, color: "#59adff" },
-          { label: "Wednesday", y: 15, color: "#59adff" },
-          { label: "Thursday", y: 10, color: "#59adff" },
-          { label: "Friday", y: 10, color: "#59adff" },
-          { label: "Saturday", y: 3, color: "#59adff" },
+          { label: "Sunday", y: borrowedBooksByDay.Sunday || 0, color: "#59adff" },
+          { label: "Monday", y: borrowedBooksByDay.Monday || 0, color: "#59adff" },
+          { label: "Tuesday", y: borrowedBooksByDay.Tuesday || 0, color: "#59adff" },
+          { label: "Wednesday", y: borrowedBooksByDay.Wednesday || 0, color: "#59adff" },
+          { label: "Thursday", y: borrowedBooksByDay.Thursday || 0, color: "#59adff" },
+          { label: "Friday", y: borrowedBooksByDay.Friday || 0, color: "#59adff" },
+          { label: "Saturday", y: borrowedBooksByDay.Saturday || 0, color: "#59adff" },
         ],
       },
     ],
   };
+
+  var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
   const [username] = useState("Admin");
 
@@ -32,7 +97,7 @@ const HomeAdmin = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTime(new Date());
-    }, 1000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -54,8 +119,6 @@ const HomeAdmin = () => {
     }
   };
 
-  var CanvasJSChart = CanvasJSReact.CanvasJSChart;
-
   const [totalIssuedToday, setTotalIssuedToday] = useState(0); // Initialize totalIssued as a number
   const [totalAvailable, setTotalavailble] = useState(0); // Initialize totalAvailableBooks as a number
   const [totalWalkInsToday, setTotalWalkInsToday] = useState(0); // Initialize totalWalkInsToday as a number
@@ -74,7 +137,7 @@ const HomeAdmin = () => {
       fetchTotalavailableBooks();
       fetchOverdueBooks();
       fetchNewestUsers();
-    }, 1000);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -228,20 +291,15 @@ const HomeAdmin = () => {
         <div className="flex">
           <div className="h-auto w-full bg-white mx-5 p-5 mt-5 rounded-xl shadow">
             <p className="center text-lg font-bold text-center my-3">
-              New Users per Day
+              Borrowed Books
             </p>
-            <CanvasJSChart
-              options={options}
-
-            />
+            <CanvasJSChart options={options}/>
           </div>
 
           <div className="bg-white mx-5 w-1/2 mt-5 rounded-xl shadow flex flex-col">
             <p className="text-xl font-bold text-center mt-10">Newest Users</p>
             <div className="p-5 custom-scrollbar overflow-y-auto max-h-[400px]">
               <ul>
-
-
                 {newestUsers.map((user, index) => (
                   <li className="mt-5 p-3 w-full bg-gray rounded-md text-black flex justify-between" key={index}>
                     {user.last_name}, {user.first_name} {user.middle_name}

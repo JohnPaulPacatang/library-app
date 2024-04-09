@@ -3,30 +3,92 @@ import CanvasJSReact from "@canvasjs/react-charts";
 import Greetings from "./Greetings";
 import { supabase } from '../../utils/supabaseClient';
 
-const CanvasJSChart = CanvasJSReact.CanvasJSChart;
-
 const SA_Dashboard = () => {
+  const CanvasJSChart = CanvasJSReact.CanvasJSChart;
+
+  const [userCountsByDay, setUserCountsByDay] = useState({});
+
+  useEffect(() => {
+    fetchUserCounts();
+    const interval = setInterval(fetchUserCounts, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchUserCounts = async () => {
+    try {
+      const { data: users, error } = await supabase
+        .from('users')
+        .select('timestamp');
+
+      if (error) {
+        throw error;
+      }
+
+      const counts = {
+        Sunday: 0,
+        Monday: 0,
+        Tuesday: 0,
+        Wednesday: 0,
+        Thursday: 0,
+        Friday: 0,
+        Saturday: 0
+      };
+
+      users.forEach(user => {
+        const dayOfWeek = new Date(user.timestamp).getDay();
+        switch (dayOfWeek) {
+          case 0:
+            counts.Sunday++;
+            break;
+          case 1:
+            counts.Monday++;
+            break;
+          case 2:
+            counts.Tuesday++;
+            break;
+          case 3:
+            counts.Wednesday++;
+            break;
+          case 4:
+            counts.Thursday++;
+            break;
+          case 5:
+            counts.Friday++;
+            break;
+          case 6:
+            counts.Saturday++;
+            break;
+          default:
+            break;
+        }
+      });
+
+      setUserCountsByDay(counts);
+    } catch (error) {
+      console.error('Error fetching user counts by day:', error.message);
+    }
+  };
+
   const options = {
     height: 400,
     axisY: {
-      maximum: 30,
+      maximum: 16,
     },
-
     data: [
       {
         type: "column",
         dataPoints: [
-          { label: "Monday", y: 10, color: "#59adff" },
-          { label: "Tuesday", y: 15, color: "#59adff" },
-          { label: "Wednesday", y: 15, color: "#59adff" },
-          { label: "Thursday", y: 10, color: "#59adff" },
-          { label: "Friday", y: 10, color: "#59adff" },
-          { label: "Saturday", y: 3, color: "#59adff" },
+          { label: "Sunday", y: userCountsByDay.Sunday || 0, color: "#59adff" },
+          { label: "Monday", y: userCountsByDay.Monday || 0, color: "#59adff" },
+          { label: "Tuesday", y: userCountsByDay.Tuesday || 0, color: "#59adff" },
+          { label: "Wednesday", y: userCountsByDay.Wednesday || 0, color: "#59adff" },
+          { label: "Thursday", y: userCountsByDay.Thursday || 0, color: "#59adff" },
+          { label: "Friday", y: userCountsByDay.Friday || 0, color: "#59adff" },
+          { label: "Saturday", y: userCountsByDay.Saturday || 0, color: "#59adff" },
         ],
       },
     ],
   };
-
 
   const [totalUsers, setTotalUsers] = useState([]);
   const [totalunavailable, setTotalUnavailble] = useState(0); // Initialize totalAvailableBooks as a number
@@ -215,12 +277,9 @@ const SA_Dashboard = () => {
       <div className="flex">
         <div className="h-auto w-full bg-white mx-5 p-5 mt-5 rounded-xl shadow">
           <p className="center text-lg font-bold text-center my-3">
-            New Users per Day
+            Registered Users
           </p>
-          <CanvasJSChart
-            options={options}
-          /* onRef={ref => this.chart = ref} */
-          />
+          <CanvasJSChart options={options} />
         </div>
 
         <div className="bg-white mx-5 w-1/2 mt-5 rounded-xl shadow flex flex-col">
