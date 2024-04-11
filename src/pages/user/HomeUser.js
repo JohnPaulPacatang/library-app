@@ -54,7 +54,7 @@ const UserDashboard = ({ userFirstName, userStudentNumber }) => {
             const currentDate = new Date();
             const timeDiff = Math.abs(currentDate.getTime() - createdDate.getTime());
             const diffHours = Math.ceil(timeDiff / (1000 * 3600));
-            return diffHours <= 24; 
+            return diffHours <= 24;
           });
           setNewBooksAdded(newBooks);
         } else {
@@ -134,7 +134,7 @@ const UserDashboard = ({ userFirstName, userStudentNumber }) => {
         </div>
 
         {/* Right side */}
-        <div className="mr-5 ml-10 relative bg-white rounded-lg p-4 shadow">
+        <div className="mr-5 ml-5 bg-white rounded-lg p-4 shadow ">
           <div className="flex flex-col">
             <p className="text-lg font-semibold">Transaction History</p>
             <div className="transaction-list h-full">
