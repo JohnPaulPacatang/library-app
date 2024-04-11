@@ -376,9 +376,9 @@ const BookSuperAdmin = () => {
         .from('borrowbooks')
         .delete()
         .eq('transaction_id', transactionId);
-        
-        
-        fetchBookIssued();
+
+
+      fetchBookIssued();
 
       toast.success("Transaction deleted successfully", {
         autoClose: 2000,
@@ -410,7 +410,16 @@ const BookSuperAdmin = () => {
     setSelectedDate(e.target.value);
   };
 
-  const filteredBookIssued = bookIssued.filter((issue) => issue.issue_date === selectedDate);
+  const filteredBookIssued = selectedDate ?
+    bookIssued.filter(issue =>
+      issue.issue_date === selectedDate &&
+      (String(issue.student_no).includes(searchQuery) ||
+        issue.status.toLowerCase().includes(searchQuery.toLowerCase()))
+    ) :
+    bookIssued.filter(issue =>
+      String(issue.student_no).includes(searchQuery) ||
+      issue.status.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   const handleExport = () => {
     const doc = new jsPDF();
@@ -616,31 +625,69 @@ const BookSuperAdmin = () => {
             </thead>
 
             <tbody>
-              {filteredBookIssued.filter(issue => issue.issue_date === selectedDate && String(issue.student_no).includes(searchQuery)).sort((a, b) => new Date(a.return_date) - new Date(b.return_date)).map((issue) => (
-                <tr key={issue.transaction_id} className="border-b border-gray text-sm">
-                  <td className="px-5 py-2">{issue.student_no}</td>
-                  <td className="px-5 py-2">{issue.full_name}</td>
-                  <td className="px-5 py-2">{issue.ddc_no}</td>
-                  <td className="px-5 py-2">{issue.book_title}</td>
-                  <td className="px-5 py-2">{issue.issue_date}</td>
-                  <td className="px-5 py-2">{issue.return_date}</td>
-                  <td className={`px-5 py-2 ${issue.status === 'Overdue' ? 'text-red' : 'text-black'}`}>{issue.status}</td>
-                  <td className="px-5">
-                    {issue.status === 'Returned' ? (
-                      <span className="text-green mr-5">Already Returned</span>
-                    ) : (
-                      <button
-                        className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black mr-5"
-                        onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}>
-                        Mark as Returned
-                      </button>
-                    )}
-                    <button className="bg-red ml-5 text-white px-3 py-1 rounded-md"
-                      onClick={() => { if (window.confirm("Are you sure you want to delete this book?")) { deleteTransaction(issue.transaction_id); } }}>Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {selectedDate ?
+                filteredBookIssued
+                  .filter(issue =>
+                    issue.issue_date === selectedDate &&
+                    (String(issue.student_no).includes(searchQuery) || issue.status.toLowerCase().includes(searchQuery.toLowerCase()))
+                  )
+                  .sort((a, b) => new Date(a.return_date) - new Date(b.return_date))
+                  .map((issue) => (
+                    <tr key={issue.transaction_id} className="border-b border-gray text-sm">
+                      <td className="px-5 py-2">{issue.student_no}</td>
+                      <td className="px-5 py-2">{issue.full_name}</td>
+                      <td className="px-5 py-2">{issue.ddc_no}</td>
+                      <td className="px-5 py-2">{issue.book_title}</td>
+                      <td className="px-5 py-2">{issue.issue_date}</td>
+                      <td className="px-5 py-2">{issue.return_date}</td>
+                      <td className={`px-5 py-2 ${issue.status === 'Overdue' ? 'text-red' : 'text-black'}`}>{issue.status}</td>
+                      <td className="px-5">
+                        {issue.status === 'Returned' ? (
+                          <span className="text-green mr-5">Already Returned</span>
+                        ) : (
+                          <button
+                            className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black mr-5"
+                            onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}>
+                            Mark as Returned
+                          </button>
+                        )}
+                        <button className="bg-red ml-5 text-white px-3 py-1 rounded-md"
+                          onClick={() => { if (window.confirm("Are you sure you want to delete this book?")) { deleteTransaction(issue.transaction_id); } }}>Delete
+                        </button>
+                      </td>
+                    </tr>
+                  )) :
+                bookIssued
+                  .filter(issue =>
+                    String(issue.student_no).includes(searchQuery) || issue.status.toLowerCase().includes(searchQuery.toLowerCase())
+                  )
+                  .sort((a, b) => new Date(a.return_date) - new Date(b.return_date))
+                  .map((issue) => (
+                    <tr key={issue.transaction_id} className="border-b border-gray text-sm">
+                      <td className="px-5 py-2">{issue.student_no}</td>
+                      <td className="px-5 py-2">{issue.full_name}</td>
+                      <td className="px-5 py-2">{issue.ddc_no}</td>
+                      <td className="px-5 py-2">{issue.book_title}</td>
+                      <td className="px-5 py-2">{issue.issue_date}</td>
+                      <td className="px-5 py-2">{issue.return_date}</td>
+                      <td className={`px-5 py-2 ${issue.status === 'Overdue' ? 'text-red' : 'text-black'}`}>{issue.status}</td>
+                      <td className="px-5">
+                        {issue.status === 'Returned' ? (
+                          <span className="text-green mr-5">Already Returned</span>
+                        ) : (
+                          <button
+                            className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black mr-5"
+                            onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}>
+                            Mark as Returned
+                          </button>
+                        )}
+                        <button className="bg-red ml-5 text-white px-3 py-1 rounded-md"
+                          onClick={() => { if (window.confirm("Are you sure you want to delete this book?")) { deleteTransaction(issue.transaction_id); } }}>Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+              }
             </tbody>
           </table>
         </div>

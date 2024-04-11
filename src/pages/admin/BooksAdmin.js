@@ -233,8 +233,16 @@ const BooksAdmin = () => {
     setSelectedDate(e.target.value);
   };
 
-  const filteredBookIssued = bookIssued.filter((issue) => issue.issue_date === selectedDate);
-
+  const filteredBookIssued = selectedDate ?
+  bookIssued.filter(issue => 
+    issue.issue_date === selectedDate && 
+    (String(issue.student_no).includes(searchQuery) || 
+    issue.status.toLowerCase().includes(searchQuery.toLowerCase()))
+  ) :
+  bookIssued.filter(issue => 
+    String(issue.student_no).includes(searchQuery) || 
+    issue.status.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleExport = () => {
     const doc = new jsPDF();
@@ -414,29 +422,55 @@ const BooksAdmin = () => {
             </thead>
 
             <tbody>
-              {filteredBookIssued.filter(issue => issue.issue_date === selectedDate && String(issue.student_no).includes(searchQuery)).sort((a, b) => new Date(a.return_date) - new Date(b.return_date)).map((issue) => (
-                <tr key={issue.transaction_id} className="border-b border-gray text-sm">
-                  <td className="px-5 py-2">{issue.student_no}</td>
-                  <td className="px-5 py-2">{issue.full_name}</td>
-                  <td className="px-5 py-2">{issue.ddc_no}</td>
-                  <td className="px-5 py-2">{issue.book_title}</td>
-                  <td className="px-5 py-2">{issue.issue_date}</td>
-                  <td className="px-5 py-2">{issue.return_date}</td>
-                  <td className={`px-5 py-2 ${issue.status === 'Overdue' ? 'text-red' : 'text-black'}`}>{issue.status}</td>
-                  <td className="px-5">
-                    {issue.status === 'Returned' ? (
-                      <span className="text-green">Already Returned</span>
-                    ) : (
-                      <button
-                        className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black"
-                        onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}
-                      >
-                        Mark as Returned
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
+              {selectedDate ?
+                filteredBookIssued.sort((a, b) => new Date(a.return_date) - new Date(b.return_date)).map((issue) => (
+                  <tr key={issue.transaction_id} className="border-b border-gray text-sm">
+                    <td className="px-5 py-2">{issue.student_no}</td>
+                    <td className="px-5 py-2">{issue.full_name}</td>
+                    <td className="px-5 py-2">{issue.ddc_no}</td>
+                    <td className="px-5 py-2">{issue.book_title}</td>
+                    <td className="px-5 py-2">{issue.issue_date}</td>
+                    <td className="px-5 py-2">{issue.return_date}</td>
+                    <td className={`px-5 py-2 ${issue.status === 'Overdue' ? 'text-red' : 'text-black'}`}>{issue.status}</td>
+                    <td className="px-5">
+                      {issue.status === 'Returned' ? (
+                        <span className="text-green">Already Returned</span>
+                      ) : (
+                        <button
+                          className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black"
+                          onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}
+                        >
+                          Mark as Returned
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                )) :
+                bookIssued.filter(issue => String(issue.student_no).includes(searchQuery)|| 
+                issue.status.toLowerCase().includes(searchQuery.trim().toLowerCase())).sort((a, b) => new Date(a.return_date) - new Date(b.return_date)).map((issue) => (
+                  <tr key={issue.transaction_id} className="border-b border-gray text-sm">
+                    <td className="px-5 py-2">{issue.student_no}</td>
+                    <td className="px-5 py-2">{issue.full_name}</td>
+                    <td className="px-5 py-2">{issue.ddc_no}</td>
+                    <td className="px-5 py-2">{issue.book_title}</td>
+                    <td className="px-5 py-2">{issue.issue_date}</td>
+                    <td className="px-5 py-2">{issue.return_date}</td>
+                    <td className={`px-5 py-2 ${issue.status === 'Overdue' ? 'text-red' : 'text-black'}`}>{issue.status}</td>
+                    <td className="px-5">
+                      {issue.status === 'Returned' ? (
+                        <span className="text-green">Already Returned</span>
+                      ) : (
+                        <button
+                          className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black"
+                          onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}
+                        >
+                          Mark as Returned
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))
+              }
             </tbody>
           </table>
         </div>
