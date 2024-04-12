@@ -10,6 +10,11 @@
   height: 48rem;
 }
 
+.transaction-space{
+  padding-top: 23.2rem;
+  padding-bottom: 23.2rem;
+}
+
 .admin-table {
   max-height: 50rem;
 }

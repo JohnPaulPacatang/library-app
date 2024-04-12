@@ -139,7 +139,7 @@ const UserDashboard = ({ userFirstName, userStudentNumber }) => {
             <p className="text-lg font-semibold">Transaction History</p>
             <div className="transaction-list h-full">
               {transactions.length === 0 ? (
-                <p className="text-black text-center py-72">No transactions made yet.</p>
+                <p className="text-black text-center transaction-space">No transactions made yet.</p>
               ) : (
                 <div className="transaction-table overflow-y-auto rounded-lg custom-scrollbar">
                   <table className="w-full table-auto">

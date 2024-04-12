@@ -956,7 +956,7 @@ const BookSuperAdmin = () => {
               <div className="flex justify-center pt-4">
                 <button
                   type="submit"
-                  className="bg-blue text-white font-semibold py-2 px-4  rounded-md shadow-sm mt-2">
+                  className="bg-blue text-white font-semibold py-2 px-4 rounded-md shadow-sm mt-2">
                   Submit
                 </button>
               </div>
