@@ -153,7 +153,7 @@ const UserDashboard = ({ userFirstName, userStudentNumber }) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {transactions.sort((a, b) => a.ddc_no - b.ddc_no).map((transaction) => (
+                      {transactions.sort((a, b) => a.return_date - b.return_date).map((transaction) => (
                         <tr key={transaction.transaction_id} className="border-b border-gray text-sm">
                           <td className="px-5 py-2">{transaction.book_title}</td>
                           <td className="px-5 py-2">{transaction.ddc_no}</td>
