@@ -103,7 +103,7 @@ const SA_Dashboard = () => {
       fetchTotalUsers();
       fetchTotalUnavailableBooks();
       fetchOverdueBooks();
-    }, 1000);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -154,91 +154,68 @@ const SA_Dashboard = () => {
     }
   };
 
+  const fetchInterval = 1000;
+
+  const fetchData = async (table, columns) => {
+    const { data, error } = await supabase.from(table).select(columns);
+    if (error) {
+      console.error(`Error fetching ${table}:`, error.message);
+      return [];
+    }
+    return data;
+  };
+
   const [borrowedBooks, setBorrowedBooks] = useState([]);
-  const [topPickedBook, setTopPickedBook] = useState(null);
   const [borrowedBookss, setBorrowedBookss] = useState([]);
+  const [topPickedBook, setTopPickedBook] = useState(null);
   const [topStudents, setTopStudents] = useState([]);
 
   useEffect(() => {
     const fetchBorrowedBooks = async () => {
-      try {
-        const { data, error } = await supabase.from('borrowbooks').select('book_title');
-        if (error) {
-          throw error;
-        }
-        setBorrowedBooks(data);
-      } catch (error) {
-        console.error('Error fetching borrowed books:', error.message);
-      }
+      const data = await fetchData('borrowbooks', 'book_title');
+      setBorrowedBooks(data);
     };
-
-    const interval = setInterval(fetchBorrowedBooks, 1000);
-
+    const interval = setInterval(fetchBorrowedBooks, fetchInterval);
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     const countBooks = () => {
       const bookCounts = {};
-
       borrowedBooks.forEach(book => {
         const { book_title } = book;
-        if (bookCounts[book_title]) {
-          bookCounts[book_title]++;
-        } else {
-          bookCounts[book_title] = 1;
-        }
+        bookCounts[book_title] = (bookCounts[book_title] || 0) + 1;
       });
-
       const sortedBooks = Object.entries(bookCounts).sort((a, b) => b[1] - a[1]);
-
       if (sortedBooks.length > 0) {
-        const [topBookId,] = sortedBooks[0];
+        const [topBookId] = sortedBooks[0];
         setTopPickedBook(topBookId);
       }
     };
-
-    const interval = setInterval(countBooks, 1000);
-
+    const interval = setInterval(countBooks, fetchInterval);
     return () => clearInterval(interval);
   }, [borrowedBooks]);
 
   useEffect(() => {
-    const fetchBorrowedBooks = async () => {
-      const { data, error } = await supabase.from('borrowbooks').select('full_name');
-      if (error) {
-        console.error('Error fetching borrowed books:', error.message);
-        return;
-      }
+    const fetchBorrowedStudents = async () => {
+      const data = await fetchData('borrowbooks', 'full_name');
       setBorrowedBookss(data);
     };
-    const interval = setInterval(fetchBorrowedBooks, 1000);
-
+    const interval = setInterval(fetchBorrowedStudents, fetchInterval);
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     const countStudents = () => {
       const studentCounts = {};
-
       borrowedBookss.forEach(book => {
         const { full_name } = book;
-        if (studentCounts[full_name]) {
-          studentCounts[full_name]++;
-        } else {
-          studentCounts[full_name] = 1;
-        }
+        studentCounts[full_name] = (studentCounts[full_name] || 0) + 1;
       });
-
-      const sortedStudents = Object.entries(studentCounts)
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 5);
-
+      const sortedStudents = Object.entries(studentCounts).sort((a, b) => b[1] - a[1]).slice(0, 5);
       setTopStudents(sortedStudents);
     };
-
-    const interval = setInterval(countStudents, 1000);
-
+    const interval = setInterval(countStudents, fetchInterval);
     return () => clearInterval(interval);
   }, [borrowedBookss]);
 
@@ -291,8 +268,8 @@ const SA_Dashboard = () => {
               </p>
             ))}
           </div>
-
         </div>
+
       </div>
     </div>
   );
