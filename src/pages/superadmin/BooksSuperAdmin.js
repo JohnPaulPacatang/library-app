@@ -676,12 +676,12 @@ const BookSuperAdmin = () => {
                           <span className="text-green mr-5">Already Returned</span>
                         ) : (
                           <button
-                            className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black mr-5"
+                            className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black delete-margin"
                             onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}>
                             Mark as Returned
                           </button>
                         )}
-                        <button className="bg-red ml-5 text-white px-3 py-1 rounded-md"
+                        <button className="bg-red ml-6 text-white px-3 py-1 rounded-md"
                           onClick={() => { if (window.confirm("Are you sure you want to delete this book?")) { deleteTransaction(issue.transaction_id); } }}>Delete
                         </button>
                       </td>

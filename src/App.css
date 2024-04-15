@@ -27,6 +27,10 @@
   max-height: 27rem;
 }
 
+.delete-margin{
+  margin-right: 18px;
+}
+
 .arrow-icon.rotated {
   transform: rotate(180deg);
 }
