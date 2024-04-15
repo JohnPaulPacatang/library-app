@@ -16,3 +16,7 @@ body {
   background-color: #edf2f4;
 }
 
+::-ms-reveal {
+    display: none !important;
+}
+
