@@ -1,25 +1,25 @@
 import React, { useState } from "react";
-import { supabase } from '../utils/supabaseClient';
+import { supabase } from "../utils/supabaseClient";
 import { FaUser, FaLock } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { IoEyeOutline } from "react-icons/io5";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ClipLoader } from "react-spinners";
 
 function Login({ handleLogin }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // new loading state
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setIsLoading(true); // set loading state to true when form submission starts
 
     try {
-
-      // Pang tawag acc galing env
       const adminUsername = process.env.REACT_APP_ADMIN_USERNAME;
       const adminPassword = process.env.REACT_APP_ADMIN_PASSWORD;
       const superadminUsername = process.env.REACT_APP_SUPERADMIN_USERNAME;
@@ -28,67 +28,68 @@ function Login({ handleLogin }) {
       if (username === adminUsername && password === adminPassword) {
         handleLogin("admin");
         navigate("/home-admin");
+        setIsLoading(false);
         return;
       }
 
       if (username === superadminUsername && password === superadminPassword) {
         handleLogin("super-admin");
         navigate("/home-super-admin");
+        setIsLoading(false);
         return;
       }
 
-
-      // Pang authenticate ng users acc galing database
       const { data, error } = await supabase
-        .from('users')
-        .select('*')
-        .eq('student_number', username);
+        .from("users")
+        .select("*")
+        .eq("student_number", username);
 
-      if (error) {
+      if (error || data.length === 0) {
         throw new Error("Invalid username or password");
       }
 
-      // Authenticate ng stud no. saka password
-      if (data.length === 1 && data[0].password === password) {
-
-        // Pang bato ng role na user saka mga info ng nakalogin
-        handleLogin("user", data[0].first_name, data[0].last_name, data[0].middle_name, data[0].email, data[0].course, data[0].password, data[0].student_number);
+      if (data[0].password === password) {
+        handleLogin(
+          "user",
+          data[0].first_name,
+          data[0].last_name,
+          data[0].middle_name,
+          data[0].email,
+          data[0].course,
+          data[0].password,
+          data[0].student_number
+        );
         navigate("/home-user");
       } else {
         throw new Error("Invalid username or password");
       }
-
     } catch (error) {
       console.error(error);
       toast.error(error.message, {
         autoClose: 2000,
-        hideProgressBar: true
+        hideProgressBar: true,
       });
+    } finally {
+      setIsLoading(false); // Reset the loading state when done
     }
   };
-
 
   return (
     <div className="flex items-center justify-start min-h-screen">
       <div className="flex items-center justify-center w-1/2 min-h-screen text-center bg-black text-white p-8 rounded-br-md rounded-tr-md shadow-lg">
         <h1 className="text-80xl font-bold">
           St. Clare College
-          <p className="text-80xl"> of Caloocan</p>
-          <p className="text-80xl text-white"> Library Management System</p>
+          <p className="text-80xl">of Caloocan</p>
+          <p className="text-80xl text-white">Library Management System</p>
         </h1>
       </div>
 
-
       <div className="flex items-center justify-center w-1/2">
-        <div
-          className="bg-white p-8 rounded-md shadow w-80"
-          style={{ height: "90vh", width: "75vh" }}
-        >
+        <div className="bg-white p-8 rounded-md shadow w-80" style={{ height: "90vh", width: "75vh" }}>
           <div className="bg-white p-2 rounded-md">
             <h2 className="text-4xl font-bold mb-4 text-center mt-10">
               Sign in to your account
             </h2>
-
             <h2 className="text-base font-semibold mb-4 text-center text-blue">
               Welcome Back! Please enter your details.
             </h2>
@@ -153,8 +154,14 @@ function Login({ handleLogin }) {
             <div className="bg-blue p-2 rounded-md mt-16">
               <button
                 type="submit"
-                className="w-full p-2 text-xl font-bold text-white rounded-md ">
-                Log In
+                className="w-full p-2 text-xl font-bold text-white rounded-md "
+                disabled={isLoading} // Disable button while loading
+              >
+                {isLoading ? (
+                  <ClipLoader color="white" size={20} />
+                ) : (
+                  "Log In"
+                )}
               </button>
             </div>
 
