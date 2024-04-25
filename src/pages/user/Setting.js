@@ -5,8 +5,16 @@ import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { IoEyeOutline } from "react-icons/io5";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { ClipLoader } from "react-spinners"; // Importing the loader
 
-const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userCourse, userPassword }) => {
+const Setting = ({
+  userFirstName,
+  userLastName,
+  userMiddleName,
+  userEmail,
+  userCourse,
+  userPassword,
+}) => {
   const [showModal, setShowModal] = useState(false);
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -14,6 +22,7 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
   const [passwordError, setPasswordError] = useState("");
   const [currentVisible, setCurrentVisible] = useState(false);
   const [reTypeVisible, setReTypeVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Loader state
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -25,6 +34,7 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
     setNewPassword("");
     setConfirmPassword("");
     setPasswordError("");
+    setIsLoading(false); // Resetting loader state when closing modal
   };
 
   const handleResetPassword = async (e) => {
@@ -46,10 +56,14 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
     }
 
     try {
+      setIsLoading(true); // Set the loader to true before making a request
+
       const { error: updateError } = await supabase
-        .from('users')
+        .from("users")
         .update({ password: newPassword })
-        .eq('email', userEmail);
+        .eq("email", userEmail);
+
+      setIsLoading(false); // Turn off loader after request
 
       if (updateError) {
         throw updateError;
@@ -57,7 +71,7 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
 
       toast.success("Password updated successfully", {
         autoClose: 2000,
-        hideProgressBar: true
+        hideProgressBar: true,
       });
 
       handleCloseModal();
@@ -65,7 +79,7 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
       console.error("Error updating password:", error.message);
       toast.error("Error updating password", {
         autoClose: 2000,
-        hideProgressBar: true
+        hideProgressBar: true,
       });
       setPasswordError("Error updating password. Please try again later.");
     }
@@ -100,18 +114,12 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
               <p className="text-black bg-gray p-3 rounded-lg w-4/5">{userFirstName}</p>
             </div>
             <div className="mb-4">
-              <label className="block text-black font-bold mb-2">
-                Middle Name:
-              </label>
+              <label className="block text-black font-bold mb-2">Middle Name:</label>
               <p className="text-black bg-gray p-3 rounded-lg w-4/5">{userMiddleName}</p>
             </div>
             <div className="mb-4">
-              <label className="block text-black font-bold mb-2">
-                Last Name:
-              </label>
-              <p className="text-black bg-gray p-3 rounded-lg w-4/5">
-                {userLastName}
-              </p>
+              <label className="block text-black font-bold mb-2">Last Name:</label>
+              <p className="text-black bg-gray p-3 rounded-lg w-4/5">{userLastName}</p>
             </div>
             <div className="mb-4">
               <label className="block text-black font-bold mb-2">Course:</label>
@@ -119,9 +127,7 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
             </div>
             <div className="mb-4">
               <label className="block text-black font-bold mb-2">Email:</label>
-              <p className="text-black bg-gray p-3 rounded-lg w-4/5">
-                {userEmail}
-              </p>
+              <p className="text-black bg-gray p-3 rounded-lg w-4/5">{userEmail}</p>
             </div>
           </div>
         </div>
@@ -129,71 +135,73 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
 
       {showModal && (
         <div className="fixed inset-0 z-10 flex justify-center items-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg">
-            <h2 className="text-lg font-bold mb-4">Change Password</h2>
-
-            <form onSubmit={handleResetPassword}> { }
-
-              <div className="mb-4 relative">
-                <label className="text-sm ml-1 font-semibold">Current password:</label>
-                <input
-                 type={currentVisible ? "text" : "password"}
-                  placeholder="Current Password"
-                  className="rounded-lg input-border shadow px-3 py-2 mb-2 w-full"
-                  value={currentPassword}
-                  onChange={(e) => setCurrentPassword(e.target.value)}
-                />
-                <div className="absolute right-0 top-0 mt-9 mr-4 text-lg text-blue" onClick={() => setCurrentVisible(!currentVisible)}>
-                  {
-                    currentVisible ? <IoEyeOutline /> : <AiOutlineEyeInvisible />
-                  }
-                </div>
+          <div className="bg-white p-6 rounded-lg"> { }
+            {isLoading ? ( 
+              <div className="flex justify-center items-center h-full"> 
+                <ClipLoader color="black" size={50} />
               </div>
+            ) : (
+              <>
+                <h2 className="text-lg font-bold mb-4">Change Password</h2>
+                <form onSubmit={handleResetPassword}> 
+                  <div className="mb-4 relative">
+                    <label className="text-sm ml-1 font-semibold">Current password:</label>
+                    <input
+                      type={currentVisible ? "text" : "password"}
+                      placeholder="Current Password"
+                      className="rounded-lg input-border shadow px-3 py-2 mb-2 w-full"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                    />
+                    <div className="absolute right-0 top-0 mt-9 mr-4 text-lg text-blue" onClick={() => setCurrentVisible(!currentVisible)}>
+                      {currentVisible ? <IoEyeOutline /> : <AiOutlineEyeInvisible />}
+                    </div>
+                  </div>
 
-              <div className="mb-4">
-                <label className="text-sm ml-1 font-semibold">New password:</label>
-                <input
-                  type="password"
-                  placeholder="New Password"
-                  className="rounded-lg input-border shadow px-3 py-2 mb-2 w-full"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-              </div>
+                  <div className="mb-4">
+                    <label className="text-sm ml-1 font-semibold">New password:</label>
+                    <input
+                      type="password"
+                      placeholder="New Password"
+                      className="rounded-lg input-border shadow px-3 py-2 mb-2 w-full"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                  </div>
 
-              <div className=" relative">
-                <label className="text-sm ml-1 font-semibold">Re-type password:</label>
-                <input
-                  type={reTypeVisible ? "text" : "password"}
-                  placeholder="Re-type Password"
-                  className="rounded-lg input-border shadow px-3 py-2 mb-2 w-full"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-                <div className="absolute right-0 top-0 mt-9 mr-4 text-lg text-blue" onClick={() => setReTypeVisible(!reTypeVisible)}>
-                  {
-                    reTypeVisible ? <IoEyeOutline /> : <AiOutlineEyeInvisible />
-                  }
-                </div>
-              </div>
+                  <div className="relative">
+                    <label className="text-sm ml-1 font-semibold">Re-type password:</label>
+                    <input
+                      type={reTypeVisible ? "text" : "password"}
+                      placeholder="Re-type Password"
+                      className="rounded-lg input-border shadow px-3 py-2 mb-2 w-full"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                    <div className="absolute right-0 top-0 mt-9 mr-4 text-lg text-blue" onClick={() => setReTypeVisible(!reTypeVisible)}>
+                      {reTypeVisible ? <IoEyeOutline /> : <AiOutlineEyeInvisible />}
+                    </div>
+                  </div>
 
-              {passwordError && <p className="text-red my-2 text-base">{passwordError}</p>}
+                  {passwordError && <p className="text-red my-2 text-base">{passwordError}</p>}
 
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  className="text-white py-2 px-4 rounded mr-2 bg-blue"
-                >
-                  Confirm
-                </button>
-                <button
-                  className="text-black py-2 px-4 rounded bg-gray"
-                  onClick={handleCloseModal}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+                  <div className="flex justify-end">
+                    <button
+                      type="submit"
+                      className="text-white py-2 px-4 rounded mr-2 bg-blue"
+                    >
+                      Confirm
+                    </button>
+                    <button
+                      className="text-black py-2 px-4 rounded bg-gray"
+                      onClick={handleCloseModal}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </>
+            )}
           </div>
         </div>
       )}
@@ -201,4 +209,4 @@ const Setting = ({ userFirstName, userLastName, userMiddleName, userEmail, userC
   );
 };
 
-export default Setting
+export default Setting;
