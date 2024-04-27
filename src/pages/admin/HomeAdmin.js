@@ -151,6 +151,16 @@ const HomeAdmin = () => {
     ],
   };
 
+  const getGreeting = () => {
+    if (hour >= 5 && hour < 12) {
+      return 'Good morning';
+    } else if (hour >= 12 && hour < 18) {
+      return 'Good afternoon';
+    } else {
+      return 'Good evening';
+    }
+  };
+
   return (
     <div className="flex-1">
       {loading ? (
@@ -163,7 +173,7 @@ const HomeAdmin = () => {
             <div className="flex justify-between">
               <div className="Greetings">
                 <p className="text-xl font-semibold pr-4">
-                  Good Day, <span className="text-blue">Welcome Admin!👋</span>
+                {getGreeting()}, <span className="text-blue">Welcome Admin!👋</span>
                 </p>
               </div>
               <div>
