@@ -90,7 +90,7 @@ const UserSearchBooks = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredData.map((book) => (
+                {filteredData.sort((a, b) => parseFloat(a.ddc_id) - parseFloat(b.ddc_id)).map((book) => (
                   <tr key={book.id} className="border-b border-gray text-sm">
                     <td className="px-5 py-2">{book.ddc_id}</td>
                     <td className="px-5 py-2">{book.title}</td>
