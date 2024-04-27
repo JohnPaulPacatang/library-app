@@ -6,7 +6,7 @@ import { ClipLoader } from "react-spinners";
 
 const UserDashboard = ({ userFirstName, userStudentNumber }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [isLoading, setIsLoading] = useState(true); // New loading state
+  const [isLoading, setIsLoading] = useState(true); 
   const [transactions, setTransactions] = useState([]);
   const [overdueTransactions, setOverdueTransactions] = useState([]);
   const [newBooksAdded, setNewBooksAdded] = useState([]);
@@ -54,14 +54,14 @@ const UserDashboard = ({ userFirstName, userStudentNumber }) => {
 
         setNewBooksAdded(newBooks);
 
-        setIsLoading(false); // Set loading state to false once data is loaded
+        setIsLoading(false); 
       } catch (error) {
         console.error("Error fetching data:", error.message);
       }
     };
 
-    fetchData(); // Fetch all data
-    return () => clearInterval(intervalID); // Cleanup interval on component unmount
+    fetchData(); 
+    return () => clearInterval(intervalID); 
   }, [userStudentNumber]);
 
   const formattedTime = currentTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -81,7 +81,7 @@ const UserDashboard = ({ userFirstName, userStudentNumber }) => {
     <div className="h-screen flex-1">
       {isLoading ? (
         <div className="flex justify-center items-center h-full">
-          <ClipLoader color="black" size={50} /> {/* Spinner while loading */}
+          <ClipLoader color="black" size={50} /> 
         </div>
       ) : (
         <div>

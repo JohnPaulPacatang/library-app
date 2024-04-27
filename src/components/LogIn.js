@@ -155,8 +155,7 @@ function Login({ handleLogin }) {
               <button
                 type="submit"
                 className="w-full p-2 text-xl font-bold text-white rounded-md "
-                disabled={isLoading} // Disable button while loading
-              >
+                disabled={isLoading} >
                 {isLoading ? (
                   <ClipLoader color="white" size={20} />
                 ) : (

@@ -5,8 +5,7 @@ import { AiOutlineEyeInvisible } from "react-icons/ai";
 import { IoEyeOutline } from "react-icons/io5";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { ClipLoader } from "react-spinners"; // Importing the loader
-
+import { ClipLoader } from "react-spinners"; 
 const Setting = ({
   userFirstName,
   userLastName,
@@ -22,7 +21,7 @@ const Setting = ({
   const [passwordError, setPasswordError] = useState("");
   const [currentVisible, setCurrentVisible] = useState(false);
   const [reTypeVisible, setReTypeVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); // Loader state
+  const [isLoading, setIsLoading] = useState(false); 
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -34,7 +33,7 @@ const Setting = ({
     setNewPassword("");
     setConfirmPassword("");
     setPasswordError("");
-    setIsLoading(false); // Resetting loader state when closing modal
+    setIsLoading(false); 
   };
 
   const handleResetPassword = async (e) => {
@@ -56,14 +55,14 @@ const Setting = ({
     }
 
     try {
-      setIsLoading(true); // Set the loader to true before making a request
+      setIsLoading(true); 
 
       const { error: updateError } = await supabase
         .from("users")
         .update({ password: newPassword })
         .eq("email", userEmail);
 
-      setIsLoading(false); // Turn off loader after request
+      setIsLoading(false); 
 
       if (updateError) {
         throw updateError;
@@ -194,8 +193,7 @@ const Setting = ({
                     </button>
                     <button
                       className="text-black py-2 px-4 rounded bg-gray"
-                      onClick={handleCloseModal}
-                    >
+                      onClick={handleCloseModal} >
                       Cancel
                     </button>
                   </div>
