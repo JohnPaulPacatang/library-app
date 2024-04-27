@@ -461,7 +461,7 @@ const BooksAdmin = () => {
                               className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black"
                               onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}
                             >
-                             {returnLoading ? <BeatLoader size={10} color="#202020" /> : "Mark as Returned"}
+                             {returnLoading ? <BeatLoader size={8} color="#202020" /> : "Mark as Returned"}
                             </button>
                           )}
                         </td>
@@ -484,7 +484,7 @@ const BooksAdmin = () => {
                               <button
                                 className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black"
                                 onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}>
-                                  {returnLoading ? <BeatLoader size={10} color="#202020" /> : "Mark as Returned"}
+                                  {returnLoading ? <BeatLoader size={8} color="#202020" /> : "Mark as Returned"}
                               </button>
                             )}
                           </td>
