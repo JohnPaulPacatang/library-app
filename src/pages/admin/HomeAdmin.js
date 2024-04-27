@@ -151,6 +151,20 @@ const HomeAdmin = () => {
     ],
   };
 
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const intervalID = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(intervalID);
+  }, []);
+
+  const hour = currentTime.getHours();
+  const username = 'Admin';
+  const formattedTime = currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
   const getGreeting = () => {
     if (hour >= 5 && hour < 12) {
       return 'Good morning';
@@ -173,20 +187,13 @@ const HomeAdmin = () => {
             <div className="flex justify-between">
               <div className="Greetings">
                 <p className="text-xl font-semibold pr-4">
-                {getGreeting()}, <span className="text-blue">Welcome Admin!👋</span>
+                  {getGreeting()}, <span className="text-blue">Welcome {username}!👋</span>
                 </p>
               </div>
               <div>
                 <p className="text-xl font-semibold">
-                  {new Date().toLocaleDateString('en-US', {
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })} 
-                  | 
-                  {new Date().toLocaleDateString('en-US', {
-                    weekday: 'long',
-                  })}
+                  {currentTime.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })} |{' '}
+                  {currentTime.toLocaleDateString('en-US', { weekday: 'long' })}, {formattedTime}
                 </p>
               </div>
             </div>
