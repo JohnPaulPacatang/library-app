@@ -10,8 +10,6 @@ const SA_Dashboard = () => {
 
   useEffect(() => {
     fetchUserCounts();
-    const interval = setInterval(fetchUserCounts, 3000);
-    return () => clearInterval(interval);
   }, []);
 
   const fetchUserCounts = async () => {
@@ -99,12 +97,6 @@ const SA_Dashboard = () => {
     fetchTotalUsers();
     fetchTotalUnavailableBooks();
     fetchOverdueBooks();
-    const interval = setInterval(() => {
-      fetchTotalUsers();
-      fetchTotalUnavailableBooks();
-      fetchOverdueBooks();
-    }, 3000);
-    return () => clearInterval(interval);
   }, []);
 
 

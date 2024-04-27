@@ -14,7 +14,7 @@ const UserDashboard = ({ userFirstName, userStudentNumber }) => {
   useEffect(() => {
     const intervalID = setInterval(() => {
       setCurrentTime(new Date());
-    }, 3000);
+    }, 1000);
 
     const fetchData = async () => {
       try {

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { ClipLoader, BeatLoader } from 'react-spinners';
+import { ClipLoader, BarLoader } from 'react-spinners';
 
 const BooksAdmin = () => {
   // Dropdown category and search
@@ -15,7 +15,7 @@ const BooksAdmin = () => {
   const [showModalIssue, setShowModalIssue] = useState(false);
   const [loading, setLoading] = useState(true);
   const [issueLoading, setIssueLoading] = useState(false);
-  const [returnLoading, setReturnLoading] = useState(false);
+  const [returnLoading, setReturnLoading] = useState({});
 
   // Category data
   const categories = [
@@ -56,11 +56,6 @@ const BooksAdmin = () => {
   useEffect(() => {
     fetchBooks();
     fetchBookIssued();
-    const interval = setInterval(() => {
-      fetchBooks();
-      fetchBookIssued();
-    }, 3000);
-    return () => clearInterval(interval);
   }, []);
 
   async function fetchBooks() {
@@ -134,7 +129,7 @@ const BooksAdmin = () => {
     try {
       if (!fullName) {
         toast.warn('Invalid student number or no account found.', {
-          autoClose: 2000,
+          autoClose: 1000,
           hideProgressBar: true
         });
         return;
@@ -168,7 +163,7 @@ const BooksAdmin = () => {
       }
 
       toast.success("Issued successfully", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
 
@@ -183,7 +178,7 @@ const BooksAdmin = () => {
     } catch (error) {
       console.error('Error issuing book:', error.message);
       toast.error("Failed to issue book.", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
       setIssueLoading(false);
@@ -191,7 +186,8 @@ const BooksAdmin = () => {
   };
 
   const markAsReturned = async (ddcId, transactionId) => {
-    setReturnLoading(true);
+
+    setReturnLoading((prev) => ({ ...prev, [transactionId]: true }));
 
     try {
       const { updateError } = await supabase
@@ -213,21 +209,22 @@ const BooksAdmin = () => {
       }
 
       toast.success("Book marked as returned", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
 
       fetchBookIssued();
       fetchBooks();
 
-      setReturnLoading(false);
+      setReturnLoading((prev) => ({ ...prev, [transactionId]: false }));
+
     } catch (error) {
       console.error('Error marking book as returned:', error.message);
       toast.error("Failed to mark book as returned.", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
-      setReturnLoading(false);
+      setReturnLoading((prev) => ({ ...prev, [transactionId]: false }));
     }
   };
 
@@ -461,7 +458,7 @@ const BooksAdmin = () => {
                               className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black"
                               onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}
                             >
-                             {returnLoading ? <BeatLoader size={8} color="#202020" /> : "Mark as Returned"}
+                             {returnLoading[issue.transaction_id] ? (<BarLoader size={5} color="#202020" />) : ("Mark as Returned")}
                             </button>
                           )}
                         </td>
@@ -484,7 +481,7 @@ const BooksAdmin = () => {
                               <button
                                 className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black"
                                 onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}>
-                                  {returnLoading ? <BeatLoader size={8} color="#202020" /> : "Mark as Returned"}
+                                  {returnLoading[issue.transaction_id] ? (<BarLoader size={5} color="#202020" />) : ("Mark as Returned")}
                               </button>
                             )}
                           </td>

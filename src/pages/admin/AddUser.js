@@ -32,10 +32,6 @@ const UserListAdmin = () => {
   // Pang realtime fetch
   useEffect(() => {
     fetchUsers();
-    const interval = setInterval(() => {
-      fetchUsers();
-    }, 3000);
-    return () => clearInterval(interval);
   }, []);
 
 
@@ -83,7 +79,7 @@ const UserListAdmin = () => {
       fetchUsers();
 
       toast.success("User added successfully", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
 
@@ -103,7 +99,7 @@ const UserListAdmin = () => {
 
     } catch (error) {
       toast.error("Error adding user. Please try again.", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
       setUserLoading(false);

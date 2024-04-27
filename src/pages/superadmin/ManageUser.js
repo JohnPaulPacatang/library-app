@@ -38,10 +38,6 @@ const UserListSuperAdmin = () => {
   // Pang realtime fetch
   useEffect(() => {
     fetchUsers();
-    const interval = setInterval(() => {
-      fetchUsers();
-    }, 3000);
-    return () => clearInterval(interval);
   }, []);
 
 
@@ -94,7 +90,7 @@ const UserListSuperAdmin = () => {
       fetchUsers();
 
       toast.success("User added successfully", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
 
@@ -112,7 +108,7 @@ const UserListSuperAdmin = () => {
 
     } catch (error) {
       toast.error("Error adding user. Please try again.", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
     }
@@ -130,13 +126,13 @@ const UserListSuperAdmin = () => {
       fetchUsers();
 
       toast.success("User deleted successfully", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
 
     } catch (error) {
       toast.error("Error deleting user. Please try again.", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
     }
@@ -180,13 +176,13 @@ const UserListSuperAdmin = () => {
       fetchUsers();
 
       toast.success("User updated successfully", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
 
     } catch (error) {
       toast.error("Error updating user. Please try again.", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
     }

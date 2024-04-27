@@ -19,8 +19,6 @@ const Attendance = () => {
 
   useEffect(() => {
     fetchAttendanceData();
-    const interval = setInterval(fetchAttendanceData, 3000);
-    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
@@ -72,7 +70,7 @@ const Attendance = () => {
 
       if (!name || !course) {
         toast.warn('Invalid student number or no account found.', {
-          autoClose: 2000,
+          autoClose: 1000,
           hideProgressBar: true,
         });
         return;
@@ -96,7 +94,7 @@ const Attendance = () => {
       fetchAttendanceData();
 
       toast.success('Signed in successfully', {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true,
       });
 
@@ -104,7 +102,7 @@ const Attendance = () => {
     } catch (error) {
       console.error('Error adding:', error.message);
       toast.error('Error adding. Please try again.', {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true,
       });
       setModalLoading(false);
@@ -125,13 +123,13 @@ const Attendance = () => {
       fetchAttendanceData();
 
       toast.success('Signed out', {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true,
       });
     } catch (error) {
       console.error('Error signing out:', error.message);
       toast.error('Error signing out. Please try again.', {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true,
       });
     }

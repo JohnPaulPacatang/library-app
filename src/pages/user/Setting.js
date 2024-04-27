@@ -68,7 +68,7 @@ const Setting = ({
       }
 
       toast.success("Password updated successfully", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true,
       });
 
@@ -76,7 +76,7 @@ const Setting = ({
     } catch (error) {
       console.error("Error updating password:", error.message);
       toast.error("Error updating password", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true,
       });
       setPasswordError("Error updating password. Please try again later.");

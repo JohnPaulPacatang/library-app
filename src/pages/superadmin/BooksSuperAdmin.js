@@ -72,11 +72,6 @@ const BookSuperAdmin = () => {
   useEffect(() => {
     fetchBooks();
     fetchBookIssued();
-    const interval = setInterval(() => {
-      fetchBooks();
-      fetchBookIssued();
-    }, 3000);
-    return () => clearInterval(interval);
   }, []);
 
 
@@ -161,13 +156,13 @@ const BookSuperAdmin = () => {
       });
 
       toast.success("Book added successfully", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
 
     } catch (error) {
       toast.error("Error adding book. Please try again.", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
     }
@@ -207,13 +202,13 @@ const BookSuperAdmin = () => {
       fetchBooks();
 
       toast.success("Book updated successfully", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
 
     } catch (error) {
       toast.error("Error updating book. Please try again.", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
     }
@@ -231,13 +226,13 @@ const BookSuperAdmin = () => {
       fetchBooks();
 
       toast.success("Book deleted successfully", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
 
     } catch (error) {
       toast.error("Error deleting book. Please try again.", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
     }
@@ -282,7 +277,7 @@ const BookSuperAdmin = () => {
     try {
       if (!fullName) {
         toast.warn('Invalid student number or no account found.', {
-          autoClose: 2000,
+          autoClose: 1000,
           hideProgressBar: true
         });
         return;
@@ -315,7 +310,7 @@ const BookSuperAdmin = () => {
       }
 
       toast.success("Issued successfully", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
 
@@ -328,7 +323,7 @@ const BookSuperAdmin = () => {
     } catch (error) {
       console.error('Error issuing book:', error.message);
       toast.error("Failed to issue book.", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
     }
@@ -355,7 +350,7 @@ const BookSuperAdmin = () => {
       }
 
       toast.success("Book marked as returned", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
 
@@ -364,7 +359,7 @@ const BookSuperAdmin = () => {
     } catch (error) {
       console.error('Error marking book as returned:', error.message);
       toast.error("Failed to mark book as returned.", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
     }
@@ -381,13 +376,13 @@ const BookSuperAdmin = () => {
       fetchBookIssued();
 
       toast.success("Transaction deleted successfully", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
 
     } catch (error) {
       toast.error("Error deleting transaction. Please try again.", {
-        autoClose: 2000,
+        autoClose: 1000,
         hideProgressBar: true
       });
     }
