@@ -15,13 +15,13 @@ const ManualSuperAdmin = () => {
   return (
     <div className='Manual'>
       {/* Floating Button to open the manual */}
-      <div className="fixed bottom-4 right-4 group"> 
+      <div className="fixed bottom-4 right-4 group">
         <button
-          className="bg-black text-2xl p-2 rounded-full shadow-lg"
+          className="bg-black text-3xl p-3 rounded-full shadow-lg"
           onClick={handleOpenModal}>
           <GrHelpBook className="text-white" />
         </button>
-        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute bottom-12 right-0 text-black text-base">
+        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute bottom-3 right-16 bg-black py-1 px-2 rounded-lg shadow text-white text-base">
           Manual
         </div>
       </div>
@@ -69,10 +69,10 @@ const ManualSuperAdmin = () => {
 
               <h4 className="text-base font-semibold my-2">Additional Note:</h4>
               <p>
-              To generate a PDF file of the records, click on the <span className='font-semibold'>"Export as PDF"</span> button. Utilize the calendar filter to specify the desired record range for export. If all records are required, simply clear the calendar date to display all records.
+                To generate a PDF file of the records, click on the <span className='font-semibold'>"Export as PDF"</span> button. Utilize the calendar filter to specify the desired record range for export. If all records are required, simply clear the calendar date to display all records.
               </p>
             </div>
-         
+
             <div>
               <h3 className="text-lg font-semibold mb-4 text-center text-blue">Updating and deleting books</h3>
               <h4 className="text-base font-semibold my-2">Updating book information:</h4>
@@ -92,7 +92,7 @@ const ManualSuperAdmin = () => {
                 <li className="ml-4">A pop-up confirmation wil show, Click <span className='font-semibold'>"Ok"</span> to confirm book deletion.</li>
               </ul>
             </div>
-            
+
             <div>
               <h3 className="text-lg font-semibold mb-4 text-center text-blue">Creating, Updating, and Deleting user accounts</h3>
               <h4 className="text-base font-semibold my-2">Creating user accounts:</h4>

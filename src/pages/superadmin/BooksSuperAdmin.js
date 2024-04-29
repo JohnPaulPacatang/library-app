@@ -18,7 +18,9 @@ const BookSuperAdmin = () => {
   const [showModalUpdate, setShowModalUpdate] = useState(false);
   const [showModalIssue, setShowModalIssue] = useState(false);
 
+  const [loading, setLoading] = useState(true);
   const [addLoading, setAddLoading] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
   const [returnLoading, setReturnLoading] = useState({});
 
   const handleOpenModal = () => {
@@ -85,6 +87,7 @@ const BookSuperAdmin = () => {
       .from('books')
       .select('*')
     setBooks(data)
+    setLoading(false)
   }
 
   async function fetchBookIssued() {
@@ -195,6 +198,9 @@ const BookSuperAdmin = () => {
 
   // Pang update ng book info
   async function updateBook(bookId) {
+
+    setUpdateLoading(true)
+
     try {
       await supabase
         .from('books')
@@ -215,11 +221,14 @@ const BookSuperAdmin = () => {
         hideProgressBar: true
       });
 
+      setUpdateLoading(false)
+
     } catch (error) {
       toast.error("Error updating book. Please try again.", {
         autoClose: 1000,
         hideProgressBar: true
       });
+      setUpdateLoading(false)
     }
   }
 
@@ -483,498 +492,505 @@ const BookSuperAdmin = () => {
 
   return (
     <div className="px-5 flex-1">
-      <div className="bg-white my-5 px-2 py-2 rounded-xl shadow flex justify-between search-container">
-        <div className="flex items-center w-full">
-          <BiSearch className="text-3xl mx-2 my-2" />
-
-          <input
-            type="text"
-            placeholder="Search"
-            className="w-3/4 px-4 py-2 border border-opacity-25 rounded-xl focus:outline-none focus:ring-1"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+      {loading ? (
+        <div className="flex justify-center items-center h-full">
+          <ClipLoader color="black" size={50} />
         </div>
-        <select
-          id="table"
-          name="table"
-          className="w-fit py-3 px-4 xl:ml-60 md:ml-32 bg-gray rounded-xl shadow sm:text-sm"
-          value={selectedTable}
-          onChange={handleTableChange}>
-          <option value="Books">Books</option>
-          <option value="Issue">Issue</option>
-        </select>
+      ) : (
+        <div className="book-list">
+          <div className="bg-white my-5 px-2 py-2 rounded-xl shadow flex justify-between search-container">
+            <div className="flex items-center w-full">
+              <BiSearch className="text-3xl mx-2 my-2" />
 
-      </div>
-      {selectedTable === 'Books' && (
-        <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
-          <table className="bg-white w-full rounded-lg px-2 py-2 shadow-xl">
-            <thead>
-              <tr className="pb-2">
-                <th colSpan="10">
-                  <div className="flex justify-between items-center px-5 py-4">
-                    <h2 className="text-xl text-black">Book list</h2>
-                    <div>
-                      <button
-                        className="bg-gray text-black text-sm font-semibold rounded-xl p-3 hover:bg-blue hover:text-white"
-                        onClick={handleOpenModal}>
-                        Add Book
-                      </button>
-                      <select
-                        id="category"
+              <input
+                type="text"
+                placeholder="Search"
+                className="w-3/4 px-4 py-2 border border-opacity-25 rounded-xl focus:outline-none focus:ring-1"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
+            <select
+              id="table"
+              name="table"
+              className="w-fit py-3 px-4 xl:ml-60 md:ml-32 bg-gray rounded-xl shadow sm:text-sm"
+              value={selectedTable}
+              onChange={handleTableChange}>
+              <option value="Books">Books</option>
+              <option value="Issue">Issue</option>
+            </select>
+
+          </div>
+          {selectedTable === 'Books' && (
+            <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
+              <table className="bg-white w-full rounded-lg px-2 py-2 shadow-xl">
+                <thead>
+                  <tr className="pb-2">
+                    <th colSpan="10">
+                      <div className="flex justify-between items-center px-5 py-4">
+                        <h2 className="text-xl text-black">Book list</h2>
+                        <div>
+                          <button
+                            className="bg-gray text-black text-sm font-semibold rounded-xl p-3 hover:bg-blue hover:text-white"
+                            onClick={handleOpenModal}>
+                            Add Book
+                          </button>
+                          <select
+                            id="category"
+                            name="category"
+                            className="w-fit py-3 px-4 ml-5 bg-gray rounded-xl font-semibold shadow-sm text-sm"
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value)}>
+                            {categories.map((category) => (
+                              <option key={category} value={category}>
+                                {category}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    </th>
+                  </tr>
+
+                  <tr className="text-left text-black text-lg border-b border-gray">
+                    <th className="px-5 py-4">DDC ID</th>
+                    <th className="px-5 py-4">Title of the book</th>
+                    <th className="px-5 py-4">Author</th>
+                    <th className="px-5 py-4">Category</th>
+                    <th className="px-5 py-4">Status</th>
+                    <th className="px-5 py-4">Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {filteredData.sort((a, b) => parseFloat(a.ddc_id) - parseFloat(b.ddc_id)).map((book) => (
+                    <tr key={book.id} className="border-b border-gray text-sm">
+                      <td className="px-5 py-2">{book.ddc_id}</td>
+                      <td className="px-5 py-2">{book.title}</td>
+                      <td className="px-5 py-2">{book.author}</td>
+                      <td className="px-5 py-2">{book.category}</td>
+                      <td className={`px-1 py-2 text-center ${book.availability ? "bg-green text-black" : "bg-red text-white"
+                        } m-2 inline-block rounded-xl text-sm w-3/4`}>
+                        {book.availability ? "Available" : "Not Available"}
+                      </td>
+                      <td className="px-5">
+                        <Menu>
+                          <MenuButton
+                            as={IconButton}
+                            aria-label='Options'
+                            icon={<BsThreeDots style={{ fontSize: '2.5rem', marginLeft: '0.5rem' }} />}
+                            variant='outline'
+                          />
+                          <MenuList className="bg-white shadow rounded-lg p-1 input-border" zIndex={10}>
+                            <MenuItem>
+                              <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline"
+                                onClick={() => { displayBook(book.id); handleOpenModalUpdate(); }}>Update</button>
+                            </MenuItem>
+                            <MenuItem>
+                              <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline"
+                                onClick={() => { if (window.confirm("Are you sure you want to delete this book?")) { deleteBook(book.id); } }}>Delete
+                              </button>
+                            </MenuItem>
+                            <MenuItem>
+                              {book.availability ? (
+                                <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline" onClick={() => {
+                                  displayBookIssue(book.id);
+                                  handleOpenModalIssue();
+                                }}>Issue</button>
+                              ) : (
+                                <button className="text-sm text-black w-full p-2 m-2 font-semibold cursor-not-allowed opacity-50" disabled>Unavailable</button>
+                              )}
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {selectedTable === 'Issue' && (
+            <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
+              <table className="bg-white w-full rounded-2xl px-2 py-2 shadow-xl">
+                <thead className="sticky top-0 bg-white">
+                  <tr className="pb-2">
+                    <th colSpan="10">
+                      <div className="flex justify-between items-center px-5 py-4">
+                        <h2 className="text-xl text-black">Book Issued</h2>
+                        <div className="flex items-center gap-3">
+                          <input
+                            type="date"
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                            className="bg-gray font-semibold rounded-lg px-3 py-2 outline-none"
+                          />
+                          <button
+                            onClick={handleExport}
+                            className="bg-gray text-black text-sm p-3 flex items-center rounded-xl hover:bg-blue hover:text-white cursor-pointer">
+                            <FaRegFilePdf className="mr-1" />
+                            Export as PDF
+                          </button>
+                        </div>
+                      </div>
+                    </th>
+                  </tr>
+
+                  <tr className="text-left text-black text-lg border-b border-gray">
+                    <th className="px-5 py-4">Student No.</th>
+                    <th className="px-5 py-4">Fullname</th>
+                    <th className="px-5 py-4">DDC ID</th>
+                    <th className="px-5 py-4">Title</th>
+                    <th className="px-5 py-4">Issue Date</th>
+                    <th className="px-5 py-4">Return Date</th>
+                    <th className="px-5 py-4">Status</th>
+                    <th className="px-5 py-4">Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {selectedDate ?
+                    filteredBookIssued
+                      .filter(issue =>
+                        issue.issue_date === selectedDate &&
+                        (String(issue.student_no).includes(searchQuery) || issue.status.toLowerCase().includes(searchQuery.toLowerCase()))
+                      )
+                      .sort((a, b) => new Date(a.return_date) - new Date(b.return_date))
+                      .map((issue) => (
+                        <tr key={issue.transaction_id} className="border-b border-gray text-sm">
+                          <td className="px-5 py-2">{issue.student_no}</td>
+                          <td className="px-5 py-2">{issue.full_name}</td>
+                          <td className="px-5 py-2">{issue.ddc_no}</td>
+                          <td className="px-5 py-2">{issue.book_title}</td>
+                          <td className="px-5 py-2">{issue.issue_date}</td>
+                          <td className="px-5 py-2">{issue.return_date}</td>
+                          <td className={`px-5 py-2 ${issue.status === 'Overdue' ? 'text-red' : 'text-black'}`}>{issue.status}</td>
+                          <td className="px-5">
+                            {issue.status === 'Returned' ? (
+                              <span className="text-green mr-5">Already Returned</span>
+                            ) : (
+                              <button
+                                className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black mr-5"
+                                onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}>
+                                {returnLoading[issue.transaction_id] ? (<BarLoader size={5} color="#202020" />) : ("Mark as Returned")}
+                              </button>
+                            )}
+                            <button className="bg-red ml-5 text-white px-3 py-1 rounded-md"
+                              onClick={() => { if (window.confirm("Are you sure you want to delete this book?")) { deleteTransaction(issue.transaction_id); } }}>Delete
+                            </button>
+                          </td>
+                        </tr>
+                      )) :
+                    bookIssued
+                      .filter(issue =>
+                        String(issue.student_no).includes(searchQuery) || issue.status.toLowerCase().includes(searchQuery.toLowerCase())
+                      )
+                      .sort((a, b) => new Date(a.return_date) - new Date(b.return_date))
+                      .map((issue) => (
+                        <tr key={issue.transaction_id} className="border-b border-gray text-sm">
+                          <td className="px-5 py-2">{issue.student_no}</td>
+                          <td className="px-5 py-2">{issue.full_name}</td>
+                          <td className="px-5 py-2">{issue.ddc_no}</td>
+                          <td className="px-5 py-2">{issue.book_title}</td>
+                          <td className="px-5 py-2">{issue.issue_date}</td>
+                          <td className="px-5 py-2">{issue.return_date}</td>
+                          <td className={`px-5 py-2 ${issue.status === 'Overdue' ? 'text-red' : 'text-black'}`}>{issue.status}</td>
+                          <td className="px-5">
+                            {issue.status === 'Returned' ? (
+                              <span className="text-green mr-5">Already Returned</span>
+                            ) : (
+                              <button
+                                className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black delete-margin"
+                                onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}>
+                                {returnLoading[issue.transaction_id] ? (<BarLoader size={5} color="#202020" />) : ("Mark as Returned")}
+                              </button>
+                            )}
+                            <button className="bg-red ml-6 text-white px-3 py-1 rounded-md"
+                              onClick={() => { if (window.confirm("Are you sure you want to delete this book?")) { deleteTransaction(issue.transaction_id); } }}>Delete
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                  }
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {showModal && (
+            <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModal(false)} >
+              <div className="bg-white p-8 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                <h2 className="text-2xl font-bold mb-4 text-center">
+                  Book Information
+                </h2>
+
+                <form onSubmit={(e) => { e.preventDefault(); addBook(book); }}>
+                  <div className="grid grid-cols-2 gap-10">
+                    <div className="flex flex-col w-72">
+                      <label className="text-sm m-1 font-semibold">DDC ID</label>
+                      <input
+                        type="number"
+                        step="any"
+                        placeholder="DDC ID"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="ddcId"
+                        value={book.ddcId}
+                        onChange={handleChange}
+                        required
+                      />
+
+                      <label className="text-sm m-1 font-semibold">Title</label>
+                      <input
+                        type="text"
+                        placeholder="Title"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="title"
+                        value={book.title}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+
+                    <div className="flex flex-col w-72">
+                      <label className="text-sm m-1 font-semibold">Author</label>
+                      <input
+                        type="text"
+                        placeholder="Author"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="author"
+                        value={book.author}
+                        onChange={handleChange}
+                        required
+                      />
+
+                      <label className="text-sm m-1 font-semibold">Category</label>
+                      <input
+                        type="text"
+                        placeholder="Category"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
                         name="category"
-                        className="w-fit py-3 px-4 ml-5 bg-gray rounded-xl font-semibold shadow-sm text-sm"
-                        value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}>
-                        {categories.map((category) => (
-                          <option key={category} value={category}>
-                            {category}
-                          </option>
-                        ))}
+                        value={book.category}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-center">
+                    <div className="flex flex-col">
+                      <label className="text-sm ml-1 font-semibold">Availability</label>
+                      <select
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 font-semibold"
+                        name="availability"
+                        value={book.availability}
+                        onChange={handleChange}
+                        required>
+                        <option value="">Select Status</option>
+                        <option className="text-green font-semibold" value={true}>Available</option>
+                        <option className="text-red font-semibold" value={false}>Not Available</option>
                       </select>
                     </div>
                   </div>
-                </th>
-              </tr>
 
-              <tr className="text-left text-black text-lg border-b border-gray">
-                <th className="px-5 py-4">DDC ID</th>
-                <th className="px-5 py-4">Title of the book</th>
-                <th className="px-5 py-4">Author</th>
-                <th className="px-5 py-4">Category</th>
-                <th className="px-5 py-4">Status</th>
-                <th className="px-5 py-4">Action</th>
-              </tr>
-            </thead>
+                  <div className="flex justify-center pt-4">
+                    <button type="submit" className="bg-blue text-white py-2 px-4 rounded-lg mr-2" >
+                      {addLoading ? <ClipLoader size={20} color="white" /> : "Add Book"}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
 
-            <tbody>
-              {filteredData.sort((a, b) => parseFloat(a.ddc_id) - parseFloat(b.ddc_id)).map((book) => (
-                <tr key={book.id} className="border-b border-gray text-sm">
-                  <td className="px-5 py-2">{book.ddc_id}</td>
-                  <td className="px-5 py-2">{book.title}</td>
-                  <td className="px-5 py-2">{book.author}</td>
-                  <td className="px-5 py-2">{book.category}</td>
-                  <td className={`px-1 py-2 text-center ${book.availability ? "bg-green text-black" : "bg-red text-white"
-                    } m-2 inline-block rounded-xl text-sm w-3/4`}>
-                    {book.availability ? "Available" : "Not Available"}
-                  </td>
-                  <td className="px-5">
-                    <Menu>
-                      <MenuButton
-                        as={IconButton}
-                        aria-label='Options'
-                        icon={<BsThreeDots style={{ fontSize: '2.5rem', marginLeft: '0.5rem' }} />}
-                        variant='outline'
-                      />
-                      <MenuList className="bg-white shadow rounded-lg p-1 input-border" zIndex={10}>
-                        <MenuItem>
-                          <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline"
-                            onClick={() => { displayBook(book.id); handleOpenModalUpdate(); }}>Update</button>
-                        </MenuItem>
-                        <MenuItem>
-                          <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline"
-                            onClick={() => { if (window.confirm("Are you sure you want to delete this book?")) { deleteBook(book.id); } }}>Delete
-                          </button>
-                        </MenuItem>
-                        <MenuItem>
-                          {book.availability ? (
-                            <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline" onClick={() => {
-                              displayBookIssue(book.id);
-                              handleOpenModalIssue();
-                            }}>Issue</button>
-                          ) : (
-                            <button className="text-sm text-black w-full p-2 m-2 font-semibold cursor-not-allowed opacity-50" disabled>Unavailable</button>
-                          )}
-                        </MenuItem>
-                      </MenuList>
-                    </Menu>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
 
-      {selectedTable === 'Issue' && (
-        <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
-          <table className="bg-white w-full rounded-2xl px-2 py-2 shadow-xl">
-            <thead className="sticky top-0 bg-white">
-              <tr className="pb-2">
-                <th colSpan="10">
-                  <div className="flex justify-between items-center px-5 py-4">
-                    <h2 className="text-xl text-black">Book Issued</h2>
-                    <div className="flex items-center gap-3">
+          {showModalUpdate && (
+            <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModalUpdate(false)} >
+              <div className="bg-white p-8 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                <h2 className="text-2xl font-bold mb-4 text-center">
+                  Book Information
+                </h2>
+
+                <form onSubmit={(e) => { e.preventDefault(); updateBook(bookData.id); }}>
+                  <div className="grid grid-cols-2 gap-10">
+                    <div className="flex flex-col w-72">
+                      <label className="text-sm m-1 font-semibold">DDC ID</label>
                       <input
-                        type="date"
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                        className="bg-gray font-semibold rounded-lg px-3 py-2 outline-none"
+                        type="number"
+                        step="any"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="ddc_id"
+                        defaultValue={bookData.ddc_id}
+                        onChange={handleUpdate}
                       />
-                      <button
-                        onClick={handleExport}
-                        className="bg-gray text-black text-sm p-3 flex items-center rounded-xl hover:bg-blue hover:text-white cursor-pointer">
-                        <FaRegFilePdf className="mr-1" />
-                        Export as PDF
-                      </button>
+
+                      <label className="text-sm m-1 font-semibold">Title</label>
+                      <input
+                        type="text"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="title"
+                        defaultValue={bookData.title}
+                        onChange={handleUpdate}
+                      />
+                    </div>
+
+                    <div className="flex flex-col w-72">
+                      <label className="text-sm m-1 font-semibold">Author</label>
+                      <input
+                        type="text"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="author"
+                        defaultValue={bookData.author}
+                        onChange={handleUpdate}
+                      />
+
+                      <label className="text-sm m-1 font-semibold">Category</label>
+                      <input
+                        type="text"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="category"
+                        defaultValue={bookData.category}
+                        onChange={handleUpdate}
+
+                      />
                     </div>
                   </div>
-                </th>
-              </tr>
 
-              <tr className="text-left text-black text-lg border-b border-gray">
-                <th className="px-5 py-4">Student No.</th>
-                <th className="px-5 py-4">Fullname</th>
-                <th className="px-5 py-4">DDC ID</th>
-                <th className="px-5 py-4">Title</th>
-                <th className="px-5 py-4">Issue Date</th>
-                <th className="px-5 py-4">Return Date</th>
-                <th className="px-5 py-4">Status</th>
-                <th className="px-5 py-4">Action</th>
-              </tr>
-            </thead>
+                  <div className="flex justify-center">
+                    <div className="flex flex-col">
+                      <label className="text-sm m-1 font-semibold">Availability</label>
+                      <select
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 font-semibold"
+                        name="availability"
+                        defaultValue={bookData.availability}
+                        onChange={handleUpdate}
+                        required>
+                        <option value="">Select Status</option>
+                        <option className="text-green font-semibold" value={true}>Available</option>
+                        <option className="text-red font-semibold" value={false}>Not Available</option>
+                      </select>
+                    </div>
+                  </div>
 
-            <tbody>
-              {selectedDate ?
-                filteredBookIssued
-                  .filter(issue =>
-                    issue.issue_date === selectedDate &&
-                    (String(issue.student_no).includes(searchQuery) || issue.status.toLowerCase().includes(searchQuery.toLowerCase()))
-                  )
-                  .sort((a, b) => new Date(a.return_date) - new Date(b.return_date))
-                  .map((issue) => (
-                    <tr key={issue.transaction_id} className="border-b border-gray text-sm">
-                      <td className="px-5 py-2">{issue.student_no}</td>
-                      <td className="px-5 py-2">{issue.full_name}</td>
-                      <td className="px-5 py-2">{issue.ddc_no}</td>
-                      <td className="px-5 py-2">{issue.book_title}</td>
-                      <td className="px-5 py-2">{issue.issue_date}</td>
-                      <td className="px-5 py-2">{issue.return_date}</td>
-                      <td className={`px-5 py-2 ${issue.status === 'Overdue' ? 'text-red' : 'text-black'}`}>{issue.status}</td>
-                      <td className="px-5">
-                        {issue.status === 'Returned' ? (
-                          <span className="text-green mr-5">Already Returned</span>
-                        ) : (
-                          <button
-                            className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black mr-5"
-                            onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}>
-                            {returnLoading[issue.transaction_id] ? (<BarLoader size={5} color="#202020" />) : ("Mark as Returned")}
-                          </button>
-                        )}
-                        <button className="bg-red ml-5 text-white px-3 py-1 rounded-md"
-                          onClick={() => { if (window.confirm("Are you sure you want to delete this book?")) { deleteTransaction(issue.transaction_id); } }}>Delete
-                        </button>
-                      </td>
-                    </tr>
-                  )) :
-                bookIssued
-                  .filter(issue =>
-                    String(issue.student_no).includes(searchQuery) || issue.status.toLowerCase().includes(searchQuery.toLowerCase())
-                  )
-                  .sort((a, b) => new Date(a.return_date) - new Date(b.return_date))
-                  .map((issue) => (
-                    <tr key={issue.transaction_id} className="border-b border-gray text-sm">
-                      <td className="px-5 py-2">{issue.student_no}</td>
-                      <td className="px-5 py-2">{issue.full_name}</td>
-                      <td className="px-5 py-2">{issue.ddc_no}</td>
-                      <td className="px-5 py-2">{issue.book_title}</td>
-                      <td className="px-5 py-2">{issue.issue_date}</td>
-                      <td className="px-5 py-2">{issue.return_date}</td>
-                      <td className={`px-5 py-2 ${issue.status === 'Overdue' ? 'text-red' : 'text-black'}`}>{issue.status}</td>
-                      <td className="px-5">
-                        {issue.status === 'Returned' ? (
-                          <span className="text-green mr-5">Already Returned</span>
-                        ) : (
-                          <button
-                            className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black delete-margin"
-                            onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}>
-                            {returnLoading[issue.transaction_id] ? (<BarLoader size={5} color="#202020" />) : ("Mark as Returned")}
-                          </button>
-                        )}
-                        <button className="bg-red ml-6 text-white px-3 py-1 rounded-md"
-                          onClick={() => { if (window.confirm("Are you sure you want to delete this book?")) { deleteTransaction(issue.transaction_id); } }}>Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-              }
-            </tbody>
-          </table>
+                  <div className="flex justify-center pt-4">
+                    <button type="submit" className="bg-blue text-white py-2 px-4 rounded-lg mr-2">
+                      {updateLoading ? <ClipLoader size={20} color="white" /> : "Update"}
+                    </button>
+                    <button type="submit" className="bg-red text-white py-2 px-4 rounded-lg mr-2" onClick={() => setShowModalUpdate(false)}>
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+
+          {showModalIssue && (
+            <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModalIssue(false)} >
+              <div className="bg-white p-8 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                <h2 className="text-2xl font-bold mb-4 text-center">
+                  Issue Book
+                </h2>
+
+                <form onSubmit={issueBook}>
+                  <div className="grid grid-cols-2 gap-4">
+
+                    <div>
+                      <label className="text-sm m-1 font-semibold">
+                        Student Number:
+                      </label>
+                      <input
+                        type="number"
+                        name="studentNumber"
+                        placeholder="Student Number"
+                        value={studentNumber}
+                        required
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setStudentNumber(value);
+                          if (!value) {
+                            setFullname('');
+                          }
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-sm m-1 font-semibold">
+                        Fullname:
+                      </label>
+                      <input
+                        type="text"
+                        name="studentNumber"
+                        value={fullName}
+                        readOnly
+                        placeholder="Fullname"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                      />
+                    </div>
+
+                    <div >
+                      <label className="text-sm m-1 font-semibold">
+                        DDC ID:
+                      </label>
+                      <input
+                        type="number"
+                        name="ddc_id"
+                        defaultValue={bookData.ddc_id}
+                        readOnly
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                      />
+                    </div>
+
+                    <div >
+                      <label className="text-sm m-1 font-semibold">
+                        Book Title:
+                      </label>
+                      <input
+                        type="text"
+                        name="title"
+                        defaultValue={bookData.title}
+                        readOnly
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-sm m-1 font-semibold">
+                        Issue Date:
+                      </label>
+                      <input
+                        type="date"
+                        name="issueDate"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="returnDate" className="text-sm m-1 font-semibold">Return Date:</label>
+                      <input
+                        type="date"
+                        name="returnDate"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-center pt-4">
+                    <button
+                      type="submit"
+                      className="bg-blue text-white font-semibold py-2 px-4 rounded-md shadow-sm mt-2">
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
       )}
-
-      {showModal && (
-        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModal(false)} >
-          <div className="bg-white p-8 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-2xl font-bold mb-4 text-center">
-              Book Information
-            </h2>
-
-            <form onSubmit={(e) => { e.preventDefault(); addBook(book); }}>
-              <div className="grid grid-cols-2 gap-10">
-                <div className="flex flex-col w-72">
-                  <label className="text-sm m-1 font-semibold">DDC ID</label>
-                  <input
-                    type="number"
-                    step="any"
-                    placeholder="DDC ID"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="ddcId"
-                    value={book.ddcId}
-                    onChange={handleChange}
-                    required
-                  />
-
-                  <label className="text-sm m-1 font-semibold">Title</label>
-                  <input
-                    type="text"
-                    placeholder="Title"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="title"
-                    value={book.title}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div className="flex flex-col w-72">
-                  <label className="text-sm m-1 font-semibold">Author</label>
-                  <input
-                    type="text"
-                    placeholder="Author"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="author"
-                    value={book.author}
-                    onChange={handleChange}
-                    required
-                  />
-
-                  <label className="text-sm m-1 font-semibold">Category</label>
-                  <input
-                    type="text"
-                    placeholder="Category"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="category"
-                    value={book.category}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-center">
-                <div className="flex flex-col">
-                  <label className="text-sm ml-1 font-semibold">Availability</label>
-                  <select
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 font-semibold"
-                    name="availability"
-                    value={book.availability}
-                    onChange={handleChange}
-                    required>
-                    <option value="">Select Status</option>
-                    <option className="text-green font-semibold" value={true}>Available</option>
-                    <option className="text-red font-semibold" value={false}>Not Available</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="flex justify-center pt-4">
-                <button type="submit" className="bg-blue text-white py-2 px-4 rounded-lg mr-2" >
-                  {addLoading ? <ClipLoader size={20} color="white" /> : "Add Book"}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-
-      {showModalUpdate && (
-        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModalUpdate(false)} >
-          <div className="bg-white p-8 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-2xl font-bold mb-4 text-center">
-              Book Information
-            </h2>
-
-            <form onSubmit={(e) => { e.preventDefault(); updateBook(bookData.id); }}>
-              <div className="grid grid-cols-2 gap-10">
-                <div className="flex flex-col w-72">
-                  <label className="text-sm m-1 font-semibold">DDC ID</label>
-                  <input
-                    type="number"
-                    step="any"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="ddc_id"
-                    defaultValue={bookData.ddc_id}
-                    onChange={handleUpdate}
-                  />
-
-                  <label className="text-sm m-1 font-semibold">Title</label>
-                  <input
-                    type="text"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="title"
-                    defaultValue={bookData.title}
-                    onChange={handleUpdate}
-                  />
-                </div>
-
-                <div className="flex flex-col w-72">
-                  <label className="text-sm m-1 font-semibold">Author</label>
-                  <input
-                    type="text"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="author"
-                    defaultValue={bookData.author}
-                    onChange={handleUpdate}
-                  />
-
-                  <label className="text-sm m-1 font-semibold">Category</label>
-                  <input
-                    type="text"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="category"
-                    defaultValue={bookData.category}
-                    onChange={handleUpdate}
-
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-center">
-                <div className="flex flex-col">
-                  <label className="text-sm m-1 font-semibold">Availability</label>
-                  <select
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 font-semibold"
-                    name="availability"
-                    defaultValue={bookData.availability}
-                    onChange={handleUpdate}
-                    required>
-                    <option value="">Select Status</option>
-                    <option className="text-green font-semibold" value={true}>Available</option>
-                    <option className="text-red font-semibold" value={false}>Not Available</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="flex justify-center pt-4">
-                <button type="submit" className="bg-blue text-white py-2 px-4 rounded-lg mr-2">
-                  Update
-                </button>
-                <button type="submit" className="bg-red text-white py-2 px-4 rounded-lg mr-2" onClick={() => setShowModalUpdate(false)}>
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-
-      {showModalIssue && (
-        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModalIssue(false)} >
-          <div className="bg-white p-8 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-2xl font-bold mb-4 text-center">
-              Issue Book
-            </h2>
-
-            <form onSubmit={issueBook}>
-              <div className="grid grid-cols-2 gap-4">
-
-                <div>
-                  <label className="text-sm m-1 font-semibold">
-                    Student Number:
-                  </label>
-                  <input
-                    type="number"
-                    name="studentNumber"
-                    placeholder="Student Number"
-                    value={studentNumber}
-                    required
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setStudentNumber(value);
-                      if (!value) {
-                        setFullname('');
-                      }
-                    }}
-                  />
-                </div>
-
-                <div>
-                  <label className="text-sm m-1 font-semibold">
-                    Fullname:
-                  </label>
-                  <input
-                    type="text"
-                    name="studentNumber"
-                    value={fullName}
-                    readOnly
-                    placeholder="Fullname"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                  />
-                </div>
-
-                <div >
-                  <label className="text-sm m-1 font-semibold">
-                    DDC ID:
-                  </label>
-                  <input
-                    type="number"
-                    name="ddc_id"
-                    defaultValue={bookData.ddc_id}
-                    readOnly
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                  />
-                </div>
-
-                <div >
-                  <label className="text-sm m-1 font-semibold">
-                    Book Title:
-                  </label>
-                  <input
-                    type="text"
-                    name="title"
-                    defaultValue={bookData.title}
-                    readOnly
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                  />
-                </div>
-
-                <div>
-                  <label className="text-sm m-1 font-semibold">
-                    Issue Date:
-                  </label>
-                  <input
-                    type="date"
-                    name="issueDate"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="returnDate" className="text-sm m-1 font-semibold">Return Date:</label>
-                  <input
-                    type="date"
-                    name="returnDate"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                  />
-                </div>
-              </div>
-
-              <div className="flex justify-center pt-4">
-                <button
-                  type="submit"
-                  className="bg-blue text-white font-semibold py-2 px-4 rounded-md shadow-sm mt-2">
-                  Submit
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
     </div>
   );
 };

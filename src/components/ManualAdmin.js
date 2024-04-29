@@ -17,11 +17,11 @@ const ManualAdmin = () => {
       {/* Floating Button to open the manual */}
       <div className="fixed bottom-4 right-4 group"> 
         <button
-          className="bg-black text-2xl p-2 rounded-full shadow-lg"
+          className="bg-black text-3xl p-3 rounded-full shadow-lg"
           onClick={handleOpenModal}>
           <GrHelpBook className="text-white" />
         </button>
-        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute bottom-12 right-0 text-black text-base">
+        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 absolute bottom-3 right-16 bg-black py-1 px-2 rounded-lg shadow text-white text-base">
           Manual
         </div>
       </div>
