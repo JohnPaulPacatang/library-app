@@ -313,7 +313,7 @@ const BooksAdmin = () => {
           <ClipLoader color="black" size={50} />
         </div>
       ) : (
-        <>
+        <div className="bookadmin-list">
           <div className="bg-white my-5 px-3 py-2 rounded-xl shadow flex justify-between search-container">
             <div className="flex items-center w-full">
               <BiSearch className="text-3xl mx-2 my-2" />
@@ -596,7 +596,7 @@ const BooksAdmin = () => {
               </div>
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

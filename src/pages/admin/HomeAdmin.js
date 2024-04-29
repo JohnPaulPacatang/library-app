@@ -183,7 +183,7 @@ const HomeAdmin = () => {
           <ClipLoader color="black" size={50} />
         </div>
       ) : (
-        <>
+        <div className='admin-dashboard'>
           <div className="p-4 m-5 bg-white rounded-lg shadow mb-3">
             <div className="flex justify-between">
               <div className="Greetings">
@@ -243,7 +243,7 @@ const HomeAdmin = () => {
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

@@ -207,7 +207,7 @@ const Attendance = () => {
           <ClipLoader color="black" size={50} />
         </div>
       ) : (
-        <>
+        <div className='walkin-table'>
           <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
             <table className='bg-white w-full rounded-2xl px-2 py-2 shadow-xl'>
               <thead className='sticky top-0 bg-white'>
@@ -335,7 +335,7 @@ const Attendance = () => {
               </div>
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

@@ -170,7 +170,7 @@ const SA_Dashboard = () => {
           <ClipLoader color="black" size={50} />
         </div>
       ) : (
-        <div className="Dashboard">
+        <div className="superadmin-dashboard">
           <Greetings></Greetings>
           <div className="flex justify-between mt-10 mb-8 gap-5">
             <div className="p-12 h-60 w-full bg-white mx-5 rounded-xl shadow">

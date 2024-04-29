@@ -49,7 +49,7 @@ const UserSearchBooks = () => {
           <ClipLoader color="black" size={50} />
         </div>
       ) : (
-        <>
+        <div className="book-search-table">
           {/* Search bar and category dropdown */}
           <div className="bg-white my-5 px-2 py-2 rounded-lg shadow flex justify-between search-container">
             <div className="flex items-center w-full">
@@ -108,7 +108,7 @@ const UserSearchBooks = () => {
               </tbody>
             </table>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
