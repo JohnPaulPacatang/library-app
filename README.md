@@ -2,7 +2,8 @@
 
 This project was bootstrapped with Create React App.
 
-![HAHA](https://preview.redd.it/may-my-tech-buddies-have-a-peaceful-holy-week-v0-ranp5l72rvqc1.jpeg?auto=webp&s=5e46a1930be43d2c09abc3c09409c6ea1cc4e8cb)
+![HAHA](https://scontent.fmnl17-2.fna.fbcdn.net/v/t1.15752-9/440327965_433989762658041_7167140684339606610_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeGZb2mRB43y4CX8z569YDkh2YJEN-SOr7DZgkQ35I6vsDR-peKi8syQMIsqOUSMbFhUh7M7Z6rmEM2gzC41aa8n&_nc_ohc=etab5tGDq2oAb5-dkxG&_nc_ht=scontent.fmnl17-2.fna&oh=03_Q7cD1QHj3LnyzxMifn5_HCHgeNl372Xd-nzW-zl_w_XlSm2hQg&oe=665718E2)
+
 
 ## Available Scripts
 
