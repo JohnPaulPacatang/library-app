@@ -9,12 +9,14 @@ import SearchBooksUser from "./pages/user/SearchBooksUser";
 import FAQ from "./pages/user/FAQ";
 import Setting from "./pages/user/Setting";
 
+import ManualAdmin from "./components/ManualAdmin"
 import SidebarAdmin from "./components/SidebarAdmin";
 import HomeAdmin from "./pages/admin/HomeAdmin";
 import Attendance from "./pages/admin/Attendance"
 import AddUser from "./pages/admin/AddUser";
 import BooksAdmin from "./pages/admin/BooksAdmin";
 
+import ManualSuperAdmin from "./components/ManualSuperAdmin"
 import SidebarSuperAdmin from "./components/SidebarSuperAdmin";
 import HomeSuperAdmin from "./pages/superadmin/HomeSuperAdmin";
 import BooksSuperAdmin from "./pages/superadmin/BooksSuperAdmin";
@@ -73,7 +75,7 @@ function App() {
   }
 
   // Render sidebar and routes based on user role
-  let sidebarComponent, routesComponent;
+  let sidebarComponent, routesComponent, manualComponent;
   
   if (userRole === "user") {
     sidebarComponent = <SidebarUser userFirstName={userFirstName} userLastName={userLastName} />;
@@ -88,6 +90,7 @@ function App() {
 
   } else if (userRole === "admin") {
     sidebarComponent = <SidebarAdmin />;
+    manualComponent = <ManualAdmin />;
     routesComponent = (
       <Routes>
         <Route path="/home-admin" element={<HomeAdmin />} />
@@ -96,8 +99,10 @@ function App() {
         <Route path="/create-accounts" element={<AddUser />} />
       </Routes>
     );
+
   } else if (userRole === "super-admin") {
     sidebarComponent = <SidebarSuperAdmin />;
+    manualComponent = <ManualSuperAdmin />;
     routesComponent = (
       <Routes>
         <Route path="/home-super-admin" element={<HomeSuperAdmin />} />
@@ -105,6 +110,7 @@ function App() {
         <Route path="/manage-users" element={<ManageUser />} />
       </Routes>
     );
+    
   } else {
     // pabalik sa login 
     return (
@@ -119,6 +125,7 @@ function App() {
     <Router>
       <div className="min-h-screen flex">
         {sidebarComponent}
+        {manualComponent}
         {routesComponent}
       </div>
     </Router>

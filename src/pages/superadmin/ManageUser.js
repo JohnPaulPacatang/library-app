@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { ClipLoader } from 'react-spinners';
 
 const UserListSuperAdmin = () => {
 
@@ -17,6 +18,9 @@ const UserListSuperAdmin = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModalUpdate, setShowModalUpdate] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [userLoading, setUserLoading] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -25,7 +29,6 @@ const UserListSuperAdmin = () => {
   const handleOpenModalUpdate = () => {
     setShowModalUpdate(true);
   };
-
 
   // Fetch users para sa table
   const [users, setUsers] = useState([]);
@@ -47,6 +50,7 @@ const UserListSuperAdmin = () => {
       .from('users')
       .select('*');
     setUsers(data);
+    setLoading(false);
   }
 
 
@@ -68,6 +72,8 @@ const UserListSuperAdmin = () => {
 
   // Pang add user
   async function addUser() {
+    setUserLoading(true)
+
     try {
       const formattedDate = new Date().toISOString().split('T')[0];
 
@@ -82,7 +88,7 @@ const UserListSuperAdmin = () => {
             middle_name: user.middleName,
             email: user.email,
             course: user.course,
-            timestamp: formattedDate, 
+            timestamp: formattedDate,
           },
         ]);
 
@@ -106,11 +112,14 @@ const UserListSuperAdmin = () => {
         course: ''
       });
 
+      setUserLoading(false)
+
     } catch (error) {
       toast.error("Error adding user. Please try again.", {
         autoClose: 1000,
         hideProgressBar: true
       });
+      setUserLoading(false)
     }
   }
 
@@ -158,6 +167,8 @@ const UserListSuperAdmin = () => {
 
   // Pang update papunta sa database
   async function updateUser(userId) {
+    setUpdateLoading(true)
+
     try {
       await supabase
         .from('users')
@@ -180,11 +191,14 @@ const UserListSuperAdmin = () => {
         hideProgressBar: true
       });
 
+      setUpdateLoading(false)
+
     } catch (error) {
       toast.error("Error updating user. Please try again.", {
         autoClose: 1000,
         hideProgressBar: true
       });
+      setUpdateLoading(false)
     }
   }
 
@@ -210,10 +224,10 @@ const UserListSuperAdmin = () => {
     const margin = 16;
 
     const addText = (text, x, y, size = 12) => {
-        doc.setFont("Poppins", "sans-serif");
-        doc.setFontSize(size);
-        doc.setTextColor(0, 0, 0);
-        doc.text(text, x, y);
+      doc.setFont("Poppins", "sans-serif");
+      doc.setFontSize(size);
+      doc.setTextColor(0, 0, 0);
+      doc.text(text, x, y);
     };
 
     const today = new Date();
@@ -229,340 +243,348 @@ const UserListSuperAdmin = () => {
     const tableData = filteredData.map(user => [user.student_number, user.last_name, user.first_name, user.middle_name, user.email, user.course]);
 
     doc.autoTable({
-        startY: startY,
-        head: [tableHeaders],
-        body: tableData,
-        margin: { top: startY },
-        tableLineColor: [0, 0, 0],
-        headStyles: {
-            fillColor: [255, 255, 255],
-            textColor: [0, 0, 0]
-        },
-        bodyStyles: {
-            lineWidth: 0.1,
-            textColor: [0, 0, 0]
-        }
+      startY: startY,
+      head: [tableHeaders],
+      body: tableData,
+      margin: { top: startY },
+      tableLineColor: [0, 0, 0],
+      headStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0]
+      },
+      bodyStyles: {
+        lineWidth: 0.1,
+        textColor: [0, 0, 0]
+      }
     });
 
     doc.save("Users list.pdf");
-};
+  };
 
   return (
     <div className="px-5 flex-1">
-      <div className="bg-white my-5 px-2 py-2 rounded-xl shadow flex justify-between search-container">
-        <div className="flex items-center w-full">
-          <MdPersonSearch className="text-3xl mx-2 my-2" />
-
-          <input
-            type="text"
-            placeholder="Search"
-            className="w-3/4 px-4 py-2 border border-opacity-25 rounded-xl focus:outline-none focus:ring-1"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+      {loading ? (
+        <div className="flex justify-center items-center h-full">
+          <ClipLoader color="black" size={50} />
         </div>
+      ) : (
+        <div className='user-table'>
+          <div className="bg-white my-5 px-2 py-2 rounded-xl shadow flex justify-between search-container">
+            <div className="flex items-center w-full">
+              <MdPersonSearch className="text-3xl mx-2 my-2" />
 
-        <select
-          id="category"
-          name="category"
-          className="w-fit py-3 px-4 xl:ml-60 md:ml-32 bg-gray rounded-xl shadow-sm focus:outline-none focus:ring-maroon focus:border-maroon sm:text-sm category "
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-        >
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
-      </div>
+              <input
+                type="text"
+                placeholder="Search"
+                className="w-3/4 px-4 py-2 border border-opacity-25 rounded-xl focus:outline-none focus:ring-1"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
 
-      <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
-        <table className="bg-white w-full rounded-lg px-2 py-2 shadow-xl">
-          <thead className="sticky top-0 bg-white">
-            <tr className="pb-2">
-              <th colSpan="10">
-                <div className="flex justify-between items-center px-5 py-4">
-                  <h2 className="text-xl text-black">Users list</h2>
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={handleExport}
-                      className="bg-gray text-black text-sm p-3 flex items-center rounded-xl hover:bg-blue hover:text-white cursor-pointer">
-                      <FaRegFilePdf className="mr-1" />
-                      Export as PDF
-                    </button>
-                    <button
-                      className="bg-gray text-black text-sm font-semibold rounded-xl p-3 hover:bg-blue hover:text-white"
-                      onClick={handleOpenModal}>
-                      Add User
-                    </button>
-                  </div>
-                </div>
-              </th>
-            </tr>
+            <select
+              id="category"
+              name="category"
+              className="w-fit py-3 px-4 xl:ml-60 md:ml-32 bg-gray rounded-xl shadow-sm focus:outline-none focus:ring-maroon focus:border-maroon sm:text-sm category "
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+            >
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+          </div>
 
-            <tr className="text-left text-black text-lg border-b border-gray">
-              <th className="px-5 py-4">Student No.</th>
-              <th className="px-5 py-4">Lastname</th>
-              <th className="px-5 py-4">Firstname</th>
-              <th className="px-5 py-4">Middlename</th>
-              <th className="px-5 py-4">Course</th>
-              <th className="px-5 py-4">Email</th>
-              <th className="px-5 py-4">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {filteredData.map((user) => (
-              <tr key={user.id} className="border-b border-gray text-sm">
-                <td className="px-5 py-2">{user.student_number}</td>
-                <td className="px-5 py-2">{user.last_name}</td>
-                <td className="px-5 py-2">{user.first_name}</td>
-                <td className="px-5 py-2">{user.middle_name}</td>
-                <td className="px-5 py-2">{user.email}</td>
-                <td className="px-5 py-2">{user.course}</td>
-                <td className="px-5">
-                  <Menu>
-                    <MenuButton
-                      as={IconButton}
-                      aria-label='Options'
-                      icon={<BsThreeDots style={{ fontSize: '2.5rem', marginLeft: '0.5rem' }} />}
-                      variant='outline'
-                    />
-                    <MenuList className="bg-white shadow rounded-lg p-1 input-border" zIndex={10}>
-                      <MenuItem>
-                        <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline"
-                          onClick={() => { displayUser(user.id); handleOpenModalUpdate(); }}>Update</button>
-                      </MenuItem>
-                      <MenuItem>
-                        <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline"
-                          onClick={() => { if (window.confirm("Are you sure you want to delete this user?")) { deleteUser(user.id); } }}>Delete
+          <div className="admin-table overflow-y-auto rounded-xl custom-scrollbar">
+            <table className="bg-white w-full rounded-lg px-2 py-2 shadow-xl">
+              <thead className="sticky top-0 bg-white">
+                <tr className="pb-2">
+                  <th colSpan="10">
+                    <div className="flex justify-between items-center px-5 py-4">
+                      <h2 className="text-xl text-black">Users list</h2>
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={handleExport}
+                          className="bg-gray text-black text-sm p-3 flex items-center rounded-xl hover:bg-blue hover:text-white cursor-pointer">
+                          <FaRegFilePdf className="mr-1" />
+                          Export as PDF
                         </button>
-                      </MenuItem>
-                    </MenuList>
-                  </Menu>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-
-      {showModal && (
-        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModal(false)}>
-          <div className="bg-white p-4 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-xl font-bold mb-4 text-center">
-              Student Information
-            </h2>
-
-            <form onSubmit={(e) => { e.preventDefault(); addUser(user); }}>
-              <div className="grid grid-cols-2 gap-10">
-                <div className="flex flex-col w-72">
-                  <label className="text-sm m-1 font-semibold">Student number:</label>
-
-                  <input
-                    type="number"
-                    placeholder="Student Number"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="studentNumber"
-                    value={user.studentNumber}
-                    onChange={handleChange}
-                    required
-                  />
-
-                  <label className="text-sm m-1 font-semibold">Lastname:</label>
-                  <input
-                    type="text"
-                    placeholder="Lastname"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="lastName"
-                    value={user.lastName}
-                    onChange={handleChange}
-                    required
-                  />
-
-                  <label className="text-sm m-1 font-semibold">Firstname:</label>
-                  <input
-                    type="text"
-                    placeholder="Firstname"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="firstName"
-                    value={user.firstName}
-                    onChange={handleChange}
-                    required
-                  />
-
-                  <label className="text-sm m-1 font-semibold">Middlename:</label>
-                  <input
-                    type="text"
-                    placeholder="Middlename"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="middleName"
-                    value={user.middleName}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="flex flex-col w-72">
-                  <label className="text-sm m-1 font-semibold">Password:</label>
-                  <div className="relative">
-                    <input
-                      type={visible ? "text" : "password"}
-                      placeholder="Password"
-                      className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                      name="password"
-                      value={user.password}
-                      onChange={handleChange}
-                      required
-                    />
-                    <div className="absolute right-0 top-0 mt-4 mr-4 text-xl text-blue" onClick={() => setVisible(!visible)}>
-                      {
-                        visible ? <IoEyeOutline /> : <AiOutlineEyeInvisible />
-                      }
+                        <button
+                          className="bg-gray text-black text-sm font-semibold rounded-xl p-3 hover:bg-blue hover:text-white"
+                          onClick={handleOpenModal}>
+                          Add User
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  <label className="text-sm m-1 font-semibold">Email:</label>
-                  <input
-                    type="email"
-                    placeholder="example@gmail.com"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="email"
-                    value={user.email}
-                    onChange={handleChange}
-                    required
-                  />
+                  </th>
+                </tr>
 
-                  <label className="text-sm m-1 font-semibold">Course:</label>
-                  <input
-                    type="text"
-                    placeholder="Course"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="course"
-                    value={user.course}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
+                <tr className="text-left text-black text-lg border-b border-gray">
+                  <th className="px-5 py-4">Student No.</th>
+                  <th className="px-5 py-4">Lastname</th>
+                  <th className="px-5 py-4">Firstname</th>
+                  <th className="px-5 py-4">Middlename</th>
+                  <th className="px-5 py-4">Course</th>
+                  <th className="px-5 py-4">Email</th>
+                  <th className="px-5 py-4">Actions</th>
+                </tr>
+              </thead>
 
-              <div className="flex justify-center pt-4">
-                <button
-                  type="submit"
-                  className="bg-blue text-white py-2 px-4 rounded-lg mr-2">
-                  Create account
-                </button>
-              </div>
-            </form>
-
+              <tbody>
+                {filteredData.map((user) => (
+                  <tr key={user.id} className="border-b border-gray text-sm">
+                    <td className="px-5 py-2">{user.student_number}</td>
+                    <td className="px-5 py-2">{user.last_name}</td>
+                    <td className="px-5 py-2">{user.first_name}</td>
+                    <td className="px-5 py-2">{user.middle_name}</td>
+                    <td className="px-5 py-2">{user.email}</td>
+                    <td className="px-5 py-2">{user.course}</td>
+                    <td className="px-5">
+                      <Menu>
+                        <MenuButton
+                          as={IconButton}
+                          aria-label='Options'
+                          icon={<BsThreeDots style={{ fontSize: '2.5rem', marginLeft: '0.5rem' }} />}
+                          variant='outline'
+                        />
+                        <MenuList className="bg-white shadow rounded-lg p-1 input-border" zIndex={10}>
+                          <MenuItem>
+                            <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline"
+                              onClick={() => { displayUser(user.id); handleOpenModalUpdate(); }}>Update</button>
+                          </MenuItem>
+                          <MenuItem>
+                            <button className="text-sm text-black w-full p-2 m-2 font-semibold hover:underline"
+                              onClick={() => { if (window.confirm("Are you sure you want to delete this user?")) { deleteUser(user.id); } }}>Delete
+                            </button>
+                          </MenuItem>
+                        </MenuList>
+                      </Menu>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
-      )}
 
 
-      {showModalUpdate && (
-        <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModalUpdate(false)}>
-          <div className="bg-white p-4 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <h2 className="text-xl font-bold mb-4 text-center">
-              Student Information
-            </h2>
+          {showModal && (
+            <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModal(false)}>
+              <div className="bg-white p-4 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                <h2 className="text-xl font-bold mb-4 text-center">
+                  Student Information
+                </h2>
 
-            <form onSubmit={(e) => { e.preventDefault(); updateUser(userData.id); }}>
-              <div className="grid grid-cols-2 gap-10">
-                <div className="flex flex-col w-72">
-                  <label className="text-sm ml-1 font-semibold">Student number:</label>
+                <form onSubmit={(e) => { e.preventDefault(); addUser(user); }}>
+                  <div className="grid grid-cols-2 gap-10">
+                    <div className="flex flex-col w-72">
+                      <label className="text-sm m-1 font-semibold">Student number:</label>
 
-                  <input
-                    type="number"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="studentNumber"
-                    defaultValue={userData.studentNumber}
-                    onChange={handleUpdate}
-                  />
+                      <input
+                        type="number"
+                        placeholder="Student Number"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="studentNumber"
+                        value={user.studentNumber}
+                        onChange={handleChange}
+                        required
+                      />
 
-                  <label className="text-sm ml-1 font-semibold">Lastname:</label>
-                  <input
-                    type="text"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="lastName"
-                    defaultValue={userData.lastName}
-                    onChange={handleUpdate}
-                  />
+                      <label className="text-sm m-1 font-semibold">Lastname:</label>
+                      <input
+                        type="text"
+                        placeholder="Lastname"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="lastName"
+                        value={user.lastName}
+                        onChange={handleChange}
+                        required
+                      />
 
-                  <label className="text-sm ml-1 font-semibold">Firstname:</label>
-                  <input
-                    type="text"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="firstName"
-                    defaultValue={userData.firstName}
-                    onChange={handleUpdate}
-                  />
+                      <label className="text-sm m-1 font-semibold">Firstname:</label>
+                      <input
+                        type="text"
+                        placeholder="Firstname"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="firstName"
+                        value={user.firstName}
+                        onChange={handleChange}
+                        required
+                      />
 
-                  <label className="text-sm ml-1 font-semibold">Middlename:</label>
-                  <input
-                    type="text"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="middleName"
-                    defaultValue={userData.middleName}
-                    onChange={handleUpdate}
-                  />
-                </div>
-
-                <div className="flex flex-col w-72">
-                  <label className="text-sm ml-1 font-semibold">Password:</label>
-                  <div className="relative">
-
-                    <input
-                      type={visible ? "text" : "password"}
-                      className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                      name="password"
-                      defaultValue={userData.password}
-                      onChange={handleUpdate}
-                    />
-
-                    <div className="absolute right-0 top-0 mt-4 mr-4 text-xl text-blue" onClick={() => setVisible(!visible)}>
-                      {
-                        visible ? <IoEyeOutline /> : <AiOutlineEyeInvisible />
-                      }
+                      <label className="text-sm m-1 font-semibold">Middlename:</label>
+                      <input
+                        type="text"
+                        placeholder="Middlename"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="middleName"
+                        value={user.middleName}
+                        onChange={handleChange}
+                      />
                     </div>
 
+                    <div className="flex flex-col w-72">
+                      <label className="text-sm m-1 font-semibold">Password:</label>
+                      <div className="relative">
+                        <input
+                          type={visible ? "text" : "password"}
+                          placeholder="Password"
+                          className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                          name="password"
+                          value={user.password}
+                          onChange={handleChange}
+                          required
+                        />
+                        <div className="absolute right-0 top-0 mt-4 mr-4 text-xl text-blue" onClick={() => setVisible(!visible)}>
+                          {
+                            visible ? <IoEyeOutline /> : <AiOutlineEyeInvisible />
+                          }
+                        </div>
+                      </div>
+                      <label className="text-sm m-1 font-semibold">Email:</label>
+                      <input
+                        type="email"
+                        placeholder="example@gmail.com"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="email"
+                        value={user.email}
+                        onChange={handleChange}
+                        required
+                      />
+
+                      <label className="text-sm m-1 font-semibold">Course:</label>
+                      <input
+                        type="text"
+                        placeholder="Course"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="course"
+                        value={user.course}
+                        onChange={handleChange}
+                        required
+                      />
+                    </div>
                   </div>
 
-                  <label className="text-sm ml-1 font-semibold">Email:</label>
-                  <input
-                    type="email"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="email"
-                    defaultValue={userData.email}
-                    onChange={handleUpdate}
-                  />
+                  <div className="flex justify-center pt-4">
+                    <button
+                      type="submit"
+                      className="bg-blue text-white py-2 px-4 rounded-lg mr-2">
+                      {userLoading ? <ClipLoader size={20} color="white" /> : "Create account"}
+                    </button>
+                  </div>
+                </form>
 
-                  <label className="text-sm ml-1 font-semibold">Course:</label>
-                  <input
-                    type="text"
-                    className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
-                    name="course"
-                    defaultValue={userData.course}
-                    onChange={handleUpdate}
-                  />
-                </div>
               </div>
+            </div>
+          )}
 
-              <div className="flex justify-center pt-4">
-                <button
-                  type="submit"
-                  className="bg-blue text-white py-2 px-4 rounded-lg mr-2">
-                  Update
-                </button>
-                <button
-                  type="submit"
-                  className="bg-red text-white py-2 px-4 rounded-lg mr-2" onClick={() => setShowModalUpdate(false)}>
-                  Cancel
-                </button>
+
+          {showModalUpdate && (
+            <div className="fixed inset-0 z-10 flex justify-center items-center shadow-2xl bg-black bg-opacity-50" onClick={() => setShowModalUpdate(false)}>
+              <div className="bg-white p-4 rounded-lg shadow-2xl" onClick={(e) => e.stopPropagation()}>
+                <h2 className="text-xl font-bold mb-4 text-center">
+                  Student Information
+                </h2>
+
+                <form onSubmit={(e) => { e.preventDefault(); updateUser(userData.id); }}>
+                  <div className="grid grid-cols-2 gap-10">
+                    <div className="flex flex-col w-72">
+                      <label className="text-sm ml-1 font-semibold">Student number:</label>
+
+                      <input
+                        type="number"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="studentNumber"
+                        defaultValue={userData.studentNumber}
+                        onChange={handleUpdate}
+                      />
+
+                      <label className="text-sm ml-1 font-semibold">Lastname:</label>
+                      <input
+                        type="text"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="lastName"
+                        defaultValue={userData.lastName}
+                        onChange={handleUpdate}
+                      />
+
+                      <label className="text-sm ml-1 font-semibold">Firstname:</label>
+                      <input
+                        type="text"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="firstName"
+                        defaultValue={userData.firstName}
+                        onChange={handleUpdate}
+                      />
+
+                      <label className="text-sm ml-1 font-semibold">Middlename:</label>
+                      <input
+                        type="text"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="middleName"
+                        defaultValue={userData.middleName}
+                        onChange={handleUpdate}
+                      />
+                    </div>
+
+                    <div className="flex flex-col w-72">
+                      <label className="text-sm ml-1 font-semibold">Password:</label>
+                      <div className="relative">
+
+                        <input
+                          type={visible ? "text" : "password"}
+                          className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                          name="password"
+                          defaultValue={userData.password}
+                          onChange={handleUpdate}
+                        />
+
+                        <div className="absolute right-0 top-0 mt-4 mr-4 text-xl text-blue" onClick={() => setVisible(!visible)}>
+                          {
+                            visible ? <IoEyeOutline /> : <AiOutlineEyeInvisible />
+                          }
+                        </div>
+
+                      </div>
+
+                      <label className="text-sm ml-1 font-semibold">Email:</label>
+                      <input
+                        type="email"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="email"
+                        defaultValue={userData.email}
+                        onChange={handleUpdate}
+                      />
+
+                      <label className="text-sm ml-1 font-semibold">Course:</label>
+                      <input
+                        type="text"
+                        className="shadow input-border rounded-xl text-sm px-5 py-4 mb-4 w-full"
+                        name="course"
+                        defaultValue={userData.course}
+                        onChange={handleUpdate}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-center pt-4">
+                    <button
+                      type="submit"
+                      className="bg-blue text-white py-2 px-4 rounded-lg mr-2">
+                      {updateLoading ? <ClipLoader size={20} color="white" /> : "Update"}
+                    </button>
+                    <button
+                      type="submit"
+                      className="bg-red text-white py-2 px-4 rounded-lg mr-2" onClick={() => setShowModalUpdate(false)}>
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+
               </div>
-            </form>
-
-          </div>
+            </div>
+          )}
         </div>
       )}
     </div>

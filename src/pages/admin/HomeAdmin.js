@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import CanvasJSReact from '@canvasjs/react-charts';
 import { supabase } from '../../utils/supabaseClient';
 import { ClipLoader } from 'react-spinners';
@@ -111,7 +111,7 @@ const HomeAdmin = () => {
     }
   };
 
-  const fetchAllData = async () => {
+  const fetchAllData = useCallback(async () => {
     setLoading(true);
     await Promise.all([
       fetchBorrowedBooks(),
@@ -122,11 +122,12 @@ const HomeAdmin = () => {
       fetchNewestUsers(),
     ]);
     setLoading(false);
-  };
+  }, []); 
+
 
   useEffect(() => {
     fetchAllData();
-  }, []);
+  }, [fetchAllData]);
 
   const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 

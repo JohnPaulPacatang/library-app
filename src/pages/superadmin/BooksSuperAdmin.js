@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { ClipLoader, BarLoader } from 'react-spinners';
 
 
 const BookSuperAdmin = () => {
@@ -16,6 +17,9 @@ const BookSuperAdmin = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModalUpdate, setShowModalUpdate] = useState(false);
   const [showModalIssue, setShowModalIssue] = useState(false);
+
+  const [addLoading, setAddLoading] = useState(false);
+  const [returnLoading, setReturnLoading] = useState({});
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -122,6 +126,8 @@ const BookSuperAdmin = () => {
 
   // Add book
   async function addBook() {
+    setAddLoading(true)
+
     try {
 
       const currentTime = new Date();
@@ -160,11 +166,14 @@ const BookSuperAdmin = () => {
         hideProgressBar: true
       });
 
+      setAddLoading(false)
+
     } catch (error) {
       toast.error("Error adding book. Please try again.", {
         autoClose: 1000,
         hideProgressBar: true
       });
+      setAddLoading(false)
     }
   }
 
@@ -330,6 +339,8 @@ const BookSuperAdmin = () => {
   };
 
   const markAsReturned = async (ddcId, transactionId) => {
+    setReturnLoading((prev) => ({ ...prev, [transactionId]: true }));
+
     try {
       const { updateError } = await supabase
         .from('books')
@@ -356,12 +367,16 @@ const BookSuperAdmin = () => {
 
       fetchBookIssued();
       fetchBooks();
+
+      setReturnLoading((prev) => ({ ...prev, [transactionId]: false }));
+
     } catch (error) {
       console.error('Error marking book as returned:', error.message);
       toast.error("Failed to mark book as returned.", {
         autoClose: 1000,
         hideProgressBar: true
       });
+      setReturnLoading((prev) => ({ ...prev, [transactionId]: false }));
     }
   };
 
@@ -643,7 +658,7 @@ const BookSuperAdmin = () => {
                           <button
                             className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black mr-5"
                             onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}>
-                            Mark as Returned
+                            {returnLoading[issue.transaction_id] ? (<BarLoader size={5} color="#202020" />) : ("Mark as Returned")}
                           </button>
                         )}
                         <button className="bg-red ml-5 text-white px-3 py-1 rounded-md"
@@ -673,7 +688,7 @@ const BookSuperAdmin = () => {
                           <button
                             className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black delete-margin"
                             onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}>
-                            Mark as Returned
+                            {returnLoading[issue.transaction_id] ? (<BarLoader size={5} color="#202020" />) : ("Mark as Returned")}
                           </button>
                         )}
                         <button className="bg-red ml-6 text-white px-3 py-1 rounded-md"
@@ -765,7 +780,7 @@ const BookSuperAdmin = () => {
 
               <div className="flex justify-center pt-4">
                 <button type="submit" className="bg-blue text-white py-2 px-4 rounded-lg mr-2" >
-                  Add Book
+                  {addLoading ? <ClipLoader size={20} color="white" /> : "Add Book"}
                 </button>
               </div>
             </form>

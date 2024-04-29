@@ -173,7 +173,7 @@ const UserListAdmin = () => {
           <ClipLoader color="black" size={50} />
         </div>
       ) : (
-        <>
+        <div className='user-table'>
           <div className='bg-white my-5 px-2 py-2 rounded-xl shadow flex justify-between'>
             <div className='flex items-center w-full'>
               <MdPersonSearch className='text-3xl mx-2 my-2' />
@@ -361,7 +361,7 @@ const UserListAdmin = () => {
               </div>
             </div>
           )}
-        </>
+        </div>
       )}
     </div>
   );

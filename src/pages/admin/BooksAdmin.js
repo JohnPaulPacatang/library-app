@@ -478,11 +478,11 @@ const BooksAdmin = () => {
                             {issue.status === 'Returned' ? (
                               <span className="text-green">Already Returned</span>
                             ) : (
-                              <button
+                              <buttons
                                 className="text-sm text-blue font-normal py-2 my-2 rounded-lg hover:text-black"
                                 onClick={() => markAsReturned(issue.ddc_no, issue.transaction_id)}>
                                   {returnLoading[issue.transaction_id] ? (<BarLoader size={5} color="#202020" />) : ("Mark as Returned")}
-                              </button>
+                              </buttons>
                             )}
                           </td>
                         </tr>

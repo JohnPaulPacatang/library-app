@@ -14,7 +14,7 @@ const Attendance = () => {
   const [course, setCourse] = useState('');
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [modalLoading, setModalLoading] = useState(false); 
+  const [modalLoading, setModalLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
   useEffect(() => {
@@ -61,7 +61,8 @@ const Attendance = () => {
 
   const handleSignIn = async (event) => {
     event.preventDefault();
-    setModalLoading(true);
+
+    setModalLoading(true); //true pag pinindot magloloading na
 
     try {
       const currentTime = new Date();
@@ -98,7 +99,8 @@ const Attendance = () => {
         hideProgressBar: true,
       });
 
-      setModalLoading(false);
+      setModalLoading(false);// false pag na add na tigil na loaders
+
     } catch (error) {
       console.error('Error adding:', error.message);
       toast.error('Error adding. Please try again.', {
@@ -259,9 +261,9 @@ const Attendance = () => {
                     </td>
 
                     <td className="px-5 py-2">
-                      {item.time_out ? 
-                        new Date(`2000-01-01T${item.time_out}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
-                        : 
+                      {item.time_out ?
+                        new Date(`2000-01-01T${item.time_out}`).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                        :
                         '--:--'
                       }
                     </td>
